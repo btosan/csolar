@@ -1,0 +1,17 @@
+{
+  "name": "eVehecles.ng ",
+  "short_name": "eVehecles ng",
+  "description": "We deal in all kinds of electric vehicles, especially BYD cars and electric keke. We import directly from the manufacturers and distribute or sell to our customers in Nigeria and West Africa.",
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#000328",
+  "background_color": "#ffffff",
+  "icons": [
+    {
+      "src": "/favicon.png",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/png"
+    }
+  ]
+
+}

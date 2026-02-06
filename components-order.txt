@@ -1,0 +1,9 @@
+1. HeroSection
+2. Banner / Social Proof
+3. Why Choose Us
+4. Projects / Case Studies
+5. Testimonials
+6. Featured Packages
+7. Pricing
+8. Why Your Business Needs Web Presence
+9. Final CTA / Contact Section
