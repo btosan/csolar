@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 300 100" height="100" width="300">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&amp;display=swap');
+    text {
+      font-family: 'Great Vibes', cursive;
+      font-size: 52px;
+      fill: #121315;
+      dominant-baseline: middle;
+    }
+  </style>
+  <text y="60" x="10">Kingsley Emi</text>
+</svg>
