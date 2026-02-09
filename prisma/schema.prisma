@@ -1,0 +1,331 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+//////////////////////////////////////
+// ENUMS
+//////////////////////////////////////
+
+enum UserRole {
+  CUSTOMER
+  ADMIN
+  TECHNICIAN
+}
+
+enum SystemType {
+  GRID
+  OFF_GRID
+  HYBRID
+}
+
+enum SystemStatus {
+  ACTIVE
+  NEEDS_ATTENTION
+  INACTIVE
+}
+
+enum BatteryType {
+  LEAD_ACID
+  LITHIUM
+}
+
+enum AlertSeverity {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+enum AlertStatus {
+  NEW
+  ACKNOWLEDGED
+  RESOLVED
+}
+
+enum MonitoringSource {
+  MANUAL
+  INTEGRATION
+  TECHNICIAN
+}
+
+enum ServiceStatus {
+  OPEN
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+enum ProductType {
+  PANEL
+  BATTERY
+  INVERTER
+  ACCESSORY
+}
+
+enum OrderStatus {
+  DRAFT // Quote or admin-created
+  PENDING // Awaiting payment
+  PAID
+  CANCELLED
+  FAILED
+}
+
+enum PaymentStatus {
+  INITIATED
+  SUCCESS
+  FAILED
+}
+
+//////////////////////////////////////
+// USER & CUSTOMER
+//////////////////////////////////////
+
+model User {
+  id       String   @id @default(cuid())
+  email    String   @unique
+  password String
+  role     UserRole @default(CUSTOMER)
+
+  customer      Customer?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  serviceVisits ServiceVisit[]
+}
+
+model Customer {
+  id      String  @id @default(cuid())
+  name    String
+  phone   String?
+  address String?
+
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id])
+
+  systems SolarSystem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  orders    Order[]
+}
+
+//////////////////////////////////////
+// SOLAR SYSTEM (CORE)
+//////////////////////////////////////
+
+model SolarSystem {
+  id               String       @id @default(cuid())
+  name             String
+  location         String
+  installationDate DateTime
+  systemType       SystemType
+  status           SystemStatus @default(ACTIVE)
+
+  customerId String
+  customer   Customer @relation(fields: [customerId], references: [id])
+
+  panelArray PanelArray?
+  battery    Battery?
+  inverter   Inverter?
+
+  monitoring      MonitoringSnapshot[]
+  healthScores    HealthScore[]
+  alerts          Alert[]
+  serviceRequests ServiceRequest[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  orders    Order[]
+}
+
+//////////////////////////////////////
+// ASSETS
+//////////////////////////////////////
+
+model PanelArray {
+  id         String  @id @default(cuid())
+  capacityKw Float
+  brand      String?
+  model      String?
+  quantity   Int
+
+  systemId String      @unique
+  system   SolarSystem @relation(fields: [systemId], references: [id])
+}
+
+model Battery {
+  id             String      @id @default(cuid())
+  type           BatteryType
+  capacityKwh    Float
+  brand          String?
+  model          String?
+  installDate    DateTime
+  healthEstimate Int?
+
+  systemId String      @unique
+  system   SolarSystem @relation(fields: [systemId], references: [id])
+}
+
+model Inverter {
+  id                  String  @id @default(cuid())
+  brand               String
+  model               String
+  capacityKw          Float
+  serialNumber        String?
+  supportsIntegration Boolean @default(false)
+
+  systemId String      @unique
+  system   SolarSystem @relation(fields: [systemId], references: [id])
+}
+
+//////////////////////////////////////
+// MONITORING & HEALTH
+//////////////////////////////////////
+
+model MonitoringSnapshot {
+  id                     String   @id @default(cuid())
+  date                   DateTime
+  estimatedGenerationKwh Float?
+  inverterStatus         String?
+  notes                  String?
+
+  source MonitoringSource
+
+  systemId String
+  system   SolarSystem @relation(fields: [systemId], references: [id])
+
+  createdAt DateTime @default(now())
+}
+
+model HealthScore {
+  id         String @id @default(cuid())
+  score      Int
+  summary    String
+  confidence Int
+
+  systemId String
+  system   SolarSystem @relation(fields: [systemId], references: [id])
+
+  createdAt DateTime @default(now())
+}
+
+model Alert {
+  id         String        @id @default(cuid())
+  type       String
+  message    String
+  severity   AlertSeverity
+  status     AlertStatus   @default(NEW)
+  actionHint String?
+
+  systemId String
+  system   SolarSystem @relation(fields: [systemId], references: [id])
+
+  createdAt DateTime @default(now())
+}
+
+//////////////////////////////////////
+// SERVICE & MAINTENANCE
+//////////////////////////////////////
+
+model ServiceRequest {
+  id          String        @id @default(cuid())
+  issueType   String
+  description String?
+  priority    Int?
+  status      ServiceStatus @default(OPEN)
+
+  systemId String
+  system   SolarSystem @relation(fields: [systemId], references: [id])
+
+  visits ServiceVisit[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ServiceVisit {
+  id               String  @id @default(cuid())
+  findings         String?
+  actionsTaken     String?
+  partsReplaced    String?
+  followUpRequired Boolean @default(false)
+
+  serviceRequestId String
+  serviceRequest   ServiceRequest @relation(fields: [serviceRequestId], references: [id])
+
+  technicianId String?
+  technician   User?   @relation(fields: [technicianId], references: [id])
+
+  createdAt DateTime @default(now())
+}
+
+model Product {
+  id               String      @id @default(cuid())
+  name             String
+  slug             String?     @unique // ← added: for clean URLs (auto-generate from name)
+  type             ProductType
+  brand            String
+  model            String?
+  shortDescription String?     @db.Text // ← added: 1-2 sentences for listings/cards
+  longDescription  String?     @db.Text // ← added: full detailed description (features, specs, etc.)
+  mainImageUrl     String? // ← added: hero image URL (Cloudinary, S3, etc.)
+  imageUrls        String[]    @default([]) // ← added: additional gallery images
+  price            Int // in kobo
+  stock            Int?        @default(0) // ← optional: if you want basic inventory
+  active           Boolean     @default(true)
+  createdAt        DateTime    @default(now())
+  updatedAt        DateTime    @updatedAt
+
+  // Optional: if you later want to link catalog products to installed assets
+  // panelArrays     PanelArray[]?
+  // batteries       Battery[]?
+  // inverters       Inverter[]?
+  orderItems OrderItem[]
+}
+
+model Order {
+  id          String      @id @default(cuid())
+  status      OrderStatus @default(DRAFT)
+  totalAmount Int // in kobo
+
+  customerId String
+  customer   Customer @relation(fields: [customerId], references: [id])
+
+  systemId String?
+  system   SolarSystem? @relation(fields: [systemId], references: [id])
+
+  items   OrderItem[]
+  payment Payment?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model OrderItem {
+  id        String @id @default(cuid())
+  quantity  Int
+  unitPrice Int // snapshot price (important!)
+
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+
+  orderId String
+  order   Order  @relation(fields: [orderId], references: [id])
+}
+
+model Payment {
+  id     String        @id @default(cuid())
+  amount Int // in kobo
+  status PaymentStatus @default(INITIATED)
+
+  paystackRef       String  @unique
+  authorizationCode String?
+  channel           String?
+
+  orderId String @unique
+  order   Order  @relation(fields: [orderId], references: [id])
+
+  createdAt DateTime @default(now())
+}

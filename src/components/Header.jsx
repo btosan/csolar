@@ -8,6 +8,7 @@ import NavMobile from "./NavMobile"
 const navLinks = [
   { name: "Services", href: "/services" },
   { name: "Solutions", href: "/solutions" },
+  { name: "Products", href: "/products" },
   { name: "Projects", href: "/projects" },
   { name: "About", href: "/about" },
 ]
@@ -18,16 +19,19 @@ const Header = () => {
     <header className="bg-primary py-4 sticky top-0 z-50">
       <div className="container mx-auto">
         <div className="flex items-center justify-between">
-          <div className="flex items-center justify-center">
+          <div className="flex items-center justify-center hover:cursor-pointer">
             <Logo />
-            <span className="ml-2 mr-1 font-medium text-white xl:text-3xl text-xl md:text-2xl ">CONTAINED</span>
-            <span className="text-accent xl:text-3xl md:text-2xl text-xl tracking-wide font-bold">SOLAR</span>
+            <Link href='/'>
+              <span className="ml-2 mr-1 font-medium text-white xl:text-2xl text-xl md:text-2xl ">CONTAINED</span>
+              <span className="text-accent xl:text-2xl md:text-2xl text-xl tracking-wide font-bold">SOLAR</span>
+            </Link>
+            
           </div>
           {/* Logo */}
           
 
           {/* Desktop Navigation */}
-          <nav className="hidden xl:flex items-center gap-10">
+          <nav className="hidden xl:flex items-center gap-8">
             {/* Main Nav */}
             <ul className="flex">
               {navLinks.map((link, i) => (
@@ -49,7 +53,7 @@ const Header = () => {
             {/* Contact CTA */}
             <Link href="/contact">
               <button
-                className="w-50 h-13.5 py-1.25 px-2.5 flex items-center 
+                className="w-48 h-13.5 py-1.25 px-2.5 flex items-center 
                 justify-between bg-white group hover:cursor-pointer"
               >
                 <div className="flex-1 text-center tracking-[1.2px] font-primary font-bold text-primary text-sm uppercase ">
