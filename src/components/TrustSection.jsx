@@ -144,8 +144,6 @@ const TrustSection = () => {
               <p className="text-gray-700 dark:text-gray-300 leading-relaxed text-base">
                 {item.description}
               </p>
-
-              {/* Subtle underline accent on hover */}
               <div
                 className="
                   mx-auto mt-8 h-1 w-16 rounded-full bg-accent/60
