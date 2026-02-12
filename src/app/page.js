@@ -9,6 +9,7 @@ import Testimonials from "@/components/Testimonials";
 import Topbar from "@/components/Topbar";
 import Work from "@/components/Work";
 import TrustSection from "@/components/TrustSection";
+import ProductSection from "../components/Products";
 
 
 export default function Home() {
@@ -16,9 +17,9 @@ export default function Home() {
     <div className="overflow-hidden">
       <Hero />
       <Services />
+      <ProductSection />
       <About />
       <Stats />
-      
       <TrustSection />
       <Work />
       <Testimonials />

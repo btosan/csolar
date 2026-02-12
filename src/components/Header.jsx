@@ -21,7 +21,7 @@ const navLinks = [
       {
         title: "Maintenance & Repairs",
         description: "Preventive care and rapid repairs for reliable performance.",
-        image: "/assets/csolar/solar-repair.jpg",
+        image: "/assets/csolar/solar-repair1.jpg",
         href: "/services/maintenance",
       },
       {

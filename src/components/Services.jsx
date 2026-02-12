@@ -140,7 +140,7 @@ const Services = () => {
         >
           <PreTitle text="Our Services" center />
           <h2 className="h2 mb-1">Solutions We Provide</h2>
-          <p className="text-xs md:text-sm lg:text-base xl:text-lg 2xl:text-xl mb-3">
+          <p className="text-sm md:text-base lg:text-lg xl:text-xl 2xl:text-2xl mb-3">
             We install your system, supply the parts, maintain it, and continuously monitor its health.
           </p>
         </motion.div>

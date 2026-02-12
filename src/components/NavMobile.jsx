@@ -71,7 +71,7 @@ const NavMobile = () => {
       {/* Drawer */}
       <SheetContent
         side="left"
-        className="bg-primary border-none text-white w-72 pl-4 pr-6 [&>button]:hidden overflow-y-auto"
+        className="bg-primary border-none text-white w-72 px-6 [&>button]:hidden overflow-y-auto"
       >
         <div className="flex flex-col h-full pt-6 pb-8">
           {/* Header */}
