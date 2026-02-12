@@ -85,7 +85,7 @@ const ProductSection = () => {
                 href={product.href}
                 className="inline-flex items-center gap-2 text-primary text-base md:text-lg xl:text-xl font-semibold hover:gap-3 transition-all"
               >
-                View product
+                View products
                 <span className="transition-transform group-hover:translate-x-1">
                   →
                 </span>
