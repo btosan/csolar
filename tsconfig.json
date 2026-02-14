@@ -29,6 +29,6 @@
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
     "**/*.mts"
-, "next.config.mjs", "src/components/Services.jsx", "src/components/forms/SignUpForm.jsx", "src/components/forms/SignInForms.jsx", "src/app/(auth)/register/page.jsx", "src/app/(auth)/signin/page.jsx", "src/components/forms/SignInForm.jsx"  ],
+, "next.config.mjs", "src/components/Services.jsx", "src/components/forms/SignUpForm.jsx", "src/components/forms/SignInForms.jsx", "src/app/(auth)/register/page.jsx", "src/app/(auth)/signin/page.jsx", "src/components/forms/SignInForm.jsx", "src/components/pages/Maintenance.jsx"  ],
   "exclude": ["node_modules"]
 }
