@@ -43,7 +43,7 @@ export default function SolarInstallationPage() {
     <main className="overflow-hidden">
 
       {/* HERO */}
-      <section className="relative h-[70vh] flex items-center">
+      <section className="relative md:h-[70vh] flex items-center py-12">
         <Image
           src="/assets/csolar/solar-installation.jpg"
           alt="Solar installation"
@@ -57,10 +57,10 @@ export default function SolarInstallationPage() {
             variants={fadeIn("up", 0.2)}
             initial="hidden"
             animate="show"
-            className="max-w-2xl"
+            className="max-w-2xl xl:max-w-3xl"
           >
             <PreTitle text="Solar & Inverter Installation" />
-            <h1 className="h1 mb-6 text-white">
+            <h1 className="h2 uppercase mb-6 text-white">
               Reliable Solar Systems Designed for Real-World Energy Needs
             </h1>
             <p className="mb-8 text-lg">
