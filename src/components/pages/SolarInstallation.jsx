@@ -150,7 +150,6 @@ export default function SolarInstallationPage() {
         </div>
       </section>
 
-      {/* WHY INSTALL WITH US */}
       <section className="py-20 bg-primary text-white">
         <div className="container mx-auto grid lg:grid-cols-2 gap-16 items-center">
 
