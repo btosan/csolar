@@ -224,7 +224,7 @@ const Header = () => {
 
             {/* Login */}
             <Link
-              href="/login"
+              href="/signin"
               className="text-sm text-white/70 uppercase font-primary tracking-[1.2px] hover:text-white transition-colors"
             >
               Login

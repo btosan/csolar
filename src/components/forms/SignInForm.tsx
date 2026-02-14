@@ -1,6 +1,5 @@
 'use client';
 
-import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useState, useEffect } from 'react';
 import {
@@ -11,15 +10,15 @@ import {
   FormLabel,
   FormMessage,
 } from '../ui/form';
-import { toast } from 'react-hot-toast'
-import { useSession } from 'next-auth/react'
-import { useSearchParams, useRouter} from 'next/navigation'
+import { toast } from 'react-hot-toast';
+import { useSession, signIn } from 'next-auth/react';
+import { useSearchParams, useRouter } from 'next/navigation';
 import * as z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
+
 import { Input } from '../ui/input';
 import { AppButton } from '../ui/AppButton';
 import Link from 'next/link';
-import { signIn } from 'next-auth/react';
 import GoogleSignInButton from '../Buttons/GoogleSignInButton';
 import { motion } from 'framer-motion';
 import { PasswordInput } from '../ui/PasswordInput';
@@ -32,15 +31,19 @@ const FormSchema = z.object({
     .min(8, 'Password must have at least 8 characters'),
 });
 
-const SignInForm = () => {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string>('');
-  const { data: session } = useSession();
+type FormValues = z.infer<typeof FormSchema>;
+
+export default function SignInForm() {
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const { data: session, status } = useSession();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get('callbackUrl') || '/profile' || '/admin';
 
-  const form = useForm<z.infer<typeof FormSchema>>({
+  const callbackUrl = searchParams.get('callbackUrl') ?? '/profile';
+
+  const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
       email: '',
@@ -48,20 +51,21 @@ const SignInForm = () => {
     },
   });
 
+  // Redirect if already signed in
   useEffect(() => {
-    if (session) {
-      if (session?.user?.role === "ADMIN") {
-        router.push("/admin");
+    if (status === 'authenticated' && session) {
+      if (session.user?.role === 'ADMIN') {
+        router.replace('/admin');
       } else {
-         router.push("/profile");
+        router.replace(callbackUrl);
       }
     }
-  }, [session, router])
+  }, [status, session, router, callbackUrl]);
 
-  const onSubmit = async (values: z.infer<typeof FormSchema>) => {
+  const onSubmit = async (values: FormValues) => {
     try {
       setIsLoading(true);
-      setError('');
+      setError(null);
 
       const result = await signIn('credentials', {
         email: values.email,
@@ -75,12 +79,13 @@ const SignInForm = () => {
         return;
       }
 
-      if (result?.ok) {
-        toast.success('Signed in successfully!');
-        router.push(callbackUrl);
-        router.refresh();
-      }
-    } catch (error) {
+      // Success — force refresh session and redirect
+      toast.success('Signed in successfully!');
+      router.refresh();           // important in App Router
+      router.replace(callbackUrl); // or '/profile' / '/admin' — handled in useEffect anyway
+
+    } catch (err) {
+      console.error(err);
       setError('An unexpected error occurred');
       toast.error('An unexpected error occurred');
     } finally {
@@ -88,8 +93,13 @@ const SignInForm = () => {
     }
   };
 
+  // Optional: prevent flash of form if already loading/authenticated
+  if (status === 'loading') {
+    return <div className="text-center py-12">Loading...</div>;
+  }
+
   return (
-    <motion.div 
+    <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
@@ -125,6 +135,7 @@ const SignInForm = () => {
                 </FormItem>
               )}
             />
+
             <FormField
               control={form.control}
               name="password"
@@ -135,7 +146,7 @@ const SignInForm = () => {
                     <PasswordInput
                       placeholder="Enter your password"
                       {...field}
-                      className="h-11 bg-gray-50 border-gray-300 focus:border-primary/50 focus:ring-primary/20 text-gray-900 placeholder:text-gray-400 "
+                      className="h-11 bg-gray-50 border-gray-300 focus:border-primary/50 focus:ring-primary/20 text-gray-900 placeholder:text-gray-400"
                     />
                   </FormControl>
                   <FormMessage className="text-xs" />
@@ -160,6 +171,7 @@ const SignInForm = () => {
             variant="glow"
             className="hover:cursor-pointer"
             isLoading={isLoading}
+            disabled={isLoading}
           >
             Sign in
           </AppButton>
@@ -190,6 +202,4 @@ const SignInForm = () => {
       </Form>
     </motion.div>
   );
-};
-
-export default SignInForm;
+}
