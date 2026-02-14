@@ -323,7 +323,7 @@ const Services = () => {
                         ))}
                       </ul>
 
-                      <Button href="/contact" text="Read more" />
+                      <Button href="/contact" text="Contact Us" />
                     </div>
                   </motion.div>
                 </TabsContent>

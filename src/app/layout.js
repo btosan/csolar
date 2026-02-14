@@ -3,6 +3,7 @@ import "./globals.css"
 import Header from "@/components/Header"
 import Topbar from "@/components/Topbar"
 import Footer from "@/components/Footer"
+import NextAuthProviders from './NextAuthProviders';
 
 const dmSans = DM_Sans({
   variable: "--font-dmSans",
@@ -39,16 +40,18 @@ export const viewport = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${dmSans.variable} ${barlow.variable} antialiased`}
       >
-        <Topbar />
-        <Header />
-        <main>
-          {children}
-        </main>
-        <Footer />
+        <NextAuthProviders>
+          <Topbar />
+          <Header />
+          <main>
+            {children}
+          </main>
+          <Footer />
+        </NextAuthProviders>
       </body>
     </html>
   )

@@ -1,3 +1,6 @@
+npm install @prisma/adapter-pg pg
+
+
 npx prisma format
 
 npx prisma generate

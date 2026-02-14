@@ -8,7 +8,7 @@ const nextConfig = {
       reactStrictMode: true,
     
       images: {
-        unoptimized: true,
+        qualities: [75, 100],
         formats: [
           'image/avif',
           'image/webp'
