@@ -1,10 +1,10 @@
 import React from 'react'
-import SystemAssessmentPage from '@/components/pages/SystemAssessment'
+import ConsultingEnergyPlanningPage from '@/components/pages/ConsultingEnergyPlanning'
 
 function page() {
   return (
     <div>
-        <SystemAssessmentPage />
+        <ConsultingEnergyPlanningPage />
     </div>
   )
 }
