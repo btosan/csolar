@@ -43,7 +43,7 @@ export default function SolarInstallationPage() {
     <main className="overflow-hidden">
 
       {/* HERO */}
-      <section className="relative md:h-[70vh] flex items-center py-12">
+      <section className="relative md:h-screen flex items-center justify-center ">
         <Image
           src="/assets/csolar/solar-installation.jpg"
           alt="Solar installation"
@@ -57,10 +57,10 @@ export default function SolarInstallationPage() {
             variants={fadeIn("up", 0.2)}
             initial="hidden"
             animate="show"
-            className="max-w-2xl xl:max-w-3xl"
+            className="max-w-2xl 2xl:max-w-3xl"
           >
             <PreTitle text="Solar & Inverter Installation" />
-            <h1 className="h2 uppercase mb-6 text-white">
+            <h1 className="text-3xl lg:text-4xl 2xl:text-5xl font-bold uppercase mb-6 text-white">
               Reliable Solar Systems Designed for Real-World Energy Needs
             </h1>
             <p className="mb-8 text-lg">
@@ -155,7 +155,7 @@ export default function SolarInstallationPage() {
 
           <div>
             <PreTitle text="Why Choose Contained Solar" />
-            <h2 className="h2 mb-6">
+            <h2 className="text-white text-2xl lg:text-3xl 2xl:text-4xl mb-6">
               Installation Backed by Lifecycle Care
             </h2>
 

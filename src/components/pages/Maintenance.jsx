@@ -18,22 +18,22 @@ const features = [
 const process = [
   {
     title: "System Evaluation",
-    description:
+    descrion:
       "We assess your solar system’s current condition, performance metrics, and component health.",
   },
   {
     title: "Preventive Care",
-    description:
+    descrion:
       "We perform scheduled maintenance to prevent failures and extend equipment lifespan.",
   },
   {
-    title: "Repair & Optimization",
-    description:
-      "If issues are detected, we resolve them quickly while optimizing system performance.",
+    title: "Repair & imization",
+    descrion:
+      "If issues are detected, we resolve them quickly while imizing system performance.",
   },
   {
     title: "Ongoing Monitoring",
-    description:
+    descrion:
       "Your system continues under observation to detect early signs of wear or inefficiency.",
   },
 ]
@@ -42,8 +42,8 @@ export default function MaintenancePage() {
   return (
     <main className="overflow-hidden">
 
-      {/* HERO */}
-      <section className="relative md:h-[70vh] flex items-center py-12">
+      {/* HERO  */}
+      <section className="relative md:h-screen flex items-center justify-center ">
         <Image
           src="/assets/csolar/solar-repair1.jpg"
           alt="Solar maintenance and repair"
@@ -57,10 +57,10 @@ export default function MaintenancePage() {
             variants={fadeIn("up", 0.2)}
             initial="hidden"
             animate="show"
-            className="max-w-2xl xl:max-w-3xl"
+            className="max-w-2xl 2xl:max-w-3xl"
           >
             <PreTitle text="Maintenance & Repairs" />
-            <h1 className="h2 uppercase mb-6 text-white">
+            <h1 className="text-3xl lg:text-4xl 2xl:text-5xl font-bold uppercase mb-6 text-white">
               Keep Your Solar System Reliable, Safe, and Performing
             </h1>
             <p className="mb-8 text-lg">
@@ -90,7 +90,7 @@ export default function MaintenancePage() {
             <p className="mb-8">
               Solar systems are long-term assets that require regular care.
               Our maintenance approach focuses on early detection,
-              performance optimization, and fast repairs to keep everything
+              performance imization, and fast repairs to keep everything
               running smoothly.
             </p>
 
@@ -143,7 +143,7 @@ export default function MaintenancePage() {
                 Step {i + 1}
               </div>
               <h3 className="h4 mb-3">{step.title}</h3>
-              <p>{step.description}</p>
+              <p>{step.descrion}</p>
             </motion.div>
           ))}
         </div>
@@ -155,7 +155,7 @@ export default function MaintenancePage() {
 
           <div>
             <PreTitle text="Why Choose Contained Solar" />
-            <h2 className="h2 mb-6">
+            <h2 className="text-white text-2xl lg:text-3xl 2xl:text-4xl font-bold mb-6">
               Maintenance Designed Around Lifecycle Ownership
             </h2>
 
