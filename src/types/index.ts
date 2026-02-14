@@ -1,106 +1,197 @@
-import { Post, User, Category } from '@prisma/client'
+// types/index.ts
 
-export type TCategory = {
-  id: string;
-  catName: string;
-};
+import type { Prisma } from '@prisma/client';
 
-export type Tag = {
-  id: string;
-  tagName: string | null;
-};
+// ────────────────────────────────────────────────
+// Re-export Prisma generated types
+// ────────────────────────────────────────────────
 
-export type TPost = {
-  id: string;
-  title: string;
-  slug: string;
-  content: string;
-  imageUrl?: string;
-  image2Url?: string;
-  publicId?: string;
-  catName?: string;
-  tags: null | string[];
-  createdAt: string;
-  authorEmail: string;
-  author: {
-    name?: string;
-    username?: string;
-    firstName?: string;
-    lastName?: string;
-  };
-};
+export type {
+  User,
+  Customer,
+  SolarSystem,
+  PanelArray,
+  Battery,
+  Inverter,
+  MonitoringSnapshot,
+  HealthScore,
+  Alert,
+  ServiceRequest,
+  ServiceVisit,
+  Product,
+  Order,
+  OrderItem,
+  Payment,
+  Project,
+  ProjectImage,
+  Role,
+  SystemType,
+  SystemStatus,
+  BatteryType,
+  AlertSeverity,
+  AlertStatus,
+  MonitoringSource,
+  ServiceStatus,
+  ProductType,
+  OrderStatus,
+  PaymentStatus,
+} from '@prisma/client';
 
-export type TProjectCategory = {
-  id: string;
-  catName: string;
-};
+// ────────────────────────────────────────────────
+// Prisma input helpers
+// ────────────────────────────────────────────────
 
-export type ProjectTag = {
-  id: string;
-  tagName: string | null;
-};
+export type UserCreateInput = Prisma.UserCreateInput;
+export type UserUpdateInput = Prisma.UserUpdateInput;
 
+// ────────────────────────────────────────────────
+// Customer helpers
+// ────────────────────────────────────────────────
 
-export interface ProjectFormData {
-  title: string;
-  slug: string;
-  imageUrl?: string;
-  imageUrls?: string[];
-  shortDescription?: string;
-  description: string;
-  featured?: boolean;
-  type?: 'BACKEND' | 'FRONTEND' | 'FULLSTACK' | 'AI' | 'WEB_3' | 'OTHER';
-  catName?: string;
-  category?: {
-    catName: string;
-  } | null;
-  projectUrl?: string;
-  playStoreUrl?: string | null; 
-  appStoreUrl?: string | null; 
-}
+export type CustomerWithoutUser = Omit<
+  Prisma.CustomerGetPayload<{}>,
+  'user'
+>;
 
-export interface Project extends ProjectFormData {
-  id: string;
-  createdAt: Date;
-  updatedAt: Date;
-  category?: {
-    id: string;
-    catName: string;
-  };
-  tags?: Array<{
-    id: string;
-    tagName: string;
+export type CustomerWithUser =
+  Prisma.CustomerGetPayload<{
+    include: { user: true };
   }>;
-  galleries?: Array<{
-    id: string;
-    publicId: string;
-    format: string;
-    version: string;
+
+// ────────────────────────────────────────────────
+// Project helpers (UPDATED for gallery + featured)
+// ────────────────────────────────────────────────
+
+export type ProjectEssential = Pick<
+  Prisma.ProjectGetPayload<{}>,
+  | 'id'
+  | 'title'
+  | 'description'
+  | 'imageUrl'
+  | 'location'
+  | 'featured'
+  | 'projectDate'
+  | 'createdAt'
+  | 'updatedAt'
+>;
+
+export type ProjectWithImages =
+  Prisma.ProjectGetPayload<{
+    include: { images: true };
   }>;
-  skills?: {  // Make skills optional
-    id: string;
-    name: string;
-    category: string;
-    proficiencyLevel: string;
-    icon?: string;
-  }[];
-  imageCredit?: string;
-  imageCreditUrls?: string[];
-}
 
-export interface ExtendedPost extends Post {
-  author: {
-    name?: string | null;
-    email: string;
-    username?: string | null;
-    firstName?: string | null;
-    lastName?: string | null;
-    image?: string | null;
-  } | null;
-  category: Category | null;
-  tags: Tag[];
-}
+export type FeaturedProject =
+  Prisma.ProjectGetPayload<{
+    where: { featured: true };
+    include: { images: true };
+  }>;
 
-export interface BlogCategoryProps {
-  blog: ExtendedPost;
-}
+// ────────────────────────────────────────────────
+// Solar system helpers
+// ────────────────────────────────────────────────
+
+export type SolarSystemWithAssets =
+  Prisma.SolarSystemGetPayload<{
+    include: {
+      panelArray: true;
+      battery: true;
+      inverter: true;
+    };
+  }>;
+
+export type SolarSystemCard =
+  Prisma.SolarSystemGetPayload<{
+    select: {
+      id: true;
+      name: true;
+      location: true;
+      systemType: true;
+      status: true;
+      installationDate: true;
+      customer: {
+        select: { name: true };
+      };
+    };
+  }>;
+
+// ────────────────────────────────────────────────
+// Product helpers
+// ────────────────────────────────────────────────
+
+export type ProductCatalogItem = Pick<
+  Prisma.ProductGetPayload<{}>,
+  | 'id'
+  | 'name'
+  | 'slug'
+  | 'type'
+  | 'brand'
+  | 'model'
+  | 'shortDescription'
+  | 'mainImageUrl'
+  | 'price'
+  | 'stock'
+  | 'active'
+>;
+
+// ────────────────────────────────────────────────
+// Order helpers
+// ────────────────────────────────────────────────
+
+export type OrderWithItemsAndCustomer =
+  Prisma.OrderGetPayload<{
+    include: {
+      customer: {
+        select: {
+          id: true;
+          name: true;
+          phone: true;
+        };
+      };
+      items: {
+        include: {
+          product: {
+            select: {
+              id: true;
+              name: true;
+              mainImageUrl: true;
+              price: true;
+            };
+          };
+        };
+      };
+      payment: true;
+    };
+  }>;
+
+// ────────────────────────────────────────────────
+// Service helpers
+// ────────────────────────────────────────────────
+
+export type ServiceRequestWithSystem =
+  Prisma.ServiceRequestGetPayload<{
+    include: {
+      system: {
+        select: {
+          id: true;
+          name: true;
+          location: true;
+          customer: {
+            select: { name: true };
+          };
+        };
+      };
+      visits: true;
+    };
+  }>;
+
+// ────────────────────────────────────────────────
+// Utility helpers
+// ────────────────────────────────────────────────
+
+export type PartialBy<T, K extends keyof T> =
+  Omit<T, K> & Partial<Pick<T, K>>;
+
+export type CreateWithoutAutoFields<T> = Omit<
+  T,
+  'id' | 'createdAt' | 'updatedAt'
+>;
