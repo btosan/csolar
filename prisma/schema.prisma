@@ -10,7 +10,7 @@ datasource db {
 // ENUMS
 //////////////////////////////////////
 
-enum UserRole {
+enum Role {
   CUSTOMER
   ADMIN
   TECHNICIAN
@@ -87,7 +87,7 @@ model User {
   id       String   @id @default(cuid())
   email    String   @unique
   password String
-  role     UserRole @default(CUSTOMER)
+  role     Role @default(CUSTOMER)
 
   name      String?      
   image     String? 
