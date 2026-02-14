@@ -152,7 +152,7 @@ const Header = () => {
                     onMouseLeave={() => hasSubmenu && setActiveMenu(null)}
                   >
                       <div
-                        className="inline-block"
+                        className="inline-block "
                         onMouseEnter={() => hasSubmenu && setActiveMenu(link.name)}
                         onMouseLeave={() => hasSubmenu && setActiveMenu(null)}
                       >
@@ -168,11 +168,11 @@ const Header = () => {
                       {hasSubmenu && (
                         <div
                           className={`fixed left-0 ${
-                            isScrolled ? "top-20" : "top-32"
-                          } w-screen 2xl:h-[90vh] xl:h-[90vh]] lg:h-[92vh] bg-gray-200 transition-opacity duration-200 z-50
+                            isScrolled ? "top-16" : "top-32"
+                          } w-screen 2xl:h-[90vh] xl:h-[90vh]] lg:h-[92vh]  bg-gray-200 transition-opacity duration-200 z-50
                           ${activeMenu === link.name ? "opacity-100 visible" : "opacity-0 invisible pointer-events-none"}`}
                         >
-                          <div className="container mx-auto h-full 2xl:py-8 py-6 px-6">
+                          <div className="container mx-auto h-full 2xl:py-8 py-6 px-6 -mt-5">
                             <div className="grid grid-cols-2 2xl:gap-8 lg:gap-6 h-full">
                               {link.submenu.map((sub, idx) => (
                                 <Link
