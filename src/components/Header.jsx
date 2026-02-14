@@ -169,19 +169,19 @@ const Header = () => {
                         <div
                           className={`fixed left-0 ${
                             isScrolled ? "top-20" : "top-28"
-                          } w-screen h-[90vh] bg-gray-200 transition-opacity duration-200 z-50
+                          } w-screen 2xl:h-[90vh] xl:h-[90vh]] lg:h-[92vh] bg-gray-200 transition-opacity duration-200 z-50
                           ${activeMenu === link.name ? "opacity-100 visible" : "opacity-0 invisible pointer-events-none"}`}
                         >
-                          <div className="container mx-auto h-full py-8 px-6">
-                            <div className="grid grid-cols-2 gap-8 h-full">
+                          <div className="container mx-auto h-full 2xl:py-8 py-6 px-6">
+                            <div className="grid grid-cols-2 2xl:gap-8 lg:gap-6 h-full">
                               {link.submenu.map((sub, idx) => (
                                 <Link
                                   key={idx}
                                   href={sub.href}
                                   onClick={closeMenu}
-                                  className="group block rounded-xl overflow-hidden bg-white shadow hover:shadow-xl transition-all duration-300"
+                                  className="group flex items-center rounded-xl overflow-hidden bg-white shadow hover:shadow-xl transition-all duration-300"
                                 >
-                                  <div className="2xl:h-64 lg:h-56 w-full overflow-hidden">
+                                  <div className="full w-auto overflow-hidden">
                                     <Image
                                       src={sub.image}
                                       alt={sub.title}
