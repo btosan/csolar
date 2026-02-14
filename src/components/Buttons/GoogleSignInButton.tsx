@@ -23,7 +23,7 @@ const GoogleSignInButton: FC<GoogleSignInButtonProps> = ({ children }) => {
         // Animate transition before redirect
         await new Promise(resolve => setTimeout(resolve, 500));
         
-        if (role === 'ADMIN' || role === 'AUTHOR') {
+        if (role === 'ADMIN') {
           window.location.href = '/admin';
         } else {
           window.location.href = '/profile';

@@ -1,11 +1,11 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
-import Link from "next/link"
-import Image from "next/image"
-import { RiArrowUpLine } from "react-icons/ri"
-import Logo from "./Logo"
-import NavMobile from "./NavMobile"
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import Image from "next/image";
+import { RiArrowUpLine } from "react-icons/ri";
+import Logo from "./Logo";
+import NavMobile from "./NavMobile";
 
 const navLinks = [
   {
@@ -105,29 +105,27 @@ const navLinks = [
 
 
 const Header = () => {
-
-  const [isScrolled, setIsScrolled] = useState(false)
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [activeMenu, setActiveMenu] = useState(null); 
 
   useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 80) {
-        setIsScrolled(true)
-      } else {
-        setIsScrolled(false)
-      }
-    }
+      const handleScroll = () => {
+        setIsScrolled(window.scrollY > 80);
+      };
+      window.addEventListener("scroll", handleScroll);
+      return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
 
-    window.addEventListener("scroll", handleScroll)
-
-    return () => window.removeEventListener("scroll", handleScroll)
-  }, [])
+    const closeMenu = () => {
+      setActiveMenu(null);
+    };
 
   return (
     <header className="bg-primary py-4 sticky top-0 z-100">
       <div className="container mx-auto">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <div className="flex items-center hover:cursor-pointer">
+          <div className="flex items-center cursor-pointer">
             <Logo />
             <Link href="/">
               <span className="ml-2 mr-1 font-medium text-white xl:text-2xl text-xl">
@@ -142,74 +140,79 @@ const Header = () => {
           {/* Desktop Navigation */}
           <nav className="hidden xl:flex items-center gap-8">
             <ul className="flex items-center">
-              {navLinks.map((link, i) => (
-                <li
-                  key={i}
-                  className="relative group text-white text-sm uppercase font-primary font-medium tracking-[1.2px]
-                  after:content-['/'] after:mx-4 last:after:content-none after:text-accent"
-                >
-                  <Link
-                    href={link.href}
-                    className="hover:text-accent transition-colors"
+              {navLinks.map((link, i) => {
+                const hasSubmenu = !!link.submenu;
+                const isActive = activeMenu === link.name;
+
+                return (
+                  <li
+                    key={i}
+                    className="relative text-white text-sm  font-primary font-medium tracking-[1.2px] after:content-['/'] after:mx-4 last:after:content-none after:text-accent"
+                    onMouseEnter={() => hasSubmenu && setActiveMenu(link.name)}
+                    onMouseLeave={() => hasSubmenu && setActiveMenu(null)}
                   >
-                    {link.name}
-                  </Link>
+                      <div
+                        className="inline-block"
+                        onMouseEnter={() => hasSubmenu && setActiveMenu(link.name)}
+                        onMouseLeave={() => hasSubmenu && setActiveMenu(null)}
+                      >
+                      <Link
+                        href={link.href}
+                        onClick={closeMenu}
+                        className="uppercase hover:text-accent transition-colors px-1 py-2 block"
+                      >
+                        {link.name}
+                      </Link>
 
-                  {/* Dropdown */}
-                {link.submenu && (
-                  <div
-                    className={`fixed left-0 ${
-                      isScrolled ? "top-20" : "top-28"
-                    } w-screen h-[90vh] bg-gray-200
-                    opacity-0 invisible group-hover:opacity-100 group-hover:visible
-                    transition-all duration-300 z-90`}
-                  >
-
-                    <div className="container mx-auto h-full py-6">
-                      <div className="grid grid-cols-2 gap-10 h-full">
-                        {link.submenu.map((sub, idx) => (
-                          <Link
-                            key={idx}
-                            href={sub.href}
-                            className="group block rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition"
-                          >
-                            {/* Image */}
-                            <div className="2xl:h-64 lg:h-56 w-full overflow-hidden ">
-                              <Image
-                                src={sub.image}
-                                alt={sub.title}
-                                width={300}
-                                height={300}
-                                className="h-full w-full object-cover group-hover:scale-105 hover:scale-75 transition duration-300"
-                              />
+                      {/* Mega Dropdown */}
+                      {hasSubmenu && (
+                        <div
+                          className={`fixed left-0 ${
+                            isScrolled ? "top-20" : "top-28"
+                          } w-screen h-[90vh] bg-gray-200 transition-opacity duration-200 z-50
+                          ${activeMenu === link.name ? "opacity-100 visible" : "opacity-0 invisible pointer-events-none"}`}
+                        >
+                          <div className="container mx-auto h-full py-8 px-6">
+                            <div className="grid grid-cols-2 gap-8 h-full">
+                              {link.submenu.map((sub, idx) => (
+                                <Link
+                                  key={idx}
+                                  href={sub.href}
+                                  onClick={closeMenu}
+                                  className="group block rounded-xl overflow-hidden bg-white shadow hover:shadow-xl transition-all duration-300"
+                                >
+                                  <div className="2xl:h-64 lg:h-56 w-full overflow-hidden">
+                                    <Image
+                                      src={sub.image}
+                                      alt={sub.title}
+                                      width={300}
+                                      height={300}
+                                      className="h-full w-full object-cover group-hover:scale-105 transition duration-500"
+                                    />
+                                  </div>
+                                  <div className="p-5 bg-white">
+                                    <h3 className="uppercase text-xl font-bold text-primary mb-2">
+                                      {sub.title}
+                                    </h3>
+                                    <p className="text-sm text-gray-600 line-clamp-2">
+                                      {sub.description}
+                                    </p>
+                                  </div>
+                                </Link>
+                              ))}
                             </div>
-
-                            {/* Content */}
-                            <div className="p-6">
-                              <h3 className="text-xl font-bold text-primary mb-2">
-                                {sub.title}
-                              </h3>
-                              <p className="text-sm text-black">
-                                {sub.description}
-                              </p>
-                            </div>
-                          </Link>
-                        ))}
+                          </div>
+                        </div>
+                      )}
                       </div>
-                    </div>
-                  </div>
-                )}
-
-                </li>
-              ))}
+                  </li>
+                );
+              })}
             </ul>
 
             {/* Contact CTA */}
             <Link href="/contact">
-              <button
-                className="w-48 h-13.5 py-1.25 px-2.5 flex items-center 
-                justify-between bg-white group"
-              >
+              <button className="w-48 h-13.5 py-1.5 px-2.5 flex items-center justify-between bg-white group">
                 <div className="flex-1 text-center tracking-[1.2px] font-primary font-bold text-primary text-sm uppercase">
                   Contact Us
                 </div>
@@ -235,7 +238,7 @@ const Header = () => {
         </div>
       </div>
     </header>
-  )
-}
+  );
+};
 
-export default Header
+export default Header;

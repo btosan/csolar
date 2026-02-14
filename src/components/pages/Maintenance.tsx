@@ -184,7 +184,7 @@ export default function MaintenancePage() {
       <section className="py-20 bg-white ">
         <div className="container  max-w-3xl text-center flex flex-col items-center justify-center mx-auto w-full">
           <PreTitle text="Need Service?" center />
-          <h2 className="h2 mb-6">
+          <h2 className="h3 mb-6">
             Protect Your Solar Investment Today
           </h2>
 

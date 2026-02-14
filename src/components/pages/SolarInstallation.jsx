@@ -185,7 +185,7 @@ export default function SolarInstallationPage() {
       <section className="py-20 bg-white text-center">
        <div className="container  max-w-3xl text-center flex flex-col items-center justify-center mx-auto w-full">
           <PreTitle text="Ready to Install?" center />
-          <h2 className="h2 mb-6">
+          <h2 className="h3 mb-6">
             Let’s Build a Solar System That Works for You
           </h2>
 
