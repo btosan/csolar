@@ -58,10 +58,7 @@ export const authOptions: NextAuthOptions = {
             id: user.id,
             email: user.email,
             name: user.name,
-            firstName: user.firstName,
-            lastName: user.lastName,
             image: user.image,
-            bio: user.bio,
             role: user.role,
           };
         } catch (error) {
