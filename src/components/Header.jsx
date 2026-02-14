@@ -164,7 +164,6 @@ const Header = () => {
                         {link.name}
                       </Link>
 
-                      {/* Mega Dropdown */}
                       {hasSubmenu && (
                         <div
                           className={`fixed left-0 ${
