@@ -70,9 +70,7 @@ export const authOptions: NextAuthOptions = {
   ],
   pages: {
     signIn: '/signin',
-    // signOut: '/signout',
-    // error: '/error',
-    // verifyRequest: '/verify',
+
   },
   session: {
     strategy: "jwt",
@@ -84,8 +82,6 @@ export const authOptions: NextAuthOptions = {
         session.user.id = token.sub as string;
         session.user.email = token.email as string;
         session.user.name = token.name as string;
-        session.user.firstName = token.firstName as string;
-        session.user.lastName = token.lastName as string;
         session.user.bio = token.bio as string;
         session.user.role = token.role as Role;
         session.user.image = token.image as string;
@@ -97,9 +93,6 @@ export const authOptions: NextAuthOptions = {
         token.id = user.id;
         token.email = user.email;
         token.name = user.name;
-        token.firstName = user.firstName;
-        token.lastName = user.lastName;
-        token.bio = user.bio;
         token.role = user.role;
         token.image = user.image;
       }
