@@ -9,6 +9,7 @@ import { fadeIn } from "@/variants"
 const features = [
   "Residential & commercial solar installations",
   "Grid-tied, off-grid & hybrid systems",
+  "Streetlight solar installations",
   "Load analysis & system sizing",
   "Battery & inverter configuration",
   "Safety-compliant installation",
@@ -97,7 +98,7 @@ export default function SolarInstallationPage() {
 
             <ul className="space-y-4">
               {features.map((item, i) => (
-                <li key={i} className="flex gap-4 items-start">
+                <li key={i} className="flex gap-4 items-center ">
                   <div className="w-2 h-2 mt-2 bg-accent" />
                   <span>{item}</span>
                 </li>
@@ -109,7 +110,7 @@ export default function SolarInstallationPage() {
             variants={fadeIn("left", 0.2)}
             initial="hidden"
             whileInView="show"
-            className="relative h-112.5"
+            className="relative h-114.5"
           >
             <Image
               src="/assets/csolar/solar-repair.jpg"
@@ -131,7 +132,7 @@ export default function SolarInstallationPage() {
           </h2>
         </div>
 
-        <div className="container mx-auto grid md:grid-cols-2 xl:grid-cols-4 gap-8">
+        <div className="container mx-auto grid md:grid-cols-2  gap-8">
           {process.map((step, i) => (
             <motion.div
               key={i}
@@ -140,7 +141,7 @@ export default function SolarInstallationPage() {
               whileInView="show"
               className="bg-white p-8 shadow rounded-lg"
             >
-              <div className="text-gray-500 font-bold mb-3">
+              <div className="text-black font-medium mb-3 px-4 py-1 bg-accent/80 rounded-md w-fit text-2xl">
                 Step {i + 1}
               </div>
               <h3 className="h4 mb-3">{step.title}</h3>

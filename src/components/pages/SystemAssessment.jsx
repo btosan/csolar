@@ -7,46 +7,47 @@ import { motion } from "framer-motion"
 import { fadeIn } from "@/variants"
 
 const features = [
-  "Preventive system maintenance",
-  "Battery & inverter health checks",
-  "Fault diagnosis & repair",
-  "Performance inspections",
-  "Emergency service response",
-  "Maintenance reporting & history tracking",
+  "Existing solar system evaluation",
+  "Performance benchmarking",
+  "Battery & inverter health analysis",
+  "Capacity expansion planning",
+  "Component upgrade recommendations",
+  "System optimization tuning",
+  "Compatibility verification",
 ]
 
 const process = [
   {
-    title: "System Evaluation",
-    descrion:
-      "We assess your solar system’s current condition, performance metrics, and component health.",
+    title: "System Assessment",
+    description:
+      "We inspect your current solar setup, measuring performance, component condition, and overall system efficiency.",
   },
   {
-    title: "Preventive Care",
-    descrion:
-      "We perform scheduled maintenance to prevent failures and extend equipment lifespan.",
+    title: "Diagnostics & Planning",
+    description:
+      "We identify bottlenecks, aging components, and growth opportunities to design a smart upgrade path.",
   },
   {
-    title: "Repair & imization",
-    descrion:
-      "If issues are detected, we resolve them quickly while imizing system performance.",
+    title: "Upgrade Implementation",
+    description:
+      "We install compatible upgrades and optimize configurations to improve output and reliability.",
   },
   {
-    title: "Ongoing Monitoring",
-    descrion:
-      "Your system continues under observation to detect early signs of wear or inefficiency.",
+    title: "Validation & Monitoring",
+    description:
+      "We verify performance gains and continue monitoring to ensure long-term stability.",
   },
 ]
 
-export default function MaintenancePage() {
+export default function SystemAssessmentPage() {
   return (
     <main className="overflow-hidden">
 
-      {/* HERO  */}
-      <section className="relative md:h-screen flex items-center justify-center ">
+      {/* HERO */}
+      <section className="relative md:h-screen flex items-center justify-center">
         <Image
-          src="/assets/csolar/solar-repair1.jpg"
-          alt="Solar maintenance and repair"
+          src="/assets/csolar/solar-audits.jpg"
+          alt="Solar system assessment"
           fill
           className="object-cover"
         />
@@ -59,16 +60,16 @@ export default function MaintenancePage() {
             animate="show"
             className="max-w-2xl 2xl:max-w-3xl"
           >
-            <PreTitle text="Maintenance & Repairs" />
+            <PreTitle text="System Assessment & Upgrades" />
             <h1 className="text-3xl lg:text-4xl 2xl:text-5xl font-bold uppercase mb-6 text-white">
-              Keep Your Solar System Reliable, Safe, and Performing
+              Optimize, Upgrade, and Future-Proof Your Solar System
             </h1>
             <p className="mb-8 text-lg">
-              Preventive care and rapid repairs ensure your solar investment
-              continues delivering stable power without unexpected downtime.
+              We evaluate existing solar systems to improve performance,
+              extend lifespan, and prepare your setup for growing energy needs.
             </p>
 
-            <Button href="/contact" text="Schedule Service" />
+            <Button href="/contact" text="Schedule Assessment" />
           </motion.div>
         </div>
       </section>
@@ -84,19 +85,18 @@ export default function MaintenancePage() {
           >
             <PreTitle text="What We Deliver" />
             <h2 className="h2 mb-6">
-              Proactive Care That Prevents Costly Failures
+              Smart Upgrades for Better Performance
             </h2>
 
             <p className="mb-8">
-              Solar systems are long-term assets that require regular care.
-              Our maintenance approach focuses on early detection,
-              performance imization, and fast repairs to keep everything
-              running smoothly.
+              Solar systems evolve with your needs. Our assessment and upgrade
+              services improve efficiency, reliability, and scalability —
+              ensuring your system continues delivering optimal performance.
             </p>
 
             <ul className="space-y-4">
               {features.map((item, i) => (
-                <li key={i} className="flex gap-4 items-start">
+                <li key={i} className="flex gap-4 items-center">
                   <div className="w-2 h-2 mt-2 bg-accent" />
                   <span>{item}</span>
                 </li>
@@ -108,11 +108,11 @@ export default function MaintenancePage() {
             variants={fadeIn("left", 0.2)}
             initial="hidden"
             whileInView="show"
-            className="relative h-112.5"
+            className="relative h-114.5"
           >
             <Image
-              src="/assets/csolar/inverter-project.jpeg"
-              alt="Technician servicing solar system"
+              src="/assets/csolar/solar-installation1.jpg"
+              alt="Solar system inspection"
               fill
               className="object-cover rounded-lg shadow-lg"
             />
@@ -126,11 +126,11 @@ export default function MaintenancePage() {
         <div className="container mx-auto text-center mb-12">
           <PreTitle text="Our Process" center />
           <h2 className="h2">
-            Structured Maintenance for Long-Term Reliability
+            Structured Optimization from Evaluation to Upgrade
           </h2>
         </div>
 
-        <div className="container mx-auto grid md:grid-cols-2  gap-8">
+        <div className="container mx-auto grid md:grid-cols-2 gap-8">
           {process.map((step, i) => (
             <motion.div
               key={i}
@@ -143,7 +143,7 @@ export default function MaintenancePage() {
                 Step {i + 1}
               </div>
               <h3 className="h4 mb-3">{step.title}</h3>
-              <p>{step.descrion}</p>
+              <p>{step.description}</p>
             </motion.div>
           ))}
         </div>
@@ -155,23 +155,23 @@ export default function MaintenancePage() {
 
           <div>
             <PreTitle text="Why Choose Contained Solar" />
-            <h2 className="text-white text-2xl lg:text-3xl 2xl:text-4xl font-bold mb-6">
-              Maintenance Designed Around Lifecycle Ownership
+            <h2 className="text-white text-2xl lg:text-3xl 2xl:text-4xl mb-6">
+              Upgrade Decisions Backed by Lifecycle Expertise
             </h2>
 
             <p className="mb-6">
-              We treat maintenance as an essential part of solar ownership —
-              not an afterthought. Our proactive approach minimizes downtime,
-              extends system lifespan, and protects your investment.
+              We don’t push unnecessary replacements. Our upgrade philosophy
+              focuses on compatibility, longevity, and measurable performance
+              gains — protecting your investment while preparing for growth.
             </p>
 
-            <Button href="/contact" text="Book Maintenance" />
+            <Button href="/contact" text="Talk to an Expert" />
           </div>
 
           <div className="relative h-100">
             <Image
-              src="/assets/csolar/solar-project3.jpeg"
-              alt="Solar repair team"
+              src="/assets/csolar/solar-project.jpeg"
+              alt="Solar technician assessment"
               fill
               className="object-cover rounded-lg"
             />
@@ -181,16 +181,16 @@ export default function MaintenancePage() {
       </section>
 
       {/* FINAL CTA */}
-      <section className="py-20 bg-white ">
-        <div className="container  max-w-3xl text-center flex flex-col items-center justify-center mx-auto w-full">
-          <PreTitle text="Need Service?" center />
+      <section className="py-20 bg-white text-center">
+        <div className="container max-w-3xl text-center flex flex-col items-center justify-center mx-auto w-full">
+          <PreTitle text="Ready to Optimize?" center />
           <h2 className="h3 mb-6">
-            Protect Your Solar Investment Today
+            Let’s Improve Your Solar System Performance
           </h2>
 
           <p className="mb-8">
-            Regular maintenance and fast repairs ensure your system keeps
-            delivering dependable power for years to come.
+            Whether expanding capacity or improving efficiency, we help your
+            solar system perform better today and adapt for tomorrow.
           </p>
 
           <Button href="/contact" text="Contact Us" />
