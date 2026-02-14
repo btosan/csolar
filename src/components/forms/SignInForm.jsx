@@ -49,7 +49,7 @@ export default function SignInForm() {
     },
   });
 
-  // Redirect if already signed in
+
   useEffect(() => {
     if (status === 'authenticated' && session) {
       if (session.user?.role === 'ADMIN') {
