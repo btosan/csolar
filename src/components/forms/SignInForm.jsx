@@ -31,11 +31,9 @@ const FormSchema = z.object({
     .min(8, 'Password must have at least 8 characters'),
 });
 
-type FormValues = z.infer<typeof FormSchema>;
-
 export default function SignInForm() {
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState(null);
 
   const { data: session, status } = useSession();
   const router = useRouter();
@@ -43,7 +41,7 @@ export default function SignInForm() {
 
   const callbackUrl = searchParams.get('callbackUrl') ?? '/profile';
 
-  const form = useForm<FormValues>({
+  const form = useForm({
     resolver: zodResolver(FormSchema),
     defaultValues: {
       email: '',
@@ -62,7 +60,7 @@ export default function SignInForm() {
     }
   }, [status, session, router, callbackUrl]);
 
-  const onSubmit = async (values: FormValues) => {
+  const onSubmit = async (values) => {
     try {
       setIsLoading(true);
       setError(null);
@@ -79,10 +77,9 @@ export default function SignInForm() {
         return;
       }
 
-      // Success — force refresh session and redirect
       toast.success('Signed in successfully!');
-      router.refresh();           // important in App Router
-      router.replace(callbackUrl); // or '/profile' / '/admin' — handled in useEffect anyway
+      router.refresh();
+      router.replace(callbackUrl);
 
     } catch (err) {
       console.error(err);
@@ -93,7 +90,6 @@ export default function SignInForm() {
     }
   };
 
-  // Optional: prevent flash of form if already loading/authenticated
   if (status === 'loading') {
     return <div className="text-center py-12">Loading...</div>;
   }
