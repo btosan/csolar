@@ -181,7 +181,6 @@ export default function SolarInstallationPage() {
         </div>
       </section>
 
-      {/* FINAL CTA */}
       <section className="py-20 bg-white text-center">
        <div className="container  max-w-3xl text-center flex flex-col items-center justify-center mx-auto w-full">
           <PreTitle text="Ready to Install?" center />
