@@ -44,7 +44,7 @@ export default function SolarInstallationPage() {
     <main className="overflow-hidden">
 
       {/* HERO */}
-      <section className="relative md:h-screen flex items-center justify-center ">
+      <section className="relative md:h-screen flex items-center justify-center py-16 md:py-0">
         <Image
           src="/assets/csolar/solar-installation.jpg"
           alt="Solar installation"

@@ -43,7 +43,7 @@ export default function MaintenancePage() {
     <main className="overflow-hidden">
 
       {/* HERO  */}
-      <section className="relative md:h-screen flex items-center justify-center ">
+      <section className="relative md:h-screen flex items-center justify-center py-16 md:py-0">
         <Image
           src="/assets/csolar/solar-repair1.jpg"
           alt="Solar maintenance and repair"
