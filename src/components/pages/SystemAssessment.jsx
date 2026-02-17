@@ -61,10 +61,10 @@ export default function SystemAssessmentPage() {
             className="max-w-2xl 2xl:max-w-3xl"
           >
             <PreTitle text="System Assessment & Upgrades" />
-            <h1 className="text-3xl lg:text-4xl 2xl:text-5xl font-bold uppercase mb-6 text-white">
+            <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold uppercase mb-6 text-white">
               Optimize, Upgrade, and Future-Proof Your Solar System
             </h1>
-            <p className="mb-8 text-lg">
+            <p className="mb-8 text-base lg:text-lg">
               We evaluate existing solar systems to improve performance,
               extend lifespan, and prepare your setup for growing energy needs.
             </p>
@@ -125,7 +125,7 @@ export default function SystemAssessmentPage() {
       <section className="py-20 bg-gray-100">
         <div className="container mx-auto text-center mb-12">
           <PreTitle text="Our Process" center />
-          <h2 className="h2">
+          <h2 className="text-2xl md:text-3xl xl:text-4xl font-semibold uppercase">
             Structured Optimization from Evaluation to Upgrade
           </h2>
         </div>

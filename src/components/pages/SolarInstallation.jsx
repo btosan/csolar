@@ -127,7 +127,7 @@ export default function SolarInstallationPage() {
       <section className="py-20 bg-gray-100">
         <div className="container mx-auto text-center mb-12">
           <PreTitle text="Our Process" center />
-          <h2 className="h2">
+          <h2 className="text-2xl md:text-3xl xl:text-4xl font-semibold uppercase">
             Structured Installation From Start to Finish
           </h2>
         </div>

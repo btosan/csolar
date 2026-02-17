@@ -61,7 +61,7 @@ export default function ConsultingEnergyPlanningPage() {
             className="max-w-2xl 2xl:max-w-3xl"
           >
             <PreTitle text="Consulting & Energy Planning" />
-            <h1 className="text-3xl lg:text-4xl 2xl:text-5xl font-bold uppercase mb-6 text-white">
+            <h1 className="text-2xl md:text-3xl xl:text-4xl font-semibold uppercase mb-6 text-white">
               Smarter Solar Decisions Start with Expert Planning
             </h1>
             <p className="mb-8 text-lg">
@@ -70,7 +70,7 @@ export default function ConsultingEnergyPlanningPage() {
               budget, and long-term growth.
             </p>
 
-            <Button href="/contact" text="Book Consultation" />
+            <Button href="/contact" text="Get Started" />
           </motion.div>
         </div>
       </section>
@@ -126,7 +126,7 @@ export default function ConsultingEnergyPlanningPage() {
       <section className="py-20 bg-gray-100">
         <div className="container mx-auto text-center mb-12">
           <PreTitle text="Our Process" center />
-          <h2 className="h2">
+          <h2 className="text-2xl md:text-3xl xl:text-4xl font-semibold uppercase">
             Structured Planning from Insight to Execution
           </h2>
         </div>
@@ -166,7 +166,7 @@ export default function ConsultingEnergyPlanningPage() {
               efficiency, reliability, and long-term value.
             </p>
 
-            <Button href="/contact" text="Speak with an Expert" />
+            <Button href="/contact" text="Get Started" />
           </div>
 
           <div className="relative h-100">
