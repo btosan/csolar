@@ -19,7 +19,7 @@ const Footer = () => {
       initial="hidden"
       whileInView="show"
       viewport={{ once: false, amount: 0.1 }}
-      className="mt-16 xl:mt-32 bg-primary"
+      className=" bg-primary"
     >
       <div className="container mx-auto">
         <div className="py-16 xl:py-25 flex flex-col xl:flex-row gap-15 xl:gap-7.5">

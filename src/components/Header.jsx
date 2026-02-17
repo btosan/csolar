@@ -33,7 +33,7 @@ const navLinks = [
       {
         title: "Consulting & Energy Planning",
         description: "Expert guidance for smarter solar decisions.",
-        image: "/assets/csolar/solar-consulting.jpg",
+        image: "/assets/services/thumb-6a.jpg",
         href: "/services/consulting",
       },
     ],
@@ -211,7 +211,7 @@ const Header = () => {
 
             {/* Contact CTA */}
             <Link href="/contact">
-              <button className="w-48 h-13.5 py-1.5 px-2.5 flex items-center justify-between bg-white group">
+              <button className="w-48 h-13.5 py-1.5 px-2.5 flex items-center justify-between bg-white hover:bg-accent group hover:cursor-pointer">
                 <div className="flex-1 text-center tracking-[1.2px] font-primary font-bold text-primary text-sm uppercase">
                   Contact Us
                 </div>
