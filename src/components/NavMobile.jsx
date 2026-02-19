@@ -16,6 +16,7 @@ import { useSession } from "next-auth/react"
 import { RiMenu3Fill } from "react-icons/ri"
 import { MdClose } from "react-icons/md"
 import { CldImage } from 'next-cloudinary'
+import { CircleUserIcon } from "lucide-react"
 
 import Logo from "./Logo"
 import Socials from "./Socials"
@@ -157,7 +158,7 @@ const NavMobile = () => {
                   onClick={() => setIsOpen(false)}
                   className="flex items-center gap-3 hover:opacity-90 transition-opacity"
                 >
-                  <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-white/30 shadow-sm flex-shrink-0">
+                  <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-white/30 shadow-sm shrink-0">
                     {user.image ? (
                       <CldImage
                         src={user.image}
@@ -180,9 +181,10 @@ const NavMobile = () => {
                 <Link
                   href="/signin"
                   onClick={() => setIsOpen(false)}
-                  className="text-sm uppercase tracking-[1.2px] text-white/70 hover:text-white"
+                  className="text-sm uppercase tracking-[1.2px] text-white hover:text-accent w-full flex mx-auto items-center gap-4 "
                 >
-                  Login
+                  <span>LOGIN</span>
+                  <CircleUserIcon className="w-6 h-6"/>
                 </Link>
               )}
             </li>

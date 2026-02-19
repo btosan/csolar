@@ -6,8 +6,15 @@ import Link from "next/link";
 import Image from "next/image";
 import { CldImage } from 'next-cloudinary';
 import { RiArrowUpLine } from "react-icons/ri";
+import { CircleUserIcon } from "lucide-react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import Logo from "./Logo";
 import NavMobile from "./NavMobile";
+
 
 const navLinks = [
   {
@@ -252,9 +259,16 @@ const Header = () => {
             ) : (
               <Link
                 href="/signin"
-                className="text-sm text-white/70 uppercase font-primary tracking-[1.2px] hover:text-white transition-colors"
+                className="mx-auto flex flex-col items-center justify-center gap-8  text-white/70 uppercase font-primary tracking-[1.2px] hover:text-white transition-colors"
               >
-                Login
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <CircleUserIcon className="w-7 h-7 hover:text-accent" />
+                  </TooltipTrigger>
+                  <TooltipContent side="bottom" sideOffset={20} className=" p-4 text-sm lg:text-base font-medium uppercase text-primary bg-accent">
+                    Login or Register
+                  </TooltipContent>
+                </Tooltip>
               </Link>
             )}
           </nav>

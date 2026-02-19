@@ -15,3 +15,7 @@ export function generateSlug(title: string): string {
     .replace(/-+$/, '')               // Remove hyphens from end
     .trim()                           // Trim whitespace
 }
+
+export const compareArrays = (a: any[], b: any[]) => {
+  return a.toString() === b.toString();
+};

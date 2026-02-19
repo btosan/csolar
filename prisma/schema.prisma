@@ -267,25 +267,66 @@ model ServiceVisit {
 model Product {
   id               String      @id @default(cuid())
   name             String
-  slug             String?     @unique // ← added: for clean URLs (auto-generate from name)
+  slug             String?     @unique
   type             ProductType
   brand            String
   model            String?
-  shortDescription String?     @db.Text // ← added: 1-2 sentences for listings/cards
-  longDescription  String?     @db.Text // ← added: full detailed description (features, specs, etc.)
-  mainImageUrl     String? // ← added: hero image URL (Cloudinary, S3, etc.)
-  imageUrls        String[]    @default([]) // ← added: additional gallery images
-  price            Int // in kobo
-  stock            Int?        @default(0) // ← optional: if you want basic inventory
+  shortDescription String?     @db.Text
+  longDescription  String?     @db.Text
+  mainImageUrl     String?
+  imageUrls        String[]    @default([])
+  price            Int
+  stock            Int?        @default(0)
   active           Boolean     @default(true)
-  createdAt        DateTime    @default(now())
-  updatedAt        DateTime    @updatedAt
 
-  // Optional: if you later want to link catalog products to installed assets
-  // panelArrays     PanelArray[]?
-  // batteries       Battery[]?
-  // inverters       Inverter[]?
+  // ✅ NEW — aggregate rating (0–5 scale, decimal allowed)
+  rating Float @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   orderItems OrderItem[]
+  gallery    ProductImage[]
+  discount   Discount?
+  reviews    Review[]
+}
+
+model ProductImage {
+  id      String  @id @default(cuid())
+  url     String
+  caption String?
+
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+}
+
+model Discount {
+  id         String @id @default(cuid())
+  amount     Int?
+  percentage Float?
+
+  active Boolean @default(true)
+
+  productId String  @unique
+  product   Product @relation(fields: [productId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Review {
+  id      Int      @id @default(autoincrement())
+  user    String
+  content String   @db.Text
+  rating  Int
+  date    DateTime @default(now())
+
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
 }
 
 model Order {

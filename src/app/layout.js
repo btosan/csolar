@@ -1,9 +1,11 @@
 import { DM_Sans, Barlow } from "next/font/google"
+import { TooltipProvider } from "@/components/ui/tooltip"
 import "./globals.css"
 import Header from "@/components/Header"
 import Topbar from "@/components/Topbar"
 import Footer from "@/components/Footer"
 import NextAuthProviders from './NextAuthProviders';
+import HolyLoader from "holy-loader";
 
 const dmSans = DM_Sans({
   variable: "--font-dmSans",
@@ -44,13 +46,16 @@ export default function RootLayout({ children }) {
       <body
         className={`${dmSans.variable} ${barlow.variable} antialiased`}
       >
+        <HolyLoader color="#ffca3b" />
         <NextAuthProviders>
+          <TooltipProvider>
           <Topbar />
           <Header />
-          <main>
-            {children}
-          </main>
+            <main>
+              {children}
+            </main>
           <Footer />
+          </TooltipProvider>
         </NextAuthProviders>
       </body>
     </html>
