@@ -46,7 +46,7 @@ interface EditUserFormProps {
   };
   currentAdminEmail: string;
 }
-
+// render
 export default function EditUserForm({ user, currentAdminEmail }: EditUserFormProps) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
@@ -141,7 +141,7 @@ export default function EditUserForm({ user, currentAdminEmail }: EditUserFormPr
               <FormField
                 control={form.control}
                 name="role"
-                render={({ field }) => (
+                render={({ field }: any) => (
                   <FormItem>
                     <FormLabel className="text-base font-medium">User Role</FormLabel>
                     <Select
