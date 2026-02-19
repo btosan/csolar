@@ -270,7 +270,7 @@ export default function Profile() {
                         className="h-11 bg-gray-50 cursor-not-allowed"
                       />
                     </FormControl>
-                    <FormDescription>This is your login email (cannot be changed)</FormDescription>
+                    <FormDescription className=''>This is your login email (cannot be changed)</FormDescription>
                   </FormItem>
 
                   {/* Profile Picture Upload */}
@@ -322,7 +322,7 @@ export default function Profile() {
                                 </div>
                               )}
 
-                              <FormDescription>
+                              <FormDescription className=''>
                                 Click to upload a new profile picture. The image will be optimized and hosted by Cloudinary.
                               </FormDescription>
                             </div>
