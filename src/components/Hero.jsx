@@ -114,8 +114,8 @@ export default function HeroCarousel() {
   const scrollNext = () => emblaApi?.scrollNext();
 
   return (
-    <section className="relative h-screen w-full overflow-hidden">
-      <div ref={emblaRef} className="h-full overflow-hidden">
+    <section className="relative lg:h-screen h-[80vh] w-full overflow-hidden">
+      <div ref={emblaRef} className="h-full">
         <div className="flex h-full">
           {slides.map((slide, index) => (
             <div
