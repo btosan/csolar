@@ -154,7 +154,7 @@ export default function EditUserForm({ user, currentAdminEmail }: EditUserFormPr
                           <SelectValue placeholder="Select role" />
                         </SelectTrigger>
                       </FormControl>
-                      <SelectContent>
+                      <SelectContent className=''>
                         <SelectItem value="CUSTOMER">Customer</SelectItem>
                         <SelectItem value="TECHNICIAN">Technician</SelectItem>
                         <SelectItem value="ADMIN">Administrator</SelectItem>
