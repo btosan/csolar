@@ -27,7 +27,7 @@ import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { LogOut, User, Mail, ShieldCheck, Upload } from 'lucide-react';
 
-// Zod schema – image is now just a string (Cloudinary secure_url)
+// Zod schema – image is now just a string (Cloudinary secure_url)  render
 const profileSchema = z.object({
   name: z.string().min(1, 'Name is required').max(100, 'Name is too long'),
   image: z.string().url('Invalid image URL').optional().or(z.literal('')),
@@ -243,7 +243,7 @@ export default function Profile() {
                   <FormField
                     control={form.control}
                     name="name"
-                    render={({ field }) => (
+                    render={({ field }: any) => (
                       <FormItem className=''>
                         <FormLabel className="text-base font-medium">Full Name</FormLabel>
                         <FormControl>
@@ -276,7 +276,7 @@ export default function Profile() {
                   <FormField
                     control={form.control}
                     name="image"
-                    render={({ field }) => (
+                    render={({ field }: any) => (
                       <FormItem className=''>
                         <FormLabel className="text-base font-medium">Profile Picture</FormLabel>
                         <FormControl>
