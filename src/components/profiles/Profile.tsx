@@ -264,6 +264,7 @@ export default function Profile() {
                     <FormLabel className="text-base font-medium">Email Address</FormLabel>
                     <FormControl>
                       <Input
+                        type="email"
                         value={user.email ?? ''}
                         disabled
                         className="h-11 bg-gray-50 cursor-not-allowed"
