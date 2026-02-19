@@ -125,7 +125,7 @@ export default function HeroCarousel() {
               <div className="absolute inset-0 bg-black/50" />
 
               <div className="relative z-10 container mx-auto h-full flex items-center justify-center xl:justify-start">
-                <div className="text-white max-w-xl text-center xl:text-left">
+                <div className="text-white text-center xl:text-left mx-auto xl:mx-0 flex flex-col items-center xl:items-start max-w-170">
                   <h1 className="h1 text-white mb-4">{slide.title}</h1>
                   <p className="mb-8">{slide.description}</p>
                   <Button href="/solutions" text="Our Solutions" />
@@ -137,7 +137,7 @@ export default function HeroCarousel() {
       </div>
 
       {/* RIGHT SIDE ARROWS (added, same style as working example) */}
-      <div className="absolute bottom-32 lg:bottom-48 right-12 z-20 flex space-x-4">
+      <div className="absolute bottom-36 lg:bottom-48 right-12 z-20 hidden md:flex space-x-4">
         <button
           onClick={scrollPrev}
           className="relative h-10 w-10 rounded-full border border-white/30 bg-black/20 
@@ -155,13 +155,13 @@ export default function HeroCarousel() {
         </button>
       </div>
 
-      {/* DO NOT REMOVE — Your Original Indicators */}
-      <div className="absolute bottom-32 lg:bottom-48 left-1/2 -translate-x-1/2 flex gap-3 z-20">
+     
+      <div className="absolute bottom-36 lg:bottom-48 left-1/2 -translate-x-1/2 flex gap-3 z-20">
         {slides.map((_, index) => (
           <button
             key={index}
             onClick={() => scrollTo(index)}
-            className={`h-1.5 w-10 rounded-full transition ${
+            className={`md:h-1.5 md:w-10 h-1 w-5 rounded-full transition ${
               index === selectedIndex
                 ? "bg-white"
                 : "bg-white/40 hover:bg-white/70"
