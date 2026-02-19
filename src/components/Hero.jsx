@@ -137,7 +137,7 @@ export default function HeroCarousel() {
       </div>
 
       {/* RIGHT SIDE ARROWS (added, same style as working example) */}
-      <div className="absolute bottom-36 lg:bottom-48 right-12 z-20 hidden md:flex space-x-4">
+      <div className="absolute bottom-12 md:bottom-16 lg:bottom-48 right-12 z-20 hidden md:flex space-x-4">
         <button
           onClick={scrollPrev}
           className="relative h-10 w-10 rounded-full border border-white/30 bg-black/20 
@@ -156,7 +156,7 @@ export default function HeroCarousel() {
       </div>
 
      
-      <div className="absolute bottom-36 lg:bottom-48 left-1/2 -translate-x-1/2 flex gap-3 z-20">
+      <div className="absolute bottom-12 md:bottom-16 lg:bottom-48 left-1/2 -translate-x-1/2 flex gap-3 z-20">
         {slides.map((_, index) => (
           <button
             key={index}
