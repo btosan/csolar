@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/carousel/carousel";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa6";
 import { useIsClient, useMediaQuery } from "usehooks-ts";
-import ReviewCard from "./common/ReviewCard";
+import ReviewCard from "@/components/products/common/ReviewCard";
 import { Review } from "@/types/review.types";
 
 type ReviewsProps = { data: Review[] };
