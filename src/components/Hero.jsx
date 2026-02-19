@@ -161,7 +161,7 @@ export default function HeroCarousel() {
           <button
             key={index}
             onClick={() => scrollTo(index)}
-            className={`md:h-1.5 md:w-10 h-1 w-5 rounded-full transition ${
+            className={`md:h-1.5 md:w-10 h-0.5 w-5 rounded-full transition ${
               index === selectedIndex
                 ? "bg-white"
                 : "bg-white/40 hover:bg-white/70"
