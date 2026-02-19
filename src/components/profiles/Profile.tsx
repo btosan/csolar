@@ -224,8 +224,8 @@ export default function Profile() {
           <CardHeader className=''>
             <div className="flex items-center justify-between">
               <div>
-                <CardTitle>Personal Information</CardTitle>
-                <CardDescription>Update your profile details</CardDescription>
+                <CardTitle className=''>Personal Information</CardTitle>
+                <CardDescription className=''>Update your profile details</CardDescription>
               </div>
               {!isEditing && (
                 <AppButton variant="outline" size="sm" onClick={() => setIsEditing(true)}>
@@ -254,7 +254,7 @@ export default function Profile() {
                             className="h-11"
                           />
                         </FormControl>
-                        <FormMessage />
+                        <FormMessage className=''/>
                       </FormItem>
                     )}
                   />
@@ -349,7 +349,7 @@ export default function Profile() {
                             </div>
                           )}
                         </FormControl>
-                        <FormMessage />
+                        <FormMessage className='' />
                       </FormItem>
                     )}
                   />
