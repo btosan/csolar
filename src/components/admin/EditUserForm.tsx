@@ -93,7 +93,7 @@ export default function EditUserForm({ user, currentAdminEmail }: EditUserFormPr
       animate={{ opacity: 1, y: 0 }}
       className="max-w-2xl mx-auto"
     >
-      <Card>
+      <Card className="border-none shadow-none">
         <CardHeader>
           <div className="flex items-center justify-between">
             <div>
