@@ -117,8 +117,8 @@ export default function EditUserForm({ user, currentAdminEmail }: EditUserFormPr
           {/* User Info Header */}
           <div className="flex items-center gap-6 pb-6 border-b">
             <Avatar className="w-20 h-20">
-              <AvatarImage src={user.image ?? undefined} alt={user.name ?? ''} />
-              <AvatarFallback>
+              <AvatarImage src={user.image ?? undefined} alt={user.name ?? ''} className=''/>
+              <AvatarFallback className=''>
                 {user.name?.[0]?.toUpperCase() || user.email[0].toUpperCase()}
               </AvatarFallback>
             </Avatar>

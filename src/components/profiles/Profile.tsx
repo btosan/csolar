@@ -164,7 +164,7 @@ export default function Profile() {
         <Card className="h-fit">
           <CardHeader className="text-center pb-4">
             <Avatar className="w-28 h-28 mx-auto border-4 border-background shadow-xl">
-              <AvatarImage
+              <AvatarImage className=''
                 src={
                   previewImage && previewImage.trim() !== ''
                     ? previewImage
@@ -225,7 +225,7 @@ export default function Profile() {
 
         {/* Right – Edit Form */}
         <Card>
-          <CardHeader>
+          <CardHeader className=''>
             <div className="flex items-center justify-between">
               <div>
                 <CardTitle>Personal Information</CardTitle>
@@ -239,7 +239,7 @@ export default function Profile() {
             </div>
           </CardHeader>
 
-          <CardContent>
+          <CardContent className=''>
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                 <div className="space-y-5">
