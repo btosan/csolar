@@ -42,6 +42,7 @@ interface EditUserFormProps {
     email: string;
     role: string;
     image: string | null;
+    createdAt?: Date | string
   };
   currentAdminEmail: string;
 }

@@ -64,6 +64,7 @@ export async function PUT(
         email: true,
         role: true,
         image: true,
+        
       },
     });
 
