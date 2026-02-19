@@ -4,6 +4,14 @@ export type Discount = {
   active?: boolean;
 };
 
+export type Review = {
+  id: number;
+  user: string;
+  content: string;
+  rating: number;
+  date: string;
+};
+
 
 export type Product = {
   id: string;
