@@ -160,7 +160,7 @@ export default function EditUserForm({ user, currentAdminEmail }: EditUserFormPr
                         <SelectItem value="ADMIN" className=''>Administrator</SelectItem>
                       </SelectContent>
                     </Select>
-                    <FormMessage />
+                    <FormMessage className='' />
                     {isSelf && (
                       <p className="text-sm text-amber-600 mt-1">
                         You cannot change your own role from this interface.

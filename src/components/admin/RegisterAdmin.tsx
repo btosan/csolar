@@ -166,7 +166,7 @@ export default function RegisterAdminPage() {
                       <FormControl>
                         <Input placeholder="admin@example.com" {...field} />
                       </FormControl>
-                      <FormMessage />
+                      <FormMessage className='' />
                     </FormItem>
                   )}
                 />
@@ -181,7 +181,7 @@ export default function RegisterAdminPage() {
                       <FormControl>
                         <Input placeholder="John Doe" {...field} />
                       </FormControl>
-                      <FormMessage />
+                      <FormMessage className='' />
                     </FormItem>
                   )}
                 />
@@ -196,7 +196,7 @@ export default function RegisterAdminPage() {
                       <FormControl>
                         <Input type="password" placeholder="••••••••" {...field} />
                       </FormControl>
-                      <FormMessage />
+                      <FormMessage className='' />
                     </FormItem>
                   )}
                 />
@@ -211,7 +211,7 @@ export default function RegisterAdminPage() {
                       <FormControl>
                         <Input type="password" placeholder="••••••••" {...field} />
                       </FormControl>
-                      <FormMessage />
+                      <FormMessage className='' />
                     </FormItem>
                   )}
                 />
@@ -264,7 +264,7 @@ export default function RegisterAdminPage() {
                           )}
                         </div>
                       </FormControl>
-                      <FormMessage />
+                      <FormMessage className=''/>
                     </FormItem>
                   )}
                 />
