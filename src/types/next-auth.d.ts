@@ -10,6 +10,7 @@ declare module "next-auth" {
     name: string | null;
     image: string | null;
     role: Role;
+    createdAt?: Date | string;
   }
 
   interface Session {
@@ -19,6 +20,7 @@ declare module "next-auth" {
       name: string | null;
       image: string | null;
       role: Role;
+      createdAt?: Date | string;
     };
   }
 }
@@ -30,5 +32,6 @@ declare module "next-auth/jwt" {
     name: string | null;
     image: string | null;
     role: Role;
+    createdAt?: Date | string;
   }
 }

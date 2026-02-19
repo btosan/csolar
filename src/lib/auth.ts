@@ -91,6 +91,7 @@ export const authOptions: NextAuthOptions = {
         session.user.name = freshUser.name;
         session.user.role = freshUser.role;
         session.user.image = freshUser.image;
+        session.user.createdAt = token.createdAt;
       }
 
       return session;
@@ -103,6 +104,7 @@ export const authOptions: NextAuthOptions = {
         token.name = user.name;
         token.role = user.role;
         token.image = user.image;
+        token.createdAt = user.createdAt;
       }
       return token;
     }
