@@ -155,9 +155,9 @@ export default function EditUserForm({ user, currentAdminEmail }: EditUserFormPr
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent className=''>
-                        <SelectItem value="CUSTOMER">Customer</SelectItem>
-                        <SelectItem value="TECHNICIAN">Technician</SelectItem>
-                        <SelectItem value="ADMIN">Administrator</SelectItem>
+                        <SelectItem value="CUSTOMER" className=''>Customer</SelectItem>
+                        <SelectItem value="TECHNICIAN" className=''>Technician</SelectItem>
+                        <SelectItem value="ADMIN" className=''>Administrator</SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />
