@@ -220,7 +220,7 @@ export default function Profile() {
         </Card>
 
         {/* Right – Edit Form */}
-        <Card>
+        <Card className=''>
           <CardHeader className=''>
             <div className="flex items-center justify-between">
               <div>
@@ -244,7 +244,7 @@ export default function Profile() {
                     control={form.control}
                     name="name"
                     render={({ field }) => (
-                      <FormItem>
+                      <FormItem className=''>
                         <FormLabel className="text-base font-medium">Full Name</FormLabel>
                         <FormControl>
                           <Input
@@ -260,7 +260,7 @@ export default function Profile() {
                   />
 
                   {/* Email – read only */}
-                  <FormItem>
+                  <FormItem className=''>
                     <FormLabel className="text-base font-medium">Email Address</FormLabel>
                     <FormControl>
                       <Input
@@ -277,7 +277,7 @@ export default function Profile() {
                     control={form.control}
                     name="image"
                     render={({ field }) => (
-                      <FormItem>
+                      <FormItem className=''>
                         <FormLabel className="text-base font-medium">Profile Picture</FormLabel>
                         <FormControl>
                           {isEditing ? (
@@ -328,7 +328,7 @@ export default function Profile() {
                           ) : (
                             <div className="flex flex-col items-start gap-1.5">
                               <Avatar className="w-16 h-16 border border-background shadow-lg">
-                                <AvatarImage
+                                <AvatarImage className=''
                                   src={
                                     previewImage?.trim() || user.image?.trim()
                                       ? (previewImage?.trim() || user.image!)
