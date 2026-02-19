@@ -16,9 +16,10 @@ const slides = [
     description:
       "From solar panels and batteries to inverters and system monitoring, Contained Solar designs, installs, and maintains power solutions built for long-term performance.",
     bg: "bg-[url('/assets/csolar/portable-solar-power.avif')]",
+    buttonText: "Contact Us",
+    buttonLink: "/contact",
   },
 
-  // SLIDE 2 — System Monitoring & Health Management
   {
     title: (
       <>
@@ -28,9 +29,10 @@ const slides = [
     description:
       "Advanced solar system health tracking with battery and inverter condition assessment, performance benchmarking, early issue detection, and proactive service recommendations.",
     bg: "bg-[url('/assets/products/monitoring2.jpg')]",
+    buttonText: "Our Solutions",
+    buttonLink: "/solutions",
   },
 
-  // SLIDE 3 — Solar Panels
   {
     title: (
       <>
@@ -40,9 +42,10 @@ const slides = [
     description:
       "Durable, high-performance solar panels engineered for maximum energy generation, long-term reliability, and seamless integration with grid-tied, hybrid, and off-grid systems.",
     bg: "bg-[url('/assets/img/hero/hero-bg.jpg')]",
+    buttonText: "Explore Panels",
+    buttonLink: "/products/solar-panels",
   },
 
-  // SLIDE 4 — Inverters
   {
     title: (
       <>
@@ -52,9 +55,10 @@ const slides = [
     description:
       "Grid-tied, hybrid, and off-grid inverters designed for intelligent power conversion, system stability, and optimized performance across residential and commercial installations.",
     bg: "bg-[url('/assets/products/micro-hybrid.webp')]",
+    buttonText: "Browse Inverters",
+    buttonLink: "/products/inverters",
   },
 
-  // SLIDE 5 — Storage & Batteries
   {
     title: (
       <>
@@ -64,8 +68,11 @@ const slides = [
     description:
       "Scalable energy storage solutions with high-capacity batteries built for efficiency, safety, and dependable backup power when you need it most.",
     bg: "bg-[url('/assets/products/solar-storage.webp')]",
+    buttonText: "View Batteries",
+    buttonLink: "/products/batteries",
   },
 ];
+
 
 
 
@@ -128,7 +135,7 @@ export default function HeroCarousel() {
                 <div className="text-white text-center xl:text-left mx-auto xl:mx-0 flex flex-col items-center xl:items-start max-w-170">
                   <h1 className="h1 text-white mb-4">{slide.title}</h1>
                   <p className="mb-8">{slide.description}</p>
-                  <Button href="/solutions" text="Our Solutions" />
+                  <Button href={slide.buttonLink} text={slide.buttonText} />
                 </div>
               </div>
             </div>
