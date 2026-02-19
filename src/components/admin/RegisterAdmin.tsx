@@ -162,7 +162,7 @@ export default function RegisterAdminPage() {
                   name="email"
                   render={({ field }: any) => (
                     <FormItem className=''>
-                      <FormLabel>Email</FormLabel>
+                      <FormLabel className=''>Email</FormLabel>
                       <FormControl>
                         <Input placeholder="admin@example.com" {...field} />
                       </FormControl>
@@ -177,7 +177,7 @@ export default function RegisterAdminPage() {
                   name="name"
                   render={({ field }: any) => (
                     <FormItem className=''>
-                      <FormLabel>Full Name</FormLabel>
+                      <FormLabel className=''>Full Name</FormLabel>
                       <FormControl>
                         <Input placeholder="John Doe" {...field} />
                       </FormControl>
@@ -192,7 +192,7 @@ export default function RegisterAdminPage() {
                   name="password"
                   render={({ field }: any) => (
                     <FormItem className=''>
-                      <FormLabel>Password</FormLabel>
+                      <FormLabel className=''>Password</FormLabel>
                       <FormControl>
                         <Input type="password" placeholder="••••••••" {...field} />
                       </FormControl>
@@ -207,7 +207,7 @@ export default function RegisterAdminPage() {
                   name="confirmPassword"
                   render={({ field }: any) => (
                     <FormItem className=''>
-                      <FormLabel>Confirm Password</FormLabel>
+                      <FormLabel className=''>Confirm Password</FormLabel>
                       <FormControl>
                         <Input type="password" placeholder="••••••••" {...field} />
                       </FormControl>
@@ -222,7 +222,7 @@ export default function RegisterAdminPage() {
                   name="image"
                   render={({ field }: any) => (
                     <FormItem className=''>
-                      <FormLabel>Profile Picture (optional)</FormLabel>
+                      <FormLabel className=''>Profile Picture (optional)</FormLabel>
                       <FormControl>
                         <div className="space-y-4">
                           <CldUploadWidget
