@@ -94,11 +94,11 @@ export default function EditUserForm({ user, currentAdminEmail }: EditUserFormPr
       className="max-w-2xl mx-auto"
     >
       <Card className="border-none shadow-none">
-        <CardHeader>
+        <CardHeader className=''>
           <div className="flex items-center justify-between">
             <div>
               <CardTitle className="text-2xl">Edit User Profile</CardTitle>
-              <CardDescription>
+              <CardDescription className=''> 
                 Change role or view user details
               </CardDescription>
             </div>
