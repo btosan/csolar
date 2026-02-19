@@ -145,7 +145,7 @@ export default function RegisterAdminPage() {
         animate={{ opacity: 1, y: 0 }}
         className="w-full max-w-lg"
       >
-        <Card>
+        <Card className=''>
           <CardHeader className="text-center">
             <CardTitle className="text-3xl font-bold">Create First Admin</CardTitle>
             <CardDescription className="mt-2">
