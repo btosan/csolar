@@ -153,7 +153,7 @@ export default function RegisterAdminPage() {
             </CardDescription>
           </CardHeader>
 
-          <CardContent>
+          <CardContent className=''>
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                 {/* Email */}
@@ -161,7 +161,7 @@ export default function RegisterAdminPage() {
                   control={form.control}
                   name="email"
                   render={({ field }: any) => (
-                    <FormItem>
+                    <FormItem className=''>
                       <FormLabel>Email</FormLabel>
                       <FormControl>
                         <Input placeholder="admin@example.com" {...field} />
@@ -176,7 +176,7 @@ export default function RegisterAdminPage() {
                   control={form.control}
                   name="name"
                   render={({ field }: any) => (
-                    <FormItem>
+                    <FormItem className=''>
                       <FormLabel>Full Name</FormLabel>
                       <FormControl>
                         <Input placeholder="John Doe" {...field} />
@@ -191,7 +191,7 @@ export default function RegisterAdminPage() {
                   control={form.control}
                   name="password"
                   render={({ field }: any) => (
-                    <FormItem>
+                    <FormItem className=''>
                       <FormLabel>Password</FormLabel>
                       <FormControl>
                         <Input type="password" placeholder="••••••••" {...field} />
@@ -206,7 +206,7 @@ export default function RegisterAdminPage() {
                   control={form.control}
                   name="confirmPassword"
                   render={({ field }: any) => (
-                    <FormItem>
+                    <FormItem className=''>
                       <FormLabel>Confirm Password</FormLabel>
                       <FormControl>
                         <Input type="password" placeholder="••••••••" {...field} />
@@ -221,7 +221,7 @@ export default function RegisterAdminPage() {
                   control={form.control}
                   name="image"
                   render={({ field }: any) => (
-                    <FormItem>
+                    <FormItem className=''>
                       <FormLabel>Profile Picture (optional)</FormLabel>
                       <FormControl>
                         <div className="space-y-4">

@@ -142,14 +142,14 @@ export default function EditUserForm({ user, currentAdminEmail }: EditUserFormPr
                 control={form.control}
                 name="role"
                 render={({ field }: any) => (
-                  <FormItem>
+                  <FormItem className=''>
                     <FormLabel className="text-base font-medium">User Role</FormLabel>
                     <Select
                       onValueChange={field.onChange}
                       defaultValue={field.value}
                       disabled={isSelf} // prevent admin from demoting themselves
                     >
-                      <FormControl>
+                      <FormControl className=''>
                         <SelectTrigger className="h-11">
                           <SelectValue placeholder="Select role" />
                         </SelectTrigger>
