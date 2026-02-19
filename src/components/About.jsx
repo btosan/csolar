@@ -26,7 +26,7 @@ const About = () => {
           <motion.div variants={fadeIn("left",0.2)} initial='hidden' whileInView="show" viewport={{once:false,amount:0.2}} className="flex-1 xl:flex xl:justify-center">
             <div className="xl:w-111 xl:h-123.25 relative">
               <div className="hidden xl:flex w-111 h-123.25 bg-accent absolute -top-4 -left-4 -z-10"></div>
-              <Image src={"/assets/img/about/img.jpg"} width={444} height={492} alt="" />
+              <Image src={"/assets/people/csolar-group2.jpg"} width={444} height={492} alt="" />
             </div>
           </motion.div>
         </div>

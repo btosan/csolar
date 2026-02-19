@@ -49,14 +49,14 @@ const Faq = () => {
   };
 
   return (
-    <div className="pt-16 xl:pt-32">
+    <div className="pt-16 xl:pt-32 pb-8 lg:pb-24">
       <div className="container mx-auto">
         <motion.div
           variants={fadeIn("up", 0.2)}
           initial="hidden"
           whileInView="show"
           viewport={{ once: false, amount: 0.2 }}
-          className="text-center max-w-[540px] mx-auto xl:mb-20"
+          className="text-center max-w-135 mx-auto lg:mb-12"
         >
           <PreTitle text="Faq" center />
           <h2 className="h2 mb-2">Got Questions? We’ve Got You Covered</h2>

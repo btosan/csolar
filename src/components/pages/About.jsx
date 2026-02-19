@@ -7,6 +7,7 @@ import PreTitle from "@/components/PreTitle"
 import Button from "@/components/Button"
 import { motion } from "framer-motion"
 import { fadeIn } from "@/variants"
+import Faq from "@/components/Faq";
 
 const capabilities = [
   "End-to-end solar lifecycle solutions",
@@ -270,6 +271,7 @@ export default function AboutPage() {
 
         </div>
       </section>
+      <Faq />
 
       {/* CTA */}
       <section className="py-20 bg-white text-center ">
@@ -288,7 +290,6 @@ export default function AboutPage() {
           <Button href="/contact" text="Contact Us" />
         </div>
       </section>
-
     </main>
   )
 }

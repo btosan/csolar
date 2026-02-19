@@ -16,11 +16,11 @@ const buttonVariants = cva(
         glow: "bg-primary text-white hover:bg-gray-700 shadow-lg hover:shadow-xl animate-glow active:scale-[0.98]",
       },
       size: {
-        default: "h-11 px-6 py-2",
-        sm: "h-9 px-4 py-2 text-xs",
-        lg: "h-12 px-8 py-3 text-base",
+        default: "h-11 px-6 md:py-4 py-2",
+        sm: "h-9 px-4 md:py-4 py-2 text-xs",
+        lg: "h-12 px-8 md:py-4 py-3 text-base",
         icon: "h-11 w-11 p-2",
-        full: "h-11 w-full px-6 py-2",
+        full: "h-11 w-full px-6 md:py-4 py-2",
       },
     },
     defaultVariants: {
@@ -46,7 +46,7 @@ const AppButton = React.forwardRef<HTMLButtonElement, ButtonProps>(
         {...props}
       >
         {isLoading && (
-          <div className="absolute inset-0 flex items-center justify-center bg-inherit">
+          <div className="absolute inset-0 flex items-center justify-center bg-inherit ">
             <svg
               className="animate-spin h-5 w-5"
               xmlns="http://www.w3.org/2000/svg"
@@ -69,7 +69,7 @@ const AppButton = React.forwardRef<HTMLButtonElement, ButtonProps>(
             </svg>
           </div>
         )}
-        <span className={isLoading ? "opacity-0" : ""}>{children}</span>
+        <span className={isLoading ? "opacity-0" : " hover:cursor-pointer"}>{children}</span>
       </button>
     );
   }

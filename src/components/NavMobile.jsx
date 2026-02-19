@@ -11,9 +11,11 @@ import {
 
 import { useState } from "react"
 import Link from "next/link"
+import { useSession } from "next-auth/react"
 
 import { RiMenu3Fill } from "react-icons/ri"
 import { MdClose } from "react-icons/md"
+import { CldImage } from 'next-cloudinary'
 
 import Logo from "./Logo"
 import Socials from "./Socials"
@@ -58,13 +60,18 @@ const NavMobile = () => {
   const [isOpen, setIsOpen] = useState(false)
   const [expanded, setExpanded] = useState(null)
 
+  // NEW: Get session data (same as Header)
+  const { data: session, status } = useSession()
+  const isAuthenticated = status === "authenticated"
+  const user = session?.user
+
   const toggleExpand = (index) => {
     setExpanded(expanded === index ? null : index)
   }
 
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
-      {/* Hamburger */}
+      {/* Hamburger – unchanged */}
       <SheetTrigger className="text-white text-3xl">
         <RiMenu3Fill />
       </SheetTrigger>
@@ -75,7 +82,7 @@ const NavMobile = () => {
         className="bg-primary border-none text-white w-72 px-6 [&>button]:hidden overflow-y-auto"
       >
         <div className="flex flex-col h-full pt-6 pb-8">
-          {/* Header */}
+          {/* Header – unchanged */}
           <SheetHeader className="flex flex-row items-center justify-between mb-8">
             <SheetTitle>
               <Logo />
@@ -92,7 +99,7 @@ const NavMobile = () => {
           <ul className="flex flex-col gap-6 flex-1">
             {links.map((link, index) => (
               <li key={index}>
-                {/* Parent link */}
+                {/* Parent link – unchanged */}
                 <div className="flex justify-between items-center">
                   <Link
                     href={link.href}
@@ -112,7 +119,7 @@ const NavMobile = () => {
                   )}
                 </div>
 
-                {/* Submenu */}
+                {/* Submenu – unchanged */}
                 {link.submenu && expanded === index && (
                   <ul className="mt-4 ml-4 flex flex-col gap-3 text-sm text-white/80">
                     {link.submenu.map((sub, subIndex) => (
@@ -131,7 +138,7 @@ const NavMobile = () => {
               </li>
             ))}
 
-            {/* Contact */}
+            {/* Contact – unchanged */}
             <li className="pt-6">
               <Link
                 href="/contact"
@@ -142,19 +149,46 @@ const NavMobile = () => {
               </Link>
             </li>
 
-            {/* Login */}
+            {/* ─── LOGIN / USER AVATAR SECTION ─── */}
             <li className="pt-2">
-              <Link
-                href="/login"
-                onClick={() => setIsOpen(false)}
-                className="text-sm uppercase tracking-[1.2px] text-white/70 hover:text-white"
-              >
-                Login
-              </Link>
+              {isAuthenticated && user ? (
+                <Link
+                  href={user.role === "ADMIN" ? "/admin/profile" : "/profile"}
+                  onClick={() => setIsOpen(false)}
+                  className="flex items-center gap-3 hover:opacity-90 transition-opacity"
+                >
+                  <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-white/30 shadow-sm flex-shrink-0">
+                    {user.image ? (
+                      <CldImage
+                        src={user.image}
+                        alt={user.name || "User"}
+                        className="w-full h-full object-cover"
+                        width={40}
+                        height={40}
+                      />
+                    ) : (
+                      <div className="w-full h-full bg-white/20 flex items-center justify-center text-white text-base font-medium">
+                        {user.name?.[0]?.toUpperCase() || "?"}
+                      </div>
+                    )}
+                  </div>
+                  <span className="text-sm uppercase tracking-[1.2px] text-white/90">
+                    {user.name || "Profile"}
+                  </span>
+                </Link>
+              ) : (
+                <Link
+                  href="/signin"
+                  onClick={() => setIsOpen(false)}
+                  className="text-sm uppercase tracking-[1.2px] text-white/70 hover:text-white"
+                >
+                  Login
+                </Link>
+              )}
             </li>
           </ul>
 
-          {/* Socials */}
+          {/* Socials – unchanged */}
           <div className="mt-auto">
             <Socials containerStyles="text-white text-xl flex gap-6 justify-center" />
           </div>

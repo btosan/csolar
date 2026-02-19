@@ -12,15 +12,10 @@ const Contact = () => {
   const emailAddress = "containedsolar@gmail.com"
 
   return (
-    <div className='pt-16 xl:pt-32' id='contact'>
-      <motion.div  
-        variants={fadeIn("up",0.1)} 
-        initial='hidden' 
-        whileInView="show" 
-        viewport={{once:false,amount:0.2}} 
-        className="container mx-auto"
+    <div className='pt-16 xl:pt-32 ' id='contact'>
+      <div className="container mx-auto "
       >
-        <div className="w-full xl:h-182.5 shadow p-4 xl:p-8 xl:px-22.5 xl:py-9 border-t-4 border-accent">
+        <div className="w-full shadow xl:px-22.5 py-24 lg:py-32 border-t-4 border-accent">
           <div className="flex flex-col xl:flex-row h-full gap-10 xl:gap-22.5">
             
             {/* Contact Info */}
@@ -113,7 +108,7 @@ const Contact = () => {
 
           </div>
         </div>
-      </motion.div>
+      </div>
     </div>
   )
 }

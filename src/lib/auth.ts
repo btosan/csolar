@@ -78,15 +78,24 @@ export const authOptions: NextAuthOptions = {
   },
   callbacks: {
     async session({ session, token }) {
-      if (session?.user) {
-        session.user.id = token.sub as string;
-        session.user.email = token.email as string;
-        session.user.name = token.name as string;
-        session.user.role = token.role as Role;
-        session.user.image = token.image as string;
+      if (!session?.user || !token?.sub) return session;
+
+      // 🔥 Always fetch fresh user from DB
+      const freshUser = await db.user.findUnique({
+        where: { id: token.sub },
+      });
+
+      if (freshUser) {
+        session.user.id = freshUser.id;
+        session.user.email = freshUser.email;
+        session.user.name = freshUser.name;
+        session.user.role = freshUser.role;
+        session.user.image = freshUser.image;
       }
+
       return session;
     },
+
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;

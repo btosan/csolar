@@ -8,6 +8,7 @@ import Button from "@/components/Button"
 import { motion } from "framer-motion"
 import { fadeIn } from "@/variants"
 import { ChevronDoubleDownIcon } from "@heroicons/react/24/solid"
+import Faq from "@/components/Faq";
 
 export default function ContactPage() {
   const [form, setForm] = useState({
@@ -35,7 +36,7 @@ export default function ContactPage() {
 
 
   return (
-    <main className="overflow-hidden bg-primary">
+    <main className="overflow-hidden ">
 
       {/* HERO */}
       <section className="relative md:h-screen flex items-center justify-center py-16 md:py-0">
@@ -189,7 +190,7 @@ export default function ContactPage() {
       </section>
 
       {/* GOOGLE MAP */}
-      <section className="py-20 bg-gray-100">
+      <section className="py-24 bg-gray-100">
         <div className="container mx-auto">
           <PreTitle text="Our Location" center />
 
@@ -204,7 +205,10 @@ export default function ContactPage() {
           </div>
         </div>
       </section>
-
+      <section className="h-fit">
+        <Faq />
+      </section>
+      
       {/* CTA */}
       <section className="py-20 bg-primary text-white text-center ">
         <div className="container  max-w-3xl text-center flex flex-col items-center justify-center mx-auto w-full">
@@ -221,6 +225,7 @@ export default function ContactPage() {
           <Button href="/projects" text="See Our Projects" />
         </div>
       </section>
+      
 
     </main>
   )

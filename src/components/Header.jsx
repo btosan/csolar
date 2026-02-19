@@ -1,8 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import Image from "next/image";
+import { CldImage } from 'next-cloudinary';
 import { RiArrowUpLine } from "react-icons/ri";
 import Logo from "./Logo";
 import NavMobile from "./NavMobile";
@@ -107,6 +109,10 @@ const navLinks = [
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeMenu, setActiveMenu] = useState(null); 
+
+  const { data: session, status } = useSession();
+  const isAuthenticated = status === "authenticated";
+  const user = session?.user;
 
   useEffect(() => {
       const handleScroll = () => {
@@ -222,12 +228,35 @@ const Header = () => {
             </Link>
 
             {/* Login */}
-            <Link
-              href="/signin"
-              className="text-sm text-white/70 uppercase font-primary tracking-[1.2px] hover:text-white transition-colors"
-            >
-              Login
-            </Link>
+            {isAuthenticated && user ? (
+              <Link
+                href={user.role === "ADMIN" ? "/admin/profile" : "/profile"}
+                className="flex items-center gap-1 hover:opacity-90 transition-opacity"
+              >
+                <div className="h-7 w-7 rounded-full overflow-hidden border border-accent/30 shadow-sm">
+                  {user.image ? (
+                    <CldImage
+                      src={user.image}
+                      alt={user.name || "User"}
+                      width={100}
+                      height={100}
+                      className="w-full h-full object-cover rounded-full"
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-white/20 flex items-center justify-center text-white text-sm font-medium">
+                      {user.name?.[0]?.toUpperCase() || "?"}
+                    </div>
+                  )}
+                </div>
+              </Link>
+            ) : (
+              <Link
+                href="/signin"
+                className="text-sm text-white/70 uppercase font-primary tracking-[1.2px] hover:text-white transition-colors"
+              >
+                Login
+              </Link>
+            )}
           </nav>
 
           {/* Mobile Navigation */}

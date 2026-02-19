@@ -15,7 +15,7 @@ import Button from "./Button"
 import { motion } from "framer-motion"
 import { fadeIn } from "@/variants"
 
-// Swiper for swipe functionality
+// Swiper for swipe functionality 
 import { Swiper, SwiperSlide } from "swiper/react"
 import "swiper/css"
 

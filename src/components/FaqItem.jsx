@@ -7,23 +7,23 @@ const FaqItem = ({ title, description }) => {
     return (
         <div className="w-full border-b ">
             <div className="flex items-center justify-between py-6">
-                <h4 className="h4 max-w-[300px] sm:max-w-md md:max-w-max">{title}</h4>
-                <button className="w-[44px] h-[44px] bg-accent flex items-center justify-center cursor-pointer" onClick={() => setIsOpen(!isOpen)}>
+                <h4 className="h4 max-w-75 sm:max-w-md md:max-w-max">{title}</h4>
+                <button className="w-11 h-11 bg-accent flex items-center justify-center cursor-pointer" onClick={() => setIsOpen(!isOpen)}>
                     {isOpen ? (
-                        <RiSubtractFill className={`text-primary text-2xl transition-opacity duration-700 ${isOpen ? "opacity-100" : "opacity-0"}`} />
+                        <RiSubtractFill className={`text-primary text-xl transition-opacity duration-700 ${isOpen ? "opacity-100" : "opacity-0"}`} />
                     ) : (
-                        <RiAddFill className={`text-primary text-2xl transition-opacity duration-700 ${isOpen ? "opacity-0" : "opacity-100"}`} />
+                        <RiAddFill className={`text-primary text-xl transition-opacity duration-700 ${isOpen ? "opacity-0" : "opacity-100"}`} />
                     )}
                 </button>
             </div>
             <div className={cn(
                 "transition-all overflow-hidden opacity-100",
                 {
-                    "max-h-[200px]  duration-500 ease-in-out": isOpen,
+                    "max-h-50  duration-500 ease-in-out": isOpen,
                     "max-h-0  duration-300 ease-in-out": !isOpen
                 }
             )}>
-                <p className="pb-8 flex items-center max-w-[860px]">{description}</p>
+                <p className="pb-8 flex items-center max-w-215">{description}</p>
             </div>
         </div>
     )
