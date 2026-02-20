@@ -52,7 +52,7 @@ const Contact = () => {
                   <div className="">
                     <h5 className="text-[22px] font-semibold font-primary leading-none">Office</h5>
                     <p className="mb-2 lg:mb-4">Come and say hello at our office</p>
-                    <p className="font-medium text-primary">1250 Alagbado Ave, Ikeja, Lagos, Nigeria</p>
+                    <p className="font-medium text-primary">No 91/93 Aina Street, Ojodu Berger, Lagos, Nigeria</p>
                   </div>
                 </div>
 
