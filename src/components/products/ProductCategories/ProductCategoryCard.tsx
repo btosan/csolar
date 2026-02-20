@@ -13,11 +13,11 @@ const ProductCategoryCard = ({ title, url, className }: ProductCategoryCardProps
     <Link
       href={url}
       className={cn([
-        "w-full md:h-full rounded-[20px] bg-white  bg-top text-xl md:text-2xl font-medium text-left py-4 md:py-6.25 px-6 md:px-9 bg-no-repeat bg-cover",
+        "w-full md:h-full rounded-[20px] bg-white  bg-top text-lg md:text-xl font-medium text-left py-4 md:py-6.25 px-6 md:px-9 bg-no-repeat bg-cover",
         className,
       ])}
     >
-      <span className="py-2 px-4 bg-primary/50 text-white">{title}</span>
+      <span className="py-2 px-4 bg-primary/40 text-white">{title}</span>
       
     </Link>
   );

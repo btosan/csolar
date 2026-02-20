@@ -8,3 +8,6 @@ npx prisma generate
 npx prisma migrate dev --name init
 # or (quick prototyping / no migrations):
 npx prisma db push
+
+
+rm -rf package-lock.json .next

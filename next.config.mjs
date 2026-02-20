@@ -3,6 +3,9 @@ const nextConfig = {
       experimental: {
         optimizeCss: false,
       },
+      turbo: {
+      resolveAlias: {},
+    },
 
       reactStrictMode: true,
     

@@ -6,7 +6,7 @@ import ProductCategoryCard from "./ProductCategoryCard";
 
 const ProductCategory = () => {
   return (
-    <div className="px-4 xl:px-0">
+    <div className="px-0 ">
       <section className="container w-full mx-auto bg-accent px-6 pb-6 pt-10 md:p-17.5 rounded-[40px] text-center">
         <motion.h2
           initial={{ y: "100px", opacity: 0 }}
@@ -35,7 +35,7 @@ const ProductCategory = () => {
           <ProductCategoryCard
             title="Storage System"
             url="/products/batteries"
-            className="md:max-w-171 h-47.5 bg-[url('/assets/products/srne.webp')]"
+            className="md:max-w-171 h-47.5 bg-[url('/assets/batteries/storage.png')]"
           />
         </motion.div>
         <motion.div
@@ -51,8 +51,8 @@ const ProductCategory = () => {
             className="md:max-w-171 h-47.5 bg-[url('/assets/panels/solarpanels.jpg')]"
           />
           <ProductCategoryCard
-            title="Complete Package"
-            url="/shop#gym"
+            title="Complete Packages"
+            url="/products/packages"
             className="md:max-w-65 lg:max-w-90 xl:max-w-101.75 h-47.5 bg-[url('/assets/csolar/portable-solar-power.avif')]"
           />
         </motion.div>
