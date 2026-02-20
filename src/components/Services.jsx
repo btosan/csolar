@@ -29,10 +29,10 @@ const serviceData = [
     serviceList: [
       "Residential Solar Installations",
       "Commercial Solar Systems",
-      "Grid-Tied, Off-Grid & Hybrid Systems",
+      "Mini-Grid, Off-Grid & Hybrid Systems",
       "Smart & Future-proof Solar Streetlights",
       "Inverter System Design & Setup",
-      "System Sizing & Load Analysis",
+      "Solar Borehole",
       "Commissioning & Handover",
     ],
     thumbs: [
