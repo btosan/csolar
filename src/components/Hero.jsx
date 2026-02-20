@@ -23,7 +23,7 @@ const slides = [
   {
     title: (
       <>
-        Smart <span className="text-accent">System Monitoring</span>
+        <span className="text-accent">Smart </span>  <span >System Monitoring</span>
       </>
     ),
     description:
@@ -36,7 +36,7 @@ const slides = [
   {
     title: (
       <>
-        High-Efficiency <span className="text-accent">Solar Panels</span>
+        <span className="text-accent">Rugged </span>  <span className="">Solar Panels</span>
       </>
     ),
     description:
@@ -49,7 +49,7 @@ const slides = [
   {
     title: (
       <>
-        Advanced <span className="text-accent">Inverter Systems</span>
+        <span className="text-accent">Advanced </span>  <span className="">Inverter Systems</span>
       </>
     ),
     description:
@@ -62,7 +62,7 @@ const slides = [
   {
     title: (
       <>
-        Reliable <span className="text-accent">Battery Storage</span>
+        <span className="text-accent">Reliable </span>  <span className="">Battery Storage</span>
       </>
     ),
     description:
