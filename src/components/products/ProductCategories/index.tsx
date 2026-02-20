@@ -7,7 +7,7 @@ import ProductCategoryCard from "./ProductCategoryCard";
 const ProductCategory = () => {
   return (
     <div className="px-0 ">
-      <section className="container w-full mx-auto bg-accent px-6 pb-6 pt-10 md:p-17.5 rounded-[40px] text-center">
+      <section className="container w-full mx-auto bg-accent px-6 pb-6 pt-10 md:p-17.5 md:rounded-[40px] text-center">
         <motion.h2
           initial={{ y: "100px", opacity: 0 }}
           whileInView={{ y: "0", opacity: 1 }}

@@ -17,7 +17,7 @@ const About = () => {
               <h2 className="h3 mb-6">Focused on Reliability Across Every Solar System</h2>
               <p className="mb-11">Our commitment goes beyond installation. Every system we design, sell, or maintain is approached with long-term performance in mind. From selecting the right components to monitoring system health and providing ongoing support, we take responsibility for making sure your solar system works reliably today and continues to perform as your needs evolve.</p>
               <div className="w-max flex flex-col text-right mb-10">
-                <Image src="/assets/img/about/signature.svg" width={154} height={38} alt="" />
+                <Image src="/assets/img/about/signature.svg" className="w-auto h-16" width={500} height={30} alt="" />
                 <p>Company CEO</p>
               </div>
               <Button href="/about" text="Contact us" />

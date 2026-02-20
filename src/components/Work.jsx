@@ -11,25 +11,25 @@ const workData = [
     img: "/assets/csolar/solar-project2.jpeg",
     name: "maintenance",
     description: "Solar installation and maintenance",
-    href: ""
+    href: "/projects"
   },
   {
     img: "/assets/csolar/solar-project3.jpeg",
     name: "monitoring",
     description: "Battery and inverter monitoring",
-    href: ""
+    href: "/projects"
   },
   {
     img: "/assets/csolar/solar-project4.jpeg",
     name: "inverters",
-    description: "installation of modern and reliable inverters",
-    href: ""
+    description: "inverter installation",
+    href: "/projects"
   },
   {
     img: "/assets/people/about.jpg",
     name: "installation",
     description: "Solar farm, Bayelsa",
-    href: ""
+    href: "/projects"
   },
 ]
 
