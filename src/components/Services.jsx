@@ -30,13 +30,14 @@ const serviceData = [
       "Residential Solar Installations",
       "Commercial Solar Systems",
       "Grid-Tied, Off-Grid & Hybrid Systems",
+      "Smart & Future-proof Solar Streetlights",
       "Inverter System Design & Setup",
       "System Sizing & Load Analysis",
       "Commissioning & Handover",
     ],
     thumbs: [
-      { url: "/assets/img/services/thumb-1.jpg" },
-      { url: "/assets/img/services/thumb-2.jpg" },
+      { url: "/assets/img/services/thumb-1a.jpg" },
+      { url: "/assets/img/services/streetlight1.jpg" },
     ],
   },
   {
@@ -54,8 +55,8 @@ const serviceData = [
       "Upgrade & Replacement Equipment",
     ],
     thumbs: [
-      { url: "/assets/img/services/thumb-3.jpg" },
-      { url: "/assets/img/services/thumb-4.jpg" },
+      { url: "/assets/inverters/inverter.jpg" },
+      { url: "/assets/products/srne.webp" },
     ],
   },
   {
@@ -92,8 +93,8 @@ const serviceData = [
       "Health-Based Recommendations",
     ],
     thumbs: [
-      { url: "/assets/img/services/thumb-1.jpg" },
-      { url: "/assets/img/services/thumb-3.jpg" },
+      { url: "/assets/products/monitoring2.jpg" },
+      { url: "/assets/img/services/thumb-4.jpg" },
     ],
   },
   {
@@ -111,8 +112,8 @@ const serviceData = [
       "Long-Term Solar Planning",
     ],
     thumbs: [
+      { url: "/assets/img/services/thumb-6.jpg" },
       { url: "/assets/img/services/thumb-1.jpg" },
-      { url: "/assets/img/services/thumb-3.jpg" },
     ],
   },
 ]
