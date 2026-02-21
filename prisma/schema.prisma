@@ -7,7 +7,7 @@ datasource db {
 }
 
 //////////////////////////////////////
-// ENUMS
+// ENUMS 
 //////////////////////////////////////
 
 enum Role {
@@ -96,6 +96,8 @@ model User {
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
   serviceVisits ServiceVisit[]
+
+  carts Cart[]
 }
 
 model Customer {
@@ -288,6 +290,8 @@ model Product {
   gallery    ProductImage[]
   discount   Discount?
   reviews    Review[]
+
+  cartItems CartItem[]
 }
 
 model ProductImage {
@@ -356,6 +360,26 @@ model OrderItem {
 
   orderId String
   order   Order  @relation(fields: [orderId], references: [id])
+}
+
+model Cart {
+  id        String     @id @default(cuid())
+  userId    String
+  user      User       @relation(fields: [userId], references: [id])
+  items     CartItem[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+}
+
+model CartItem {
+  id        String  @id @default(cuid())
+  cartId    String
+  cart      Cart    @relation(fields: [cartId], references: [id])
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+  quantity  Int     @default(1)
+
+  @@unique([cartId, productId])
 }
 
 model Payment {

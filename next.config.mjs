@@ -3,8 +3,8 @@ const nextConfig = {
   experimental: {
     optimizeCss: false,
   },
-  turbo: {
-    resolveAlias: {},
+  turbopack: {
+    resolveAlias: {},   // keep your aliases here if you add any later
   },
 
   reactStrictMode: true,

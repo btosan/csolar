@@ -16,7 +16,7 @@ export default async function AdminCreateProductPage() {
       <p className="text-muted-foreground mb-6">
         Add a new product to the store
       </p>
-      <ProductForm />
+      <ProductForm mode="create"/>
     </section>
   );
 }
