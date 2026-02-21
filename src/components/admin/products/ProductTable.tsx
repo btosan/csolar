@@ -15,26 +15,15 @@ type Product = {
   active: boolean;
 };
 
-export default function ProductTable() {
-  const [products, setProducts] = useState<Product[]>([]);
+interface ProductTableProps {
+  products: Product[];          
+}
+
+export default function ProductTable({ products: initialProducts }: ProductTableProps) {
+  const [products] = useState<Product[]>(initialProducts);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    async function fetchProducts() {
-      setLoading(true);
-      try {
-        const data = await getAllProducts();
-        setProducts(data);
-      } catch (error) {
-        console.error("Failed to fetch products:", error);
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchProducts();
-  }, []);
-
-  const visibleProducts = products.filter((p) => p.active);
+const visibleProducts = products.filter((p) => p.active);
 
   if (loading) {
     return (
