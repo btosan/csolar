@@ -48,11 +48,13 @@ export type ProductImage = {
 // PRODUCT (Fully aligned)
 ///////////////////////////////////////////
 
+import { ProductType } from "@prisma/client";
+
 export type Product = {
   id: string;
 
   // core info
-  name: string; // ✅ was title before — corrected
+  name: string;
   slug?: string | null;
   type: ProductType;
   brand: string;
@@ -70,7 +72,15 @@ export type Product = {
   price: number;
   stock?: number | null;
   active: boolean;
+  featured: boolean;
   discount?: Discount | null;
+
+  // solar specs
+  wattage?: number | null;
+  kva?: number | null;
+  ah?: number | null;
+  voltage?: string | null;
+  specifications?: any | null;
 
   // rating
   rating: number;

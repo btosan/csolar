@@ -279,10 +279,19 @@ model Product {
   price            Int
   stock            Int?        @default(0)
   active           Boolean     @default(true)
+  featured         Boolean @default(false)
 
-  // ✅ NEW — aggregate rating (0–5 scale, decimal allowed)
   rating Float @default(0)
 
+  // 🔋 Solar Specs
+  wattage          Int?
+  kva              Float?
+  ah               Int?
+  voltage          String?
+
+  // 📦 Technical Specs JSON
+  specifications   Json?
+  
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 

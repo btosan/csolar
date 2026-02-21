@@ -70,7 +70,7 @@ async function recalculateProductRating(productId: string) {
 }
 
 /////////////////////////////////////////////////
-// 🟢 CREATE PRODUCT
+// 🟢 CREATE PRODUCT tx
 /////////////////////////////////////////////////
 
 export async function createProduct(data: {
@@ -85,6 +85,14 @@ export async function createProduct(data: {
   price: number;
   stock?: number;
   active?: boolean;
+  featured?: boolean;
+
+  wattage?: number;
+  kva?: number;
+  ah?: number;
+  voltage?: string;
+  specifications?: any;
+
   gallery?: string[];
 }) {
   await requireAdmin();
@@ -109,6 +117,13 @@ export async function createProduct(data: {
         price: data.price,
         stock: data.stock ?? 0,
         active: data.active ?? true,
+        featured: data.featured ?? false,
+
+        wattage: data.wattage,
+        kva: data.kva,
+        ah: data.ah,
+        voltage: data.voltage,
+        specifications: data.specifications,
       },
     });
 
@@ -148,6 +163,14 @@ export async function updateProduct(
     price?: number;
     stock?: number;
     active?: boolean;
+    featured?: boolean;
+
+    wattage?: number;
+    kva?: number;
+    ah?: number;
+    voltage?: string;
+    specifications?: any;
+
     gallery?: string[];
   }
 ) {
@@ -174,6 +197,13 @@ export async function updateProduct(
         price: data.price,
         stock: data.stock,
         active: data.active,
+
+        featured: data.featured,
+        wattage: data.wattage,
+        kva: data.kva,
+        ah: data.ah,
+        voltage: data.voltage,
+        specifications: data.specifications,
       },
     });
 

@@ -7,7 +7,6 @@ import { CldUploadWidget } from "next-cloudinary";
 import { createProduct, updateProduct } from "@/lib/actions/products";
 import RichTextEditor from "@/components/editor/RichTextEditor";
 
-// const editor
 interface ProductWithRelations extends Product {
   gallery?: { id: string; url: string }[];
 }
@@ -51,6 +50,12 @@ export default function ProductForm({ mode, product }: Props) {
     price: product?.price || 0,
     stock: product?.stock || 0,
     active: product?.active ?? true,
+    featured: product?.featured ?? false,
+    wattage: product?.wattage ?? undefined,
+    kva: product?.kva ?? undefined,
+    ah: product?.ah ?? undefined,
+    voltage: product?.voltage || "",
+    specifications: product?.specifications ?? [],
   });
 
   const [gallery, setGallery] = useState<string[]>(
@@ -60,7 +65,6 @@ export default function ProductForm({ mode, product }: Props) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Auto slug generation
   useEffect(() => {
     if (!slugManuallyEdited) {
       setForm((prev) => ({
@@ -70,50 +74,42 @@ export default function ProductForm({ mode, product }: Props) {
     }
   }, [form.name, slugManuallyEdited]);
 
-<RichTextEditor
-  value={form.longDescription}
-  onChange={(val) =>
-    setForm((prev) => ({ ...prev, longDescription: val }))
-  }
-/>
-  
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setError(null);
 
-async function handleSubmit(e: React.FormEvent) {
-  e.preventDefault();
-  setError(null);
-
-  if (form.stock < 0) {
-    setError("Stock cannot be negative.");
-    return;
-  }
-
-  setLoading(true);
-
-  try {
-    if (isEdit && product) {
-      await updateProduct(product.id, {
-        ...form,
-        gallery, 
-      });
-    } else {
-      await createProduct({
-        ...form,
-        gallery, 
-      });
+    if (form.stock < 0) {
+      setError("Stock cannot be negative.");
+      return;
     }
 
-    router.push("/admin/products");
-    router.refresh();
-  } catch (err: any) {
-    setError(err.message || "Something went wrong.");
-  } finally {
-    setLoading(false);
+    setLoading(true);
+
+    try {
+      if (isEdit && product) {
+        await updateProduct(product.id, {
+          ...form,
+          specifications: form.specifications || null,
+          gallery,
+        });
+      } else {
+        await createProduct({
+          ...form,
+          gallery,
+        });
+      }
+
+      router.push("/admin/products");
+      router.refresh();
+    } catch (err: any) {
+      setError(err.message || "Something went wrong.");
+    } finally {
+      setLoading(false);
+    }
   }
-}
 
   return (
     <form onSubmit={handleSubmit} className="space-y-8 max-w-4xl">
-
       {error && <p className="text-red-500">{error}</p>}
 
       {/* BASIC INFO */}
@@ -168,76 +164,104 @@ async function handleSubmit(e: React.FormEvent) {
         </select>
       </div>
 
-      {/* IMAGES */}
-      <div className="space-y-4">
-        <h2 className="text-xl font-semibold">Images</h2>
+      {/* FEATURED */}
+      <label className="flex items-center gap-2">
+        <input
+          type="checkbox"
+          checked={form.featured}
+          onChange={(e) =>
+            setForm({ ...form, featured: e.target.checked })
+          }
+        />
+        Mark as Featured Product
+      </label>
 
-        {/* Main Image */}
-        <CldUploadWidget
-          uploadPreset="tosanxprofiles"
-          onSuccess={(result: any) => {
-            const url = result?.info?.secure_url;
-            if (url) {
-              setForm({ ...form, mainImageUrl: url });
-            }
-          }}
-        >
-          {({ open }) => (
-            <button
-              type="button"
-              onClick={() => open()}
-              className="border-dashed border-2 p-6 rounded w-full"
-            >
-              Upload Main Image
-            </button>
-          )}
-        </CldUploadWidget>
+      {/* TECHNICAL SPECS */}
+      <div className="grid md:grid-cols-2 gap-4">
+        <input
+          type="number"
+          placeholder="Wattage (W)"
+          value={form.wattage ?? ""}
+          onChange={(e) =>
+            setForm({
+              ...form,
+              wattage: e.target.value
+                ? Number(e.target.value)
+                : undefined,
+            })
+          }
+          className="border p-3 rounded"
+        />
 
-        {form.mainImageUrl && (
-          <img
-            src={form.mainImageUrl}
-            className="w-48 h-48 object-cover rounded"
-          />
-        )}
+        <input
+          type="number"
+          step="0.1"
+          placeholder="kVA"
+          value={form.kva ?? ""}
+          onChange={(e) =>
+            setForm({
+              ...form,
+              kva: e.target.value
+                ? Number(e.target.value)
+                : undefined,
+            })
+          }
+          className="border p-3 rounded"
+        />
 
-        {/* Gallery */}
-        <CldUploadWidget
-          uploadPreset="tosanxprofiles"
-          options={{ multiple: true }}
-          onSuccess={(result: any) => {
-            const url = result?.info?.secure_url;
-            if (url) {
-              setGallery((prev) => [...prev, url]);
-            }
-          }}
-        >
-          {({ open }) => (
-            <button
-              type="button"
-              onClick={() => open()}
-              className="border-dashed border-2 p-4 rounded"
-            >
-              Add Gallery Images
-            </button>
-          )}
-        </CldUploadWidget>
+        <input
+          type="number"
+          placeholder="Battery Capacity (Ah)"
+          value={form.ah ?? ""}
+          onChange={(e) =>
+            setForm({
+              ...form,
+              ah: e.target.value
+                ? Number(e.target.value)
+                : undefined,
+            })
+          }
+          className="border p-3 rounded"
+        />
 
-        <div className="grid grid-cols-3 gap-3">
-          {gallery.map((url, i) => (
-            <div key={i} className="relative">
-              <img src={url} className="rounded h-28 w-full object-cover" />
-              <button
-                type="button"
-                onClick={() =>
-                  setGallery(gallery.filter((_, index) => index !== i))
-                }
-                className="absolute top-1 right-1 bg-red-500 text-white px-2 rounded text-xs"
-              >
-                ✕
-              </button>
-            </div>
-          ))}
-        </div>
+        <input
+          type="text"
+          placeholder="Voltage (e.g. 12V / 24V)"
+          value={form.voltage}
+          onChange={(e) =>
+            setForm({ ...form, voltage: e.target.value })
+          }
+          className="border p-3 rounded"
+        />
+      </div>
+
+      {/* SPECIFICATIONS */}
+      <div className="space-y-2">
+        <label className="text-sm font-medium">
+          Technical Specifications
+        </label>
+
+        <textarea
+          rows={6}
+          value={
+            typeof form.specifications === "string"
+              ? form.specifications
+              : form.specifications
+              ? JSON.stringify(form.specifications, null, 2)
+              : ""
+          }
+          onChange={(e) =>
+            setForm({
+              ...form,
+              specifications: e.target.value,
+            })
+          }
+          className="w-full border p-3 rounded"
+          placeholder="Example:
+      - Weight: 25kg
+      - Warranty: 2 Years
+      - Efficiency: 98%"
+        />
       </div>
 
       {/* DESCRIPTION */}
@@ -252,6 +276,7 @@ async function handleSubmit(e: React.FormEvent) {
           }
           className="w-full border p-3 rounded"
         />
+
         <h2 className="text-xl font-semibold">Long Description</h2>
 
         <RichTextEditor
