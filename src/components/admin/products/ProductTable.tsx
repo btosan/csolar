@@ -5,25 +5,53 @@ import { getAllProducts } from "@/lib/actions/products";
 import DeleteProductButton from "./DeleteProductButton";
 import Link from "next/link";
 
-type Product = {
+type AdminProductListItem = {
   id: string;
   name: string;
+  slug?: string | null;
+  type: string;               // ProductType enum comes as string
   brand: string;
-  type: string;
+  model?: string | null;
+  shortDescription?: string | null;
+  longDescription?: string | null;
+  mainImageUrl?: string | null;
   price: number;
-  stock: number;
+  stock: number | null;       // ← this was the main mismatch
   active: boolean;
+  rating: number;
+  createdAt: Date;
+  updatedAt: Date;
+
+  // Included relations from getAllProducts()
+  gallery: { id: string; url: string; caption?: string | null; createdAt: Date }[];
+  discount: {
+    id: string;
+    amount?: number | null;
+    percentage?: number | null;
+    active: boolean;
+    productId: string;
+    createdAt: Date;
+    updatedAt: Date;
+  } | null;
+  _count: {
+    reviews: number;
+  };
 };
 
 interface ProductTableProps {
-  products: Product[];          
+  products: AdminProductListItem[];
 }
 
-export default function ProductTable({ products: initialProducts }: ProductTableProps) {
+export default function ProductTable({ products }: ProductTableProps) {
   const [products] = useState<Product[]>(initialProducts);
   const [loading, setLoading] = useState(true);
 
-const visibleProducts = products.filter((p) => p.active);
+const visibleProducts = products
+    .filter((p) => p.active)
+    .map((p) => ({
+      ...p,
+      stock: p.stock ?? 0,
+    }));
 
   if (loading) {
     return (
@@ -74,7 +102,9 @@ const visibleProducts = products.filter((p) => p.active);
                   ₦{(product.price / 100).toLocaleString()}
                 </td>
 
-                <td className="px-6 py-4">{product.stock}</td>
+                <td className="px-6 py-4">
+                  {product.stock ?? 0}
+                </td>
 
                 <td className="px-6 py-4">
                   <span
