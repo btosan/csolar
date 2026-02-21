@@ -1,7 +1,5 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { getAllProducts } from "@/lib/actions/products";
 import DeleteProductButton from "./DeleteProductButton";
 import Link from "next/link";
 
@@ -9,20 +7,17 @@ type AdminProductListItem = {
   id: string;
   name: string;
   slug?: string | null;
-  type: string;               // ProductType enum comes as string
+  type: string;
   brand: string;
   model?: string | null;
-  shortDescription?: string | null;
-  longDescription?: string | null;
   mainImageUrl?: string | null;
   price: number;
-  stock: number | null;       // ← this was the main mismatch
+  stock: number | null;
   active: boolean;
   rating: number;
   createdAt: Date;
   updatedAt: Date;
 
-  // Included relations from getAllProducts()
   gallery: { id: string; url: string; caption?: string | null; createdAt: Date }[];
   discount: {
     id: string;
@@ -43,35 +38,27 @@ interface ProductTableProps {
 }
 
 export default function ProductTable({ products }: ProductTableProps) {
-  const [products] = useState<Product[]>(initialProducts);
-  const [loading, setLoading] = useState(true);
+  // We use the prop directly — no need for useState here anymore
+  // (server already gave us fresh data)
 
-const visibleProducts = products
+  const visibleProducts = products
     .filter((p) => p.active)
     .map((p) => ({
       ...p,
-      stock: p.stock ?? 0,
+      stock: p.stock ?? 0, // safe default for display
     }));
-
-  if (loading) {
-    return (
-      <div className="bg-white shadow rounded-2xl p-8 text-center text-gray-500">
-        Loading products...
-      </div>
-    );
-  }
 
   if (visibleProducts.length === 0) {
     return (
       <div className="bg-white shadow rounded-2xl p-8 text-center text-gray-500">
-        No products found.
+        No active products found.
       </div>
     );
   }
 
   return (
-    <div className="space-y-6 container">
-      {/* ================= DESKTOP TABLE ================= */}
+    <div className="space-y-6 container mx-auto">
+      {/* DESKTOP TABLE */}
       <div className="hidden lg:block bg-white shadow rounded-2xl overflow-hidden">
         <table className="w-full">
           <thead className="bg-gray-50 text-sm text-gray-600">
@@ -90,22 +77,15 @@ const visibleProducts = products
                 className="border-t hover:bg-gray-50 transition"
               >
                 <td className="px-6 py-4">
-                  <div className="font-semibold text-primary">
-                    {product.name}
-                  </div>
+                  <div className="font-semibold text-primary">{product.name}</div>
                   <div className="text-sm text-gray-500">
                     {product.brand} • {product.type}
                   </div>
                 </td>
-
                 <td className="px-6 py-4 font-medium">
                   ₦{(product.price / 100).toLocaleString()}
                 </td>
-
-                <td className="px-6 py-4">
-                  {product.stock ?? 0}
-                </td>
-
+                <td className="px-6 py-4">{product.stock}</td>
                 <td className="px-6 py-4">
                   <span
                     className={`px-3 py-1 text-xs font-medium rounded-full ${
@@ -117,7 +97,6 @@ const visibleProducts = products
                     {product.active ? "Active" : "Hidden"}
                   </span>
                 </td>
-
                 <td className="px-6 py-4 text-right space-x-2">
                   <Link
                     href={`/admin/products/${product.id}`}
@@ -133,7 +112,7 @@ const visibleProducts = products
         </table>
       </div>
 
-      {/* ================= MOBILE CARDS ================= */}
+      {/* MOBILE CARDS */}
       <div className="lg:hidden space-y-4">
         {visibleProducts.map((product) => (
           <div
@@ -141,9 +120,7 @@ const visibleProducts = products
             className="bg-white shadow rounded-2xl p-5 space-y-3"
           >
             <div>
-              <h3 className="font-semibold text-primary">
-                {product.name}
-              </h3>
+              <h3 className="font-semibold text-primary">{product.name}</h3>
               <p className="text-sm text-gray-500">
                 {product.brand} • {product.type}
               </p>
