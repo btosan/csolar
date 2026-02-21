@@ -15,7 +15,6 @@ import {
 import Logo from "./Logo";
 import NavMobile from "./NavMobile";
 
-
 const navLinks = [
   {
     name: "Services",
@@ -109,29 +108,27 @@ const navLinks = [
   },
   { name: "Projects", href: "/projects" },
   { name: "About", href: "/about" },
-]
-
-
+];
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
-  const [activeMenu, setActiveMenu] = useState(null); 
+  const [activeMenu, setActiveMenu] = useState(null);
 
   const { data: session, status } = useSession();
   const isAuthenticated = status === "authenticated";
   const user = session?.user;
 
   useEffect(() => {
-      const handleScroll = () => {
-        setIsScrolled(window.scrollY > 80);
-      };
-      window.addEventListener("scroll", handleScroll);
-      return () => window.removeEventListener("scroll", handleScroll);
-    }, []);
-
-    const closeMenu = () => {
-      setActiveMenu(null);
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 80);
     };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const closeMenu = () => {
+    setActiveMenu(null);
+  };
 
   return (
     <header className="bg-primary py-4 sticky top-0 z-100">
@@ -160,15 +157,15 @@ const Header = () => {
                 return (
                   <li
                     key={i}
-                    className="relative text-white text-sm  font-primary font-medium tracking-[1.2px] after:content-['/'] after:mx-4 last:after:content-none after:text-accent"
+                    className="relative text-white text-sm font-primary font-medium tracking-[1.2px] after:content-['/'] after:mx-4 last:after:content-none after:text-accent"
                     onMouseEnter={() => hasSubmenu && setActiveMenu(link.name)}
                     onMouseLeave={() => hasSubmenu && setActiveMenu(null)}
                   >
-                      <div
-                        className="inline-block "
-                        onMouseEnter={() => hasSubmenu && setActiveMenu(link.name)}
-                        onMouseLeave={() => hasSubmenu && setActiveMenu(null)}
-                      >
+                    <div
+                      className="inline-block"
+                      onMouseEnter={() => hasSubmenu && setActiveMenu(link.name)}
+                      onMouseLeave={() => hasSubmenu && setActiveMenu(null)}
+                    >
                       <Link
                         href={link.href}
                         onClick={closeMenu}
@@ -181,7 +178,7 @@ const Header = () => {
                         <div
                           className={`fixed left-0 ${
                             isScrolled ? "top-16" : "top-32"
-                          } w-screen 2xl:h-[90vh] xl:h-[90vh]] lg:h-[92vh]  bg-gray-200 transition-opacity duration-200 z-50
+                          } w-screen 2xl:h-[90vh] xl:h-[90vh] lg:h-[92vh] bg-gray-200 transition-opacity duration-200 z-50
                           ${activeMenu === link.name ? "opacity-100 visible" : "opacity-0 invisible pointer-events-none"}`}
                         >
                           <div className="container mx-auto h-full 2xl:py-8 py-6 px-6 -mt-5">
@@ -216,7 +213,7 @@ const Header = () => {
                           </div>
                         </div>
                       )}
-                      </div>
+                    </div>
                   </li>
                 );
               })}
@@ -234,38 +231,77 @@ const Header = () => {
               </button>
             </Link>
 
-            {/* Login */}
+            {/* Authenticated user avatar + hover panel */}
             {isAuthenticated && user ? (
-              <Link
-                href={user.role === "ADMIN" ? "/admin/profile" : "/profile"}
-                className="flex items-center gap-1 hover:opacity-90 transition-opacity"
-              >
-                <div className="h-7 w-7 rounded-full overflow-hidden border border-accent/30 shadow-sm">
-                  {user.image ? (
-                    <CldImage
-                      src={user.image}
-                      alt={user.name || "User"}
-                      width={100}
-                      height={100}
-                      className="w-full h-full object-cover rounded-full"
-                    />
-                  ) : (
-                    <div className="w-full h-full bg-white/20 flex items-center justify-center text-white text-sm font-medium">
-                      {user.name?.[0]?.toUpperCase() || "?"}
-                    </div>
-                  )}
+              <div className="relative group">
+                <Link
+                  href={user.role === "ADMIN" ? "/admin/profile" : "/profile"}
+                  className="flex items-center gap-1 hover:opacity-90 transition-opacity"
+                >
+                  <div className="h-7 w-7 rounded-full overflow-hidden border border-accent/30 shadow-sm">
+                    {user.image ? (
+                      <CldImage
+                        src={user.image}
+                        alt={user.name || "User"}
+                        width={100}
+                        height={100}
+                        className="w-full h-full object-cover rounded-full"
+                      />
+                    ) : (
+                      <div className="w-full h-full bg-white/20 flex items-center justify-center text-white text-sm font-medium">
+                        {user.name?.[0]?.toUpperCase() || "?"}
+                      </div>
+                    )}
+                  </div>
+                </Link>
+
+                {/* Hover panel */}
+                <div className="
+                  absolute right-0 top-full mt-2 w-64 
+                  bg-white rounded-lg shadow-xl border border-gray-200 
+                  opacity-0 invisible group-hover:opacity-100 group-hover:visible 
+                  transition-all duration-200 z-50 pointer-events-none group-hover:pointer-events-auto
+                ">
+                  <div className="p-4 border-b border-gray-100">
+                    <p className="font-medium text-gray-900 truncate">
+                      {user.name || "User"}
+                    </p>
+                  </div>
+
+                  <div className="border-t border-gray-200" />
+
+                  <div className="py-2">
+                    <Link
+                      href={user.role === "ADMIN" ? "/admin/profile" : "/profile"}
+                      className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary transition-colors"
+                    >
+                      Profile
+                    </Link>
+
+                    {user.role === "ADMIN" && (
+                      <Link
+                        href="/admin"
+                        className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary transition-colors"
+                      >
+                        Dashboard
+                      </Link>
+                    )}
+                  </div>
+
+                  {/* Small upward arrow */}
+                  <div className="absolute right-4 -top-2 w-4 h-4 bg-white border-l border-t border-gray-200 rotate-45 transform origin-bottom-right" />
                 </div>
-              </Link>
+              </div>
             ) : (
               <Link
                 href="/signin"
-                className="mx-auto flex flex-col items-center justify-center gap-8  text-white/70 uppercase font-primary tracking-[1.2px] hover:text-white transition-colors"
+                className="mx-auto flex flex-col items-center justify-center gap-8 text-white/70 uppercase font-primary tracking-[1.2px] hover:text-white transition-colors"
               >
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <CircleUserIcon className="w-7 h-7 hover:text-accent" />
                   </TooltipTrigger>
-                  <TooltipContent side="bottom" sideOffset={20} className=" p-4 text-sm lg:text-base font-medium uppercase text-primary bg-accent">
+                  <TooltipContent side="bottom" sideOffset={20} className="p-4 text-sm lg:text-base font-medium uppercase text-primary bg-accent">
                     Login or Register
                   </TooltipContent>
                 </Tooltip>
