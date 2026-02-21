@@ -1,25 +1,30 @@
-import NextAuth, { DefaultSession, NextAuthOptions } from "next-auth";
+import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import GoogleProvider from 'next-auth/providers/google';
-import { db } from './db';
+import GoogleProvider from "next-auth/providers/google";
+import { db } from "./db";
 import bcrypt from "bcryptjs";
-import { User, Role } from "@prisma/client";
-
 
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(db),
+
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     }),
+
     CredentialsProvider({
       name: "credentials",
       credentials: {
-        email: { label: "Email", type: "email", placeholder: "john@email.com" },
-        password: { label: "Password", type: "password" }
+        email: {
+          label: "Email",
+          type: "email",
+          placeholder: "john@email.com",
+        },
+        password: { label: "Password", type: "password" },
       },
+
       async authorize(credentials) {
         try {
           if (!credentials?.email || !credentials?.password) {
@@ -45,13 +50,10 @@ export const authOptions: NextAuthOptions = {
             throw new Error("Invalid credentials");
           }
 
-          // Update user's updatedAt timestamp
+          // update activity timestamp
           await db.user.update({
-            where: { 
-              id: user.id, 
-              email: user.email,
-             },
-            data: { updatedAt: new Date() }
+            where: { id: user.id },
+            data: { updatedAt: new Date() },
           });
 
           return {
@@ -68,19 +70,21 @@ export const authOptions: NextAuthOptions = {
       },
     }),
   ],
-  pages: {
-    signIn: '/signin',
 
+  pages: {
+    signIn: "/signin",
   },
+
   session: {
     strategy: "jwt",
-    maxAge: 30 * 24 * 60 * 60, // 30 days
+    maxAge: 30 * 24 * 60 * 60,
   },
+
   callbacks: {
     async session({ session, token }) {
       if (!session?.user || !token?.sub) return session;
 
-      // 🔥 Always fetch fresh user from DB
+      // always fetch fresh DB user
       const freshUser = await db.user.findUnique({
         where: { id: token.sub },
       });
@@ -89,9 +93,9 @@ export const authOptions: NextAuthOptions = {
         session.user.id = freshUser.id;
         session.user.email = freshUser.email;
         session.user.name = freshUser.name;
-        session.user.role = freshUser.role;
         session.user.image = freshUser.image;
-        session.user.createdAt = token.createdAt;
+        session.user.role = freshUser.role;
+        session.user.createdAt = freshUser.createdAt;
       }
 
       return session;
@@ -100,17 +104,16 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
-        token.email = user.email;
-        token.name = user.name;
         token.role = user.role;
-        token.image = user.image;
-        token.createdAt = user.createdAt;
       }
+
       return token;
-    }
+    },
   },
-  debug: process.env.NODE_ENV === 'development',
+
+  debug: process.env.NODE_ENV === "development",
 };
 
 const handler = NextAuth(authOptions);
+
 export { handler as GET, handler as POST };

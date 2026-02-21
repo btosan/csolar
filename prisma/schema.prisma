@@ -274,7 +274,6 @@ model Product {
   shortDescription String?     @db.Text
   longDescription  String?     @db.Text
   mainImageUrl     String?
-  imageUrls        String[]    @default([])
   price            Int
   stock            Int?        @default(0)
   active           Boolean     @default(true)

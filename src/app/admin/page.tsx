@@ -2,7 +2,16 @@ import { redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import Link from 'next/link';
-import { Users, User, Settings, ShieldCheck } from 'lucide-react';
+import { 
+  Users, 
+  User, 
+  Settings, 
+  ShieldCheck, 
+  Briefcase, 
+  Sun, 
+  Package,
+  TrendingUp
+} from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
 
@@ -31,7 +40,7 @@ export default async function AdminDashboard() {
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
 
         <Link href="/admin/profile">
-          <div className="border rounded-xl p-6 hover:shadow-md transition-all hover:border-primary/50 cursor-pointer">
+          <div className="border rounded-xl p-6 hover:shadow-md transition-all hover:border-primary/50 hover:bg-accent/50 hover:text-black hover:font-medium cursor-pointer">
             <div className="flex items-center gap-4 mb-4">
               <div className="p-3 bg-primary/10 rounded-lg">
                 <User className="h-6 w-6 text-primary" />
@@ -44,7 +53,7 @@ export default async function AdminDashboard() {
           </div>
         </Link>
         <Link href="/admin/users">
-          <div className="border rounded-xl p-6 hover:shadow-md transition-all hover:border-primary/50 cursor-pointer">
+          <div className="border rounded-xl p-6 hover:shadow-md transition-all hover:border-primary/50 hover:bg-accent/50 hover:text-black hover:font-medium cursor-pointer">
             <div className="flex items-center gap-4 mb-4">
               <div className="p-3 bg-primary/10 rounded-lg">
                 <Users className="h-6 w-6 text-primary" />
@@ -57,6 +66,35 @@ export default async function AdminDashboard() {
           </div>
         </Link>
 
+        <Link href="/admin/products/create">
+          <div className="border rounded-xl p-6 hover:shadow-md transition-all hover:border-primary/50 hover:bg-accent/50 hover:text-black hover:font-medium cursor-pointer">
+            <div className="flex items-center gap-4 mb-4">
+              <div className="p-3 bg-primary/10 rounded-lg">
+                <Sun className="h-6 w-6 text-primary" />
+              </div>
+              <h3 className="text-xl font-semibold">Create Products</h3>
+            </div>
+            <p className="text-muted-foreground">
+              Create a product - solar panels, inverters, batteries, accessories
+            </p>
+          </div>
+        </Link>
+
+        
+        <Link href="/admin/projects/create">
+          <div className="border rounded-xl p-6 hover:shadow-md transition-all hover:border-primary/50 hover:bg-accent/50 hover:text-black hover:font-medium cursor-pointer">
+            <div className="flex items-center gap-4 mb-4">
+              <div className="p-3 bg-primary/10 rounded-lg">
+                <Briefcase className="h-6 w-6 text-primary" />
+              </div>
+              <h3 className="text-xl font-semibold">Create Projects</h3>
+            </div>
+            <p className="text-muted-foreground">
+              Create a project - ongoing and completed projects
+            </p>
+          </div>
+        </Link>
+
         {/* Future cards – you can add more later */}
         <div className="border rounded-xl p-6 opacity-60 cursor-not-allowed">
           <div className="flex items-center gap-4 mb-4">
@@ -64,6 +102,24 @@ export default async function AdminDashboard() {
               <ShieldCheck className="h-6 w-6 text-gray-500" />
             </div>
             <h3 className="text-xl font-semibold">System Settings</h3>
+          </div>
+          <p className="text-muted-foreground">Coming soon...</p>
+        </div>
+        <div className="border rounded-xl p-6 opacity-60 cursor-not-allowed">
+          <div className="flex items-center gap-4 mb-4">
+            <div className="p-3 bg-gray-100 rounded-lg">
+              <Package className="h-6 w-6 text-gray-500" />
+            </div>
+            <h3 className="text-xl font-semibold">View Orders</h3>
+          </div>
+          <p className="text-muted-foreground">Coming soon...</p>
+        </div>
+        <div className="border rounded-xl p-6 opacity-60 cursor-not-allowed">
+          <div className="flex items-center gap-4 mb-4">
+            <div className="p-3 bg-gray-100 rounded-lg">
+              <TrendingUp className="h-6 w-6 text-gray-500" />
+            </div>
+            <h3 className="text-xl font-semibold">View Sales</h3>
           </div>
           <p className="text-muted-foreground">Coming soon...</p>
         </div>

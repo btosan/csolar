@@ -9,6 +9,7 @@ import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { toast } from 'react-hot-toast';
 import { CldUploadWidget } from 'next-cloudinary';
+import Link from 'next/link';
 
 import {
   Form,
@@ -192,7 +193,7 @@ export default function Profile() {
               >
                 <ShieldCheck size={16} />
                 {role === 'ADMIN'
-                  ? 'Administrator'
+                  ? 'Admin'
                   : role === 'TECHNICIAN'
                   ? 'Technician'
                   : 'Customer'}
@@ -205,10 +206,25 @@ export default function Profile() {
 
             <Separator className="my-6" />
 
+            {role === 'ADMIN' && (
+              <>
+                <Link 
+                  href="/admin" 
+                  className="flex items-center justify-center gap-2 py-2 px-4 text-center font-medium text-primary hover:text-primary/80 transition-colors rounded-md hover:bg-gray-100/90"
+                >
+                  <span>Admin Dashboard</span>
+                  <span className="text-lg leading-none">→</span>
+                </Link>
+                <Separator className="my-6" />
+              </>
+            )}
+
+            <Separator className="my-6" />
+
             <AppButton
               variant="outline"
               size="lg"
-              className="w-fit mx-auto flex border text-destructive hover:text-destructive hover:bg-accent/10"
+              className="w-fit mx-auto flex border text-destructive hover:text-destructive hover:bg-gray-100/90"
               onClick={handleSignOut}
             >
               <div className='mx-auto flex items-center justify-center gap-2'>
@@ -286,7 +302,7 @@ export default function Profile() {
                               <CldUploadWidget
                                 uploadPreset="tosanxprofiles"
                                 onSuccess={(result) => handleUploadSuccess(result)}
-                                onQueuesEnd={() => toast.dismiss()} // optional
+                                onQueuesEnd={() => toast.dismiss()}
                                 options={{
                                   maxFiles: 1,
                                   resourceType: 'image',
@@ -342,7 +358,7 @@ export default function Profile() {
                                 </AvatarFallback>
                               </Avatar>
 
-                              <p className="text-xs text-muted-foreground text-center max-w-35">
+                              <p className="text-xs text-muted-foreground text-start max-w-35">
                                 {previewImage?.trim() || user.image?.trim()
                                   ? 'Profile picture set'
                                   : 'No profile picture set • Click "Edit Profile" to add one'}
@@ -365,7 +381,7 @@ export default function Profile() {
                       disabled={isLoading}
                       className="flex-1"
                     >
-                      Save Changes
+                      Save
                     </AppButton>
 
                     <AppButton
