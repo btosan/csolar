@@ -1,7 +1,7 @@
 "use client";
 
 import { useTransition } from "react";
-import { addToCart } from "@/app/lib/actions/cart";
+import { addToCart } from "@/lib/actions/cart";
 
 export default function AddToCartButton({ productId }: { productId: string }) {
   const [isPending, startTransition] = useTransition();
