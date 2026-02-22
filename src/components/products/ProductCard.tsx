@@ -23,16 +23,15 @@ export default function ProductCard({ data }: ProductCardProps) {
     rating,
   } = data;
 
-  // ✅ SAFE IMAGE HANDLING
   const imageSrc =
     mainImageUrl && mainImageUrl.trim() !== ""
       ? mainImageUrl
-      : "/placeholder-product.png"; // put a placeholder image in public folder
+      : "/assets/csolar/solar-inverter.jpeg"; 
 
   return (
     <Link
       href={`/products/${slug}`}
-      className="group flex flex-col"
+      className="group flex flex-col border border-black/5 shadow-md p-4"
     >
       <div className="bg-[#F0EEED] rounded-xl lg:rounded-2xl w-full aspect-square mb-4 overflow-hidden">
         <Image

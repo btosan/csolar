@@ -281,6 +281,8 @@ model Product {
   active           Boolean     @default(true)
   featured         Boolean @default(false)
 
+  specifications Specification[]
+
   rating Float @default(0)
 
   // 🔋 Solar Specs
@@ -289,9 +291,6 @@ model Product {
   ah               Int?
   voltage          String?
 
-  // 📦 Technical Specs JSON
-  specifications   Json?
-  
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -301,6 +300,17 @@ model Product {
   reviews    Review[]
 
   cartItems CartItem[]
+}
+
+model Specification {
+  id        String   @id @default(cuid())
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  key       String
+  value     String 
+
+  @@index([productId])
 }
 
 model ProductImage {

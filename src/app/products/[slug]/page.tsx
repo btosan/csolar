@@ -114,7 +114,7 @@ export default async function ProductDetailPage({ params }: Props) {
             )}
 
             {featured && (
-              <span className="inline-block mt-2 text-xs px-3 py-1 rounded-full bg-yellow-500/10 text-yellow-600 font-medium">
+              <span className="inline-block mt-2 text-xs px-3 py-1 rounded-full bg-yellow-500/10 text-gray-600 font-medium">
                 Featured Product
               </span>
             )}

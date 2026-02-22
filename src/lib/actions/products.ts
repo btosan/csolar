@@ -7,7 +7,7 @@ import { authOptions } from "@/lib/auth";
 import { ProductType, Role } from "@prisma/client";
 
 /////////////////////////////////////////////////
-// 🔐 ADMIN GUARD
+// 🔐 ADMIN GUARD //specifications: data.specifications?.length
 /////////////////////////////////////////////////
 
 async function requireAdmin() {
@@ -123,7 +123,16 @@ export async function createProduct(data: {
         kva: data.kva,
         ah: data.ah,
         voltage: data.voltage,
-        specifications: data.specifications,
+        specifications: data.specifications?.length
+        ? {
+            create: data.specifications
+              .filter((s: any) => s.key?.trim() && s.value?.trim())
+              .map((s: any) => ({
+                key: s.key.trim(),
+                value: s.value.trim(),
+              })),
+          }
+        : undefined,
       },
     });
 
@@ -203,8 +212,19 @@ export async function updateProduct(
         kva: data.kva,
         ah: data.ah,
         voltage: data.voltage,
-        specifications: data.specifications,
-      },
+        specifications:
+          data.specifications !== undefined
+            ? {
+                deleteMany: {},
+                create: data.specifications
+                  .filter((s: any) => s.key?.trim() && s.value?.trim())
+                  .map((s: any) => ({
+                    key: s.key.trim(),
+                    value: s.value.trim(),
+                  })),
+              }
+            : undefined,
+        },
     });
 
     if (data.gallery) {
@@ -248,6 +268,7 @@ export async function getAllProducts() {
     include: {
       gallery: true,
       discount: true,
+      specifications: true,
       _count: {
         select: { reviews: true },
       },
@@ -266,6 +287,7 @@ export async function getActiveProducts() {
     include: {
       gallery: true,
       discount: true,
+      specifications: true,
     },
   });
 }
@@ -283,6 +305,7 @@ export async function getPublicProductBySlug(slug: string) {
     include: {
       gallery: true,
       discount: true,
+      specifications: true,
       reviews: true,
     },
   });

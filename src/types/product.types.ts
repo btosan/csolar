@@ -1,9 +1,4 @@
-// Matches Prisma ProductType enum
-export type ProductType =
-  | "PANEL"
-  | "BATTERY"
-  | "INVERTER"
-  | "ACCESSORY";
+import { ProductType } from "@prisma/client";
 
 ///////////////////////////////////////////
 // DISCOUNT
@@ -17,6 +12,12 @@ export type Discount = {
 
   createdAt: string;
   updatedAt: string;
+};
+
+export type Specification = {
+  id: string;
+  key: string;
+  value: string;
 };
 
 ///////////////////////////////////////////
@@ -48,8 +49,6 @@ export type ProductImage = {
 // PRODUCT (Fully aligned)
 ///////////////////////////////////////////
 
-import { ProductType } from "@prisma/client";
-
 export type Product = {
   id: string;
 
@@ -80,7 +79,7 @@ export type Product = {
   kva?: number | null;
   ah?: number | null;
   voltage?: string | null;
-  specifications?: any | null;
+  specifications?: Specification[];
 
   // rating
   rating: number;

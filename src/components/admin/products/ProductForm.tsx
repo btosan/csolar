@@ -6,9 +6,11 @@ import { useRouter } from "next/navigation";
 import { CldUploadWidget } from "next-cloudinary";
 import { createProduct, updateProduct } from "@/lib/actions/products";
 import RichTextEditor from "@/components/editor/RichTextEditor";
+// add specification
 
 interface ProductWithRelations extends Product {
   gallery?: { id: string; url: string }[];
+  specifications?: { id: string; key: string; value: string }[];
 }
 
 interface Props {
@@ -236,32 +238,63 @@ export default function ProductForm({ mode, product }: Props) {
       </div>
 
       {/* SPECIFICATIONS */}
-      <div className="space-y-2">
-        <label className="text-sm font-medium">
-          Technical Specifications
-        </label>
+      <div className="space-y-4">
+        <h2 className="text-xl font-semibold">Technical Specifications</h2>
 
-        <textarea
-          rows={6}
-          value={
-            typeof form.specifications === "string"
-              ? form.specifications
-              : form.specifications
-              ? JSON.stringify(form.specifications, null, 2)
-              : ""
-          }
-          onChange={(e) =>
+        {form.specifications?.map((spec: any, index: number) => (
+          <div key={index} className="grid grid-cols-5 gap-2">
+            <input
+              placeholder="Key (e.g. Weight)"
+              value={spec.key}
+              onChange={(e) => {
+                const updated = [...form.specifications];
+                updated[index].key = e.target.value;
+                setForm({ ...form, specifications: updated });
+              }}
+              className="col-span-2 border p-2 rounded"
+            />
+
+            <input
+              placeholder="Value (e.g. 25kg)"
+              value={spec.value}
+              onChange={(e) => {
+                const updated = [...form.specifications];
+                updated[index].value = e.target.value;
+                setForm({ ...form, specifications: updated });
+              }}
+              className="col-span-2 border p-2 rounded"
+            />
+
+            <button
+              type="button"
+              onClick={() => {
+                const updated = form.specifications.filter(
+                  (_: any, i: number) => i !== index
+                );
+                setForm({ ...form, specifications: updated });
+              }}
+              className="text-red-500"
+            >
+              ✕
+            </button>
+          </div>
+        ))}
+
+        <button
+          type="button"
+          onClick={() =>
             setForm({
               ...form,
-              specifications: e.target.value,
+              specifications: [
+                ...(form.specifications || []),
+                { key: "", value: "" },
+              ],
             })
           }
-          className="w-full border p-3 rounded"
-          placeholder="Example:
-      - Weight: 25kg
-      - Warranty: 2 Years
-      - Efficiency: 98%"
-        />
+          className="text-sm text-blue-600 hover:cursor-pointer"
+        >
+          + Add Specification
+        </button>
       </div>
 
       {/* DESCRIPTION */}
