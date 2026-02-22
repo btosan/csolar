@@ -15,7 +15,7 @@ export type Discount = {
 };
 
 export type Specification = {
-  id: string;
+  id?: string;
   key: string;
   value: string;
 };
