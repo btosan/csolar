@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 import { CldUploadWidget } from "next-cloudinary";
 import { createProduct, updateProduct } from "@/lib/actions/products";
 import RichTextEditor from "@/components/editor/RichTextEditor";
-// specifications?: { id: string; key: string; value: string }[];
 
 interface ProductWithRelations extends Product {
   gallery?: { id: string; url: string }[];
