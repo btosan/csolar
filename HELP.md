@@ -10,6 +10,7 @@ npx prisma migrate dev --name init
 npx prisma db push
 
 <!-- production -->
+npx prisma migrate dev --name add_project_date_default
 npx prisma migrate dev --name baseline
 npx prisma migrate deploy
 

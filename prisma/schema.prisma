@@ -424,6 +424,7 @@ model Project {
   id String @id @default(cuid())
 
   title       String
+  slug        String @unique
   description String? @db.Text
   location    String?
 
@@ -435,11 +436,16 @@ model Project {
 
   // mark featured projects (homepage, highlights, etc.)
   featured Boolean @default(false)
+  deleted Boolean @default(false)
 
-  projectDate DateTime
+  projectDate DateTime @default(now())
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([featured])
+  @@index([deleted])
+  @@index([projectDate])
 }
 
 model ProjectImage {

@@ -359,6 +359,81 @@ export default function ProductForm({ mode, product }: Props) {
         </label>
       </div>
 
+            {/* MAIN IMAGE */}
+      <div className="space-y-4">
+        <h2 className="text-xl font-semibold">Main Image</h2>
+
+        {form.mainImageUrl && (
+          <img
+            src={form.mainImageUrl}
+            alt="Main"
+            className="w-40 h-40 object-cover rounded"
+          />
+        )}
+
+        <CldUploadWidget
+          uploadPreset="tosanxprofiles"
+          onSuccess={(result: any) => {
+            const url = result.info.secure_url;
+            setForm({ ...form, mainImageUrl: url });
+          }}
+        >
+          {({ open }) => (
+            <button
+              type="button"
+              onClick={() => open()}
+              className="bg-gray-200 px-4 py-2 rounded"
+            >
+              Upload Main Image
+            </button>
+          )}
+        </CldUploadWidget>
+      </div>
+
+      {/* GALLERY */}
+      <div className="space-y-4">
+        <h2 className="text-xl font-semibold">Gallery Images</h2>
+
+        <div className="flex gap-4 flex-wrap">
+          {gallery.map((url, index) => (
+            <div key={index} className="relative">
+              <img
+                src={url}
+                alt="Gallery"
+                className="w-32 h-32 object-cover rounded"
+              />
+              <button
+                type="button"
+                onClick={() =>
+                  setGallery(gallery.filter((_, i) => i !== index))
+                }
+                className="absolute top-1 right-1 bg-red-500 text-white px-2 rounded"
+              >
+                ✕
+              </button>
+            </div>
+          ))}
+        </div>
+
+        <CldUploadWidget
+          uploadPreset="tosanxprofiles"
+          onSuccess={(result: any) => {
+            const url = result.info.secure_url;
+            setGallery((prev) => [...prev, url]);
+          }}
+        >
+          {({ open }) => (
+            <button
+              type="button"
+              onClick={() => open()}
+              className="bg-gray-200 px-4 py-2 rounded"
+            >
+              Upload Gallery Images
+            </button>
+          )}
+        </CldUploadWidget>
+      </div>
+
       <button
         disabled={loading}
         className="bg-green-600 text-white px-6 py-3 rounded hover:cursor-pointer"

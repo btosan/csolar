@@ -11,6 +11,7 @@ import Work from "@/components/Work";
 // import ProductSection from "../components/Products";
 import ProductCategory from "@/components/products/ProductCategories";
 import FeaturedProducts from "@/components/products/FeaturedProducts";
+import FeaturedProjects from "@/components/projects/FeaturedProjects";
 
 
 
@@ -27,6 +28,7 @@ export default function Home() {
       <Stats />
       {/* <TrustSection /> */}
       <Work />
+      <FeaturedProjects />
       <Testimonials />
       <Contact />
     </div>
