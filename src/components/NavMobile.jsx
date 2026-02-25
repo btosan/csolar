@@ -49,7 +49,7 @@ const links = [
       { name: "Solar Panels", href: "/products/solar-panels" },
       { name: "Inverters", href: "/products/inverters" },
       { name: "Batteries & Storage", href: "/products/batteries" },
-      { name: "Complete Solar Packages", href: "/products/packages" },
+      { name: "Solar System Accessories", href: "/products/accessories" },
     ],
   },
   { name: "Projects", href: "/projects" },
