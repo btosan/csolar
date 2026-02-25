@@ -72,7 +72,7 @@ const NavMobile = () => {
 
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
-      <SheetTrigger className="text-white text-3xl ">
+      <SheetTrigger className="text-white text-3xl hover:cursor-pointer">
         <RiMenu3Fill />
       </SheetTrigger>
 
@@ -96,7 +96,7 @@ const NavMobile = () => {
           <ul className="flex flex-col gap-6 md:gap-12 flex-1">
             {links.map((link, index) => (
               <li key={index}>
-                <div className="flex justify-between items-center">
+                <div className="flex justify-between items-center ">
                   <Link
                     href={link.href}
                     onClick={() => setIsOpen(false)}
@@ -108,7 +108,7 @@ const NavMobile = () => {
                   {link.submenu && (
                     <button
                       onClick={() => toggleExpand(index)}
-                      className="text-xl"
+                      className="text-xl hover:cursor-pointer"
                     >
                       {expanded === index ? "−" : "+"}
                     </button>
@@ -149,7 +149,7 @@ const NavMobile = () => {
                   <button
                     type="button"
                     onClick={() => setShowProfilePanel(!showProfilePanel)}
-                    className="flex items-center gap-3 w-full text-left hover:opacity-90 transition-opacity focus:outline-none"
+                    className="flex items-center gap-3 w-full text-left hover:opacity-90 transition-opacity focus:outline-none hover:cursor-pointer"
                   >
                     <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-white/30 shadow-sm shrink-0">
                       {user.image ? (
@@ -174,14 +174,14 @@ const NavMobile = () => {
                   {showProfilePanel && (
                     <>
                       <div
-                        className="fixed inset-0 z-40 bg-black/20"
+                        className="fixed inset-0 z-40 bg-black/20 "
                         onClick={() => setShowProfilePanel(false)}
                       />
 
                       <div className="
                         absolute left-6 right-6 bottom-10 z-50
                         bg-white rounded-lg shadow-2xl border border-gray-200
-                        overflow-hidden
+                        overflow-hidden 
                       ">
                         {/* Close X button */}
                         <button
