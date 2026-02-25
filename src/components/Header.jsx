@@ -153,7 +153,7 @@ const Header = () => {
             </Link>
           </div>
 
-          {/* Desktop Navigation */}
+          
           <nav className="hidden xl:flex items-center gap-8">
             <ul className="flex items-center">
               {navLinks.map((link, i) => {

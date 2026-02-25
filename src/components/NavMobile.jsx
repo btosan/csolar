@@ -72,28 +72,28 @@ const NavMobile = () => {
 
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
-      <SheetTrigger className="text-white text-3xl">
+      <SheetTrigger className="text-white text-3xl ">
         <RiMenu3Fill />
       </SheetTrigger>
 
       <SheetContent
         side="left"
-        className="bg-primary border-none text-white w-72 px-6 [&>button]:hidden overflow-y-auto"
+        className="bg-primary z-100 border-none text-white w-72 md:w-md px-6 md:px-16 [&>button]:hidden overflow-y-auto"
       >
-        <div className="flex flex-col h-full pt-6 pb-8">
-          <SheetHeader className="flex flex-row items-center justify-between mb-8">
+        <div className="flex flex-col h-full pt-6 md:pt-8 pb-8 ">
+          <SheetHeader className="flex flex-row w-full items-center justify-between mb-8 md:mb-16 ">
             <SheetTitle>
               <Logo />
             </SheetTitle>
 
             <SheetClose asChild>
-              <button className="text-white text-2xl hover:rotate-90 transition">
+              <button className="text-white text-2xl hover:rotate-90 hover:cursor-pointer transition">
                 <MdClose />
               </button>
             </SheetClose>
           </SheetHeader>
 
-          <ul className="flex flex-col gap-6 flex-1">
+          <ul className="flex flex-col gap-6 md:gap-12 flex-1">
             {links.map((link, index) => (
               <li key={index}>
                 <div className="flex justify-between items-center">
@@ -142,7 +142,7 @@ const NavMobile = () => {
                 Contact Us
               </Link>
             </li>
-{/* divide */}
+
             <li className="pt-2">
               {isAuthenticated && user ? (
                 <div className="relative">
