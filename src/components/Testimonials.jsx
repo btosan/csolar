@@ -23,7 +23,7 @@ const Testimonials = () => {
           </motion.div>
           <motion.div  variants={fadeIn("left",0.2)} initial='hidden' whileInView="show" viewport={{once:false,amount:0.2}} className="flex-1 flex flex-col xl:flex-row xl:justify-end">
             <div className="relative hidden xl:flex xl:w-142.5 xl:h-145 ">
-              <Image src="/assets/img/testimonials/img.jpg" fill className="object-contain"
+              <Image src="/assets/people/kc.jpg" fill className="object-contain"
                 quality={100} alt="testimoniald" />
             </div>
             < motion.div  variants={fadeIn("left",0.1)} initial='hidden' whileInView="show" viewport={{once:false,amount:0.2}} className="xl:absolute xl:bottom-0 xl:right-40 relative max-w-max ">

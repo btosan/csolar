@@ -10,17 +10,17 @@ const workData = [
   {
     img: "/assets/csolar/solar-project2.jpeg",
     name: "maintenance",
-    description: "Solar installation and maintenance",
+    description: "Installation and maintenance",
     href: "/projects"
   },
   {
     img: "/assets/csolar/solar-project3.jpeg",
     name: "monitoring",
-    description: "Battery and inverter monitoring",
+    description: "Inverter monitoring",
     href: "/projects"
   },
   {
-    img: "/assets/csolar/solar-project4.jpeg",
+    img: "/assets/projects/solarproject4.jpeg",
     name: "inverters",
     description: "inverter installation",
     href: "/projects"
@@ -50,7 +50,7 @@ const Work = () => {
         {workData.map((item, i) => (
           <div className="w-full h-123 flex-1 relative overflow-hidden group flex justify-center md:border-2 border-accent"
             key={i}>
-            <Image src={item.img} fill className="object-cover" alt='' quality={100} />
+            <Image src={item.img} fill className="object-cover" alt='contained solar' quality={100} />
             <div className="w-[90%] h-21 bg-primary absolute bottom-4 flex justify-between items-center text-white md:translate-y-27 md:group-hover:translate-y-0 transition-all duration-500">
               <div className="pl-8">
                 <h4 className="text-white font-primary font-semibold tracking-[1px] uppercase">{item.name}</h4>

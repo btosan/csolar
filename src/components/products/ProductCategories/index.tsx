@@ -30,7 +30,7 @@ const ProductCategory = () => {
           <ProductCategoryCard
             title="Inverters"
             url="/products/inverters"
-            className="md:max-w-65 lg:max-w-90 xl:max-w-101.75 h-160 bg-[url('/assets/csolar/solar-inverter.jpeg')]"
+            className="md:max-w-65 lg:max-w-90 xl:max-w-101.75 h-160 bg-[url('/assets/inverters/hybrid-inverter.jpeg')]"
           />
           <ProductCategoryCard
             title="Storage System"
@@ -51,9 +51,9 @@ const ProductCategory = () => {
             className="md:max-w-171 h-47.5 bg-[url('/assets/panels/solarpanels.jpg')]"
           />
           <ProductCategoryCard
-            title="Complete Packages"
-            url="/products/packages"
-            className="md:max-w-65 lg:max-w-90 xl:max-w-101.75 h-47.5 bg-[url('/assets/csolar/portable-solar-power.avif')]"
+            title="Solar Accessories"
+            url="/products/accessories"
+            className="md:max-w-65 lg:max-w-90 xl:max-w-101.75 h-47.5 bg-[url('/assets/accessories/accessories-solar.jpeg')]"
           />
         </motion.div>
       </section>
