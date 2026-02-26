@@ -79,14 +79,6 @@ enum PaymentStatus {
   FAILED
 }
 
-enum UpgradeStatus {
-  OPEN
-  REVIEWED
-  ACCEPTED
-  REJECTED
-  IMPLEMENTED
-}
-
 //////////////////////////////////////
 // USER & CUSTOMER
 //////////////////////////////////////
@@ -148,10 +140,6 @@ model SolarSystem {
   alerts          Alert[]
   serviceRequests ServiceRequest[]
 
-  // ✅ NEW (safe)
-  aiRecommendations    AiRecommendation[]
-  upgradeOpportunities UpgradeOpportunity[]
-
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   orders    Order[]
@@ -210,28 +198,10 @@ model MonitoringSnapshot {
 
   source MonitoringSource
 
-  // 🔽 NEW SAFE OPTIONAL FIELDS
-
-  expectedGenerationKwh Float?
-  consumptionKwh        Float?
-
-  inverterTempC        Float?
-  inverterEfficiency   Float?
-  inverterOutputKw     Float?
-
-  batteryChargePercent Float?
-  batteryTempC         Float?
-  batteryCycles        Int?
-  batteryHealthPercent Float?
-
-  anomalyDetected Boolean @default(false)
-
   systemId String
   system   SolarSystem @relation(fields: [systemId], references: [id])
 
   createdAt DateTime @default(now())
-
-  @@index([systemId, date])
 }
 
 model HealthScore {
@@ -240,57 +210,10 @@ model HealthScore {
   summary    String
   confidence Int
 
-  productionScore Float?
-  inverterScore   Float?
-  batteryScore    Float?
-  alertPenalty    Float?
-
-  systemId String
-  system   SolarSystem @relation(fields: [systemId], references: [id])
-
-  // ✅ NEW
-  aiRecommendations AiRecommendation[]
-
-  createdAt DateTime @default(now())
-
-  @@index([systemId, createdAt])
-}
-
-model AiRecommendation {
-  id         String @id @default(cuid())
-  summary    String
-  actionPlan String
-  urgency    String
-  rawJson    Json?
-
-  systemId String
-  system   SolarSystem @relation(fields: [systemId], references: [id])
-
-  healthScoreId String?
-  healthScore   HealthScore? @relation(fields: [healthScoreId], references: [id])
-
-  createdAt DateTime @default(now())
-
-  @@index([systemId, createdAt])
-}
-
-model UpgradeOpportunity {
-  id     String @id @default(cuid())
-  type   String
-  reason String
-
-  suggestedProductId String?
-  suggestedProduct   Product? @relation(fields: [suggestedProductId], references: [id])
-
-  status UpgradeStatus @default(OPEN)
-
   systemId String
   system   SolarSystem @relation(fields: [systemId], references: [id])
 
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([systemId, status])
 }
 
 model Alert {
@@ -377,8 +300,6 @@ model Product {
   reviews    Review[]
 
   cartItems CartItem[]
-
-  upgradeSuggestions UpgradeOpportunity[]
 }
 
 model Specification {

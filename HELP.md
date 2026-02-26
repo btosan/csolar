@@ -16,5 +16,7 @@ npx prisma migrate deploy
 
 npx prisma migrate resolve --applied 20260219_init
 
+npx prisma migrate dev --name add-monitoring-enhancements
+
 
 rm -rf package-lock.json .next
