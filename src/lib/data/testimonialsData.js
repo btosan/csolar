@@ -40,14 +40,14 @@ export const testimonials = [
     name: "Nneka A.",
     location: "Asaba",
     comment:
-      "We invested in their high-capacity lithium batteries, and the difference is clear — longer backup time and no drop in performance even during extended outages. Very durable and worth every kobo.",
+      "We invested in their high-capacity lithium batteries, and the difference is clear — longer backup time and no drop in performance even during extended outages.",
     picture: "/assets/img/testimonials/nneka.jpg",
   },
   {
     name: "Raymond S.",
     location: "Lagos",
     comment:
-      "Contained Solar supplied us with a reliable high-efficiency inverter that handles our heavy appliances without struggle. Paired with their robust batteries, our power supply has been rock-solid for months.",
+      "They supplied us with a reliable high-efficiency inverter that handles our heavy appliances without struggle. Our power supply has been rock-solid for months.",
     picture: "/assets/img/testimonials/raymond.jpg",
   },
 ];
