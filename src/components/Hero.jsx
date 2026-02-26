@@ -15,7 +15,7 @@ const slides = [
     ),
     description:
       "From solar panels and batteries to inverters and system monitoring, Contained Solar designs, installs, and maintains power solutions built for long-term performance.",
-    bg: "bg-[url('/assets/csolar/portable-solar-power.avif')]",
+    bg: "bg-[url('/assets/inverters/inverter.jpg')]",
     buttonText: "Contact Us",
     buttonLink: "/contact",
   },

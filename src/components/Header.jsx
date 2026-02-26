@@ -95,13 +95,13 @@ const navLinks = [
       {
         title: "Batteries & Storage",
         description: "Reliable backup power solutions.",
-        image: "/assets/batteries/batteries-deep-cycle.jpg",
+        image: "/assets/batteries/battery-storage.jpeg",
         href: "/products/batteries",
       },
       {
         title: "Accessories",
         description: "Original solar system accessories & components.",
-        image: "/assets/accessories/accessories2.jpg",
+        image: "/assets/accessories/accessories-solar.jpeg",
         href: "/products/accessories",
       },
       // {
