@@ -158,6 +158,7 @@ export default function Profile() {
           <CardHeader className="text-center pb-4">
             <Avatar className="w-28 h-28 mx-auto border-4 border-background shadow-xl">
               <AvatarImage
+                className=""
                 src={
                   previewImage && previewImage.trim() !== ''
                     ? previewImage
@@ -359,7 +360,7 @@ export default function Profile() {
                           ) : (
                             <div className="flex flex-col items-start gap-1.5">
                               <Avatar className="w-16 h-16 border border-background shadow-lg">
-                                <AvatarImage
+                                <AvatarImage className=""
                                   src={
                                     previewImage?.trim() || user.image?.trim()
                                       ? (previewImage?.trim() || user.image!)
