@@ -78,7 +78,7 @@ export default async function DashboardPage() {
             You don’t have any registered solar systems yet.
           </p>
           <Link
-            href="/dashboard/system/self-check"
+            href="/dashboard/system/new"
             className="bg-black text-white px-6 py-3 rounded-xl hover:opacity-90"
           >
             Register System

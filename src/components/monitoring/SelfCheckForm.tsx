@@ -1,58 +1,29 @@
+// src/components/monitoring/SelfCheckForm.tsx
 "use client";
 
 import { useTransition } from "react";
-import { useRouter } from "next/navigation";
-import { MonitoringSource } from "@prisma/client";
-import { createMonitoringSnapshot } from "@/lib/actions/monitoring";
 
-interface Props {
+interface SelfCheckFormProps {
   systemId: string;
+  onSubmit: (formData: FormData) => Promise<void>;
 }
 
-export default function SelfCheckForm({ systemId }: Props) {
-  const router = useRouter();
+export default function SelfCheckForm({ systemId, onSubmit }: SelfCheckFormProps) {
   const [isPending, startTransition] = useTransition();
 
-  const handleSubmit = async (formData: FormData) => {
-    const parseNumber = (value: FormDataEntryValue | null) => {
-      if (!value) return undefined;
-      const num = Number(value);
-      return isNaN(num) ? undefined : num;
-    };
-
+  const handleSubmit = (formData: FormData) => {
     startTransition(async () => {
-      await createMonitoringSnapshot({
-        systemId,
-        source: MonitoringSource.MANUAL,
-
-        estimatedGenerationKwh: parseNumber(
-          formData.get("estimatedGenerationKwh")
-        ),
-        expectedGenerationKwh: parseNumber(
-          formData.get("expectedGenerationKwh")
-        ),
-        consumptionKwh: parseNumber(formData.get("consumptionKwh")),
-
-        inverterTempC: parseNumber(formData.get("inverterTempC")),
-        inverterEfficiency: parseNumber(
-          formData.get("inverterEfficiency")
-        ),
-        inverterOutputKw: parseNumber(formData.get("inverterOutputKw")),
-
-        batteryChargePercent: parseNumber(
-          formData.get("batteryChargePercent")
-        ),
-        batteryTempC: parseNumber(formData.get("batteryTempC")),
-        batteryCycles: parseNumber(formData.get("batteryCycles")),
-        batteryHealthPercent: parseNumber(
-          formData.get("batteryHealthPercent")
-        ),
-
-        notes: (formData.get("notes") as string) || undefined,
-      });
-
-      router.push(`/dashboard/system/${systemId}`);
-      router.refresh();
+      try {
+        await onSubmit(formData);
+        // NO router.push() needed here — server already redirected!
+        // If you ever remove server redirect, then add:
+        // router.push(`/dashboard/system/${systemId}`);
+        // router.refresh();
+      } catch (err) {
+        console.error('Form error:', err);
+        // Simple feedback — in real app use toast / error UI
+        alert('Failed to save self-check. Please try again.');
+      }
     });
   };
 
@@ -62,84 +33,40 @@ export default function SelfCheckForm({ systemId }: Props) {
 
       {/* Production */}
       <div className="space-y-2">
-        <label className="block text-sm font-medium">
-          Estimated Generation (kWh)
-        </label>
-        <input
-          name="estimatedGenerationKwh"
-          type="number"
-          step="0.01"
-          className="w-full border rounded-md p-2"
-        />
+        <label className="block text-sm font-medium">Estimated Generation (kWh)</label>
+        <input name="estimatedGenerationKwh" type="number" step="0.01" className="w-full border rounded-md p-2" />
       </div>
 
       <div className="space-y-2">
-        <label className="block text-sm font-medium">
-          Expected Generation (kWh)
-        </label>
-        <input
-          name="expectedGenerationKwh"
-          type="number"
-          step="0.01"
-          className="w-full border rounded-md p-2"
-        />
+        <label className="block text-sm font-medium">Expected Generation (kWh)</label>
+        <input name="expectedGenerationKwh" type="number" step="0.01" className="w-full border rounded-md p-2" />
       </div>
 
       {/* Inverter */}
       <div className="space-y-2">
-        <label className="block text-sm font-medium">
-          Inverter Efficiency (%)
-        </label>
-        <input
-          name="inverterEfficiency"
-          type="number"
-          step="0.1"
-          className="w-full border rounded-md p-2"
-        />
+        <label className="block text-sm font-medium">Inverter Efficiency (%)</label>
+        <input name="inverterEfficiency" type="number" step="0.1" className="w-full border rounded-md p-2" />
       </div>
 
       <div className="space-y-2">
-        <label className="block text-sm font-medium">
-          Inverter Temperature (°C)
-        </label>
-        <input
-          name="inverterTempC"
-          type="number"
-          step="0.1"
-          className="w-full border rounded-md p-2"
-        />
+        <label className="block text-sm font-medium">Inverter Temperature (°C)</label>
+        <input name="inverterTempC" type="number" step="0.1" className="w-full border rounded-md p-2" />
       </div>
 
       {/* Battery */}
       <div className="space-y-2">
-        <label className="block text-sm font-medium">
-          Battery Charge (%)
-        </label>
-        <input
-          name="batteryChargePercent"
-          type="number"
-          step="0.1"
-          className="w-full border rounded-md p-2"
-        />
+        <label className="block text-sm font-medium">Battery Charge (%)</label>
+        <input name="batteryChargePercent" type="number" step="0.1" className="w-full border rounded-md p-2" />
       </div>
 
       <div className="space-y-2">
-        <label className="block text-sm font-medium">
-          Battery Temperature (°C)
-        </label>
-        <input
-          name="batteryTempC"
-          type="number"
-          step="0.1"
-          className="w-full border rounded-md p-2"
-        />
+        <label className="block text-sm font-medium">Battery Temperature (°C)</label>
+        <input name="batteryTempC" type="number" step="0.1" className="w-full border rounded-md p-2" />
       </div>
 
       {/* Notes */}
       <div className="space-y-2">
-        <label className="block text-sm font-medium">
-          Anything unusual?
-        </label>
+        <label className="block text-sm font-medium">Anything unusual?</label>
         <textarea
           name="notes"
           rows={4}
