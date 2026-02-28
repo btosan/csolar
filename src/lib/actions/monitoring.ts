@@ -77,20 +77,27 @@ export async function createMonitoringSnapshot(
     // ────────────────────────────────────────────────
     // 1. Transaction: snapshot + alerts + health score
     // ────────────────────────────────────────────────
-    const result = await db.$transaction(async (tx) => {
-      const snapshot = await tx.monitoringSnapshot.create({
-        data: {
-          ...input,
-          date: new Date(),
-        },
-      });
+    const result = await db.$transaction(
+      async (tx) => {
+        const snapshot = await tx.monitoringSnapshot.create({
+          data: {
+            ...input,
+            date: new Date(),
+          },
+        });
 
-      await evaluateAlerts(tx, systemId);
+        await evaluateAlerts(tx, systemId);
 
-      const health = await recalculateHealthScore(tx, systemId);
+        const health = await recalculateHealthScore(tx, systemId);
 
-      return { snapshot, health };
-    });
+        return { snapshot, health };
+      },
+      {
+        timeout: 15000,   // 15 seconds max for the whole transaction (default: 5000ms)
+        maxWait: 5000,    // 5 seconds max wait to get a transaction slot (default: 2000ms)
+        // isolationLevel: Prisma.TransactionIsolationLevel.ReadCommitted, // optional if needed
+      }
+    );
 
     // ────────────────────────────────────────────────
     // 2. AI Recommendation (non-critical – failure is tolerated)

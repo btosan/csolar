@@ -23,10 +23,11 @@ export async function generateSystemInsight(
   const apiKey = process.env.OPENROUTER_API_KEY;
   if (!apiKey) {
     console.error("[generateSystemInsight] Missing OPENROUTER_API_KEY");
-    return fallbackInsight();
+    return fallbackInsight(input);
   }
 
-  const model = process.env.OPENROUTER_MODEL || "openai/gpt-4o-mini"; // ← configurable via .env
+  // Use .env model or fallback to a free one
+  const model = process.env.OPENROUTER_MODEL || "meta-llama/llama-3.3-70b-instruct:free";
 
   const prompt = `
 You are an expert solar energy diagnostic assistant for homeowners and technicians.
@@ -38,16 +39,15 @@ System details:
 - Inverter Score: ${input.inverterScore}/100
 - Battery Score: ${input.batteryScore}/100
 - Active unresolved alerts: ${input.activeAlerts}
-- Additional summary: ${input.summary || "No additional summary provided"}
+- Additional context: ${input.summary || "No additional details provided"}
 
 Task:
-Provide customer-friendly, clear, and actionable advice in **strict JSON format** only.
-Do NOT include any text outside the JSON object.
+Respond ONLY with valid JSON. No extra text, no explanations, no markdown.
 
 {
-  "summary": "Short, friendly explanation of the current system state (2-4 sentences)",
-  "actionPlan": "Numbered list of recommended next steps (3-6 items max)",
-  "urgency": "LOW" | "MEDIUM" | "HIGH" (based on score and alerts)
+  "summary": "Short, friendly, customer-oriented explanation (2-4 sentences)",
+  "actionPlan": "Numbered list of clear next steps (3-6 items max)",
+  "urgency": "LOW" | "MEDIUM" | "HIGH"
 }
 `;
 
@@ -59,74 +59,58 @@ Do NOT include any text outside the JSON object.
         messages: [
           {
             role: "system",
-            content:
-              "Always respond in valid JSON only. No explanations, no markdown, no extra text.",
+            content: "Respond strictly in JSON format only.",
           },
           { role: "user", content: prompt },
         ],
         temperature: 0.4,
         max_tokens: 500,
-        // Optional: enforce JSON structure (supported by many models on OpenRouter)
         response_format: { type: "json_object" },
       },
       {
         headers: {
           Authorization: `Bearer ${apiKey}`,
           "Content-Type": "application/json",
-          // Optional: helps OpenRouter track usage / leaderboard
-          "HTTP-Referer": "https://your-solar-app.com",
-          "X-OpenRouter-Title": "Contained Solar - Health Insights",
         },
-        timeout: 30000, // 30s timeout to avoid hanging
+        timeout: 30000,
       },
     );
 
-    const content = response.data.choices?.[0]?.message?.content?.trim();
+    const content = response.data.choices?.[0]?.message?.content?.trim() || "";
 
     if (!content) {
-      throw new Error("Empty response from OpenRouter");
+      throw new Error("Empty response from AI");
     }
 
     const parsed = JSON.parse(content);
 
-    // Basic validation
     if (
       typeof parsed.summary !== "string" ||
       typeof parsed.actionPlan !== "string" ||
       !["LOW", "MEDIUM", "HIGH"].includes(parsed.urgency)
     ) {
-      throw new Error("Invalid JSON structure from AI");
+      throw new Error("Invalid AI response structure");
     }
 
     return parsed as SystemInsightOutput;
   } catch (error: any) {
-    console.error("[generateSystemInsight] Failed:", {
-      error: error.message,
-      status: error.response?.status,
-      data: error.response?.data,
-      input,
-    });
-
+    console.error("[generateSystemInsight] Failed:", error.message);
     return fallbackInsight(input);
   }
 }
 
-function fallbackInsight(input?: SystemInsightInput): SystemInsightOutput {
-  const score = input?.score ?? 0;
-  const alerts = input?.activeAlerts ?? 0;
+function fallbackInsight(input: SystemInsightInput): SystemInsightOutput {
+  const score = input.score ?? 0;
+  const alerts = input.activeAlerts ?? 0;
 
   let urgency: "LOW" | "MEDIUM" | "HIGH" = "LOW";
   if (score < 50 || alerts > 3) urgency = "HIGH";
   else if (score < 70 || alerts > 0) urgency = "MEDIUM";
 
   return {
-    summary:
-      "We're having trouble connecting to our AI analysis right now. " +
-      `Your system currently has a health score of ${score}/100 with ${alerts} active alert${alerts === 1 ? "" : "s"}.`,
+    summary: `Your system "${input.systemName}" has a health score of ${score}/100 with ${alerts} active alerts. We're currently unable to generate detailed AI insights.`,
     actionPlan:
-      "1. Check the dashboard for detailed alerts and snapshots.\n" +
-      "2. Verify inverter and battery readings manually.\n" +
-      "3. Contact support or a technician if issues persist.",
+      "1. Review alerts in the dashboard.\n2. Check system readings manually.\n3. Contact support if needed.",
     urgency,
   };
 }

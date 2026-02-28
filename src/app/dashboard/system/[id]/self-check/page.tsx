@@ -62,8 +62,8 @@ export default async function SelfCheckPage({ params }: PageProps) {
 
   return (
     <div className="max-w-5xl mx-auto px-6 py-16">
-      <h1 className="text-2xl font-bold mb-6">
-        Run Self Check for {displayName}
+      <h1 className="text-2xl font-medium mb-6">
+        Run Self Check for <span className=' font-bold'>{displayName}</span> 
       </h1>
 
       <SelfCheckForm systemId={id} onSubmit={handleSelfCheck} />
