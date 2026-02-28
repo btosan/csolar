@@ -136,9 +136,13 @@ export async function recalculateHealthScore(
   // ----------------------------------
   // 12️⃣ Return Useful Data
   // ----------------------------------
-  return {
+return {
     score: normalizedScore,
     status: newStatus,
     healthRecordId: healthRecord.id,
+    productionScore,     // ← add this
+    inverterScore,       // ← add this
+    batteryScore,        // ← add this
+    alertPenalty,        // ← optional, but good to have
   };
 }
