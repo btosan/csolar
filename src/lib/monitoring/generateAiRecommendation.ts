@@ -10,7 +10,7 @@ interface GenerateAiRecommendationInput {
   inverterScore: number;
   batteryScore: number;
   activeAlerts: number;
-  tx: any; // Prisma transaction client
+  tx: any; 
 }
 
 export async function generateAiRecommendation(input: GenerateAiRecommendationInput) {
@@ -24,7 +24,7 @@ export async function generateAiRecommendation(input: GenerateAiRecommendationIn
     activeAlerts,
     tx,
   } = input;
-
+// adding nothing
   // 1. Get upgrade suggestions (keep this as-is)
   const upgrades = await evaluateUpgradeOpportunities(tx, systemId);
   const upgradeText =
