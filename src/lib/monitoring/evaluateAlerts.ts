@@ -1,8 +1,7 @@
-import { PrismaClient, AlertSeverity } from "@prisma/client";
-import { Prisma } from '@prisma/client';
+import { AlertSeverity, AlertStatus, Prisma } from "@prisma/client";
 
 export async function evaluateAlerts(
-  tx: Prisma.TransactionClient,   // ← Changed from PrismaClient to Prisma.TransactionClient
+  tx: Prisma.TransactionClient,
   systemId: string
 ) {
   const snapshot = await tx.monitoringSnapshot.findFirst({
@@ -12,49 +11,81 @@ export async function evaluateAlerts(
 
   if (!snapshot) return;
 
-  // LOW PRODUCTION
-  if (
-    snapshot.expectedGenerationKwh &&
-    snapshot.estimatedGenerationKwh &&
-    snapshot.estimatedGenerationKwh < snapshot.expectedGenerationKwh * 0.7
+  // Helper: ensure alert exists OR resolve it
+  async function handleAlert(
+    type: string,
+    condition: boolean,
+    severity: AlertSeverity,
+    message: string,
+    actionHint: string
   ) {
-    await tx.alert.create({
-      data: {
+    const existing = await tx.alert.findFirst({
+      where: {
         systemId,
-        type: "LOW_PRODUCTION",
-        message: "Energy generation significantly below expected levels.",
-        severity: AlertSeverity.MEDIUM,
-        actionHint: "Inspect panels for shading or debris.",
+        type,
+        status: { not: AlertStatus.RESOLVED },
       },
     });
+
+    if (condition) {
+      // Create only if no active one exists
+      if (!existing) {
+        await tx.alert.create({
+          data: {
+            systemId,
+            type,
+            message,
+            severity,
+            actionHint,
+          },
+        });
+      }
+    } else {
+      // Resolve existing active alerts if condition is no longer true
+      if (existing) {
+        await tx.alert.updateMany({
+          where: {
+            systemId,
+            type,
+            status: { not: AlertStatus.RESOLVED },
+          },
+          data: {
+            status: AlertStatus.RESOLVED,
+          },
+        });
+      }
+    }
   }
+
+  // LOW PRODUCTION
+  await handleAlert(
+    "LOW_PRODUCTION",
+    !!(
+      snapshot.expectedGenerationKwh &&
+      snapshot.estimatedGenerationKwh &&
+      snapshot.estimatedGenerationKwh <
+        snapshot.expectedGenerationKwh * 0.7
+    ),
+    AlertSeverity.MEDIUM,
+    "Energy generation significantly below expected levels.",
+    "Inspect panels for shading or debris."
+  );
 
   // HIGH BATTERY TEMP
-  if (snapshot.batteryTempC && snapshot.batteryTempC > 55) {
-    await tx.alert.create({
-      data: {
-        systemId,
-        type: "HIGH_BATTERY_TEMP",
-        message: "Battery temperature exceeds safe threshold.",
-        severity: AlertSeverity.HIGH,
-        actionHint: "Immediate inspection recommended.",
-      },
-    });
-  }
+  await handleAlert(
+    "HIGH_BATTERY_TEMP",
+    !!(snapshot.batteryTempC && snapshot.batteryTempC > 55),
+    AlertSeverity.HIGH,
+    "Battery temperature exceeds safe threshold.",
+    "Immediate inspection recommended."
+  );
 
   // LOW INVERTER EFFICIENCY
-  if (
-    snapshot.inverterEfficiency &&
-    snapshot.inverterEfficiency < 85
-  ) {
-    await tx.alert.create({
-      data: {
-        systemId,
-        type: "LOW_INVERTER_EFFICIENCY",
-        message: "Inverter efficiency below optimal level.",
-        severity: AlertSeverity.MEDIUM,
-        actionHint: "Check inverter diagnostics.",
-      },
-    });
-  }
+  await handleAlert(
+    "LOW_INVERTER_EFFICIENCY",
+    !!(snapshot.inverterEfficiency && snapshot.inverterEfficiency < 85),
+    AlertSeverity.MEDIUM,
+    "Inverter efficiency below optimal level.",
+    "Check inverter diagnostics."
+  );
 }

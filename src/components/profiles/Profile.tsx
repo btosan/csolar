@@ -28,7 +28,7 @@ import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { LogOut, User, Mail, ShieldCheck, Upload } from 'lucide-react';
 
-// Zod schema – image is now just a string (Cloudinary secure_url)  render
+// Zod schema
 const profileSchema = z.object({
   name: z.string().min(1, 'Name is required').max(100, 'Name is too long'),
   image: z.string().url('Invalid image URL').optional().or(z.literal('')),
@@ -84,11 +84,9 @@ export default function Profile() {
   const onSubmit = async (values: ProfileFormValues) => {
     setIsLoading(true);
 
-    // save previous state for rollback
     const previousName = optimisticName;
     const previousImage = previewImage;
 
-    // optimistic update
     setOptimisticName(values.name);
     setPreviewImage(values.image || null);
 
@@ -106,7 +104,6 @@ export default function Profile() {
 
       if (!response.ok) throw new Error(data.message);
 
-      // refresh session silently
       await update();
       router.refresh();
 
@@ -114,7 +111,6 @@ export default function Profile() {
 
       setIsEditing(false);
     } catch (error) {
-      // rollback if server fails
       setOptimisticName(previousName);
       setPreviewImage(previousImage || null);
 
@@ -161,7 +157,7 @@ export default function Profile() {
         <Card className="h-fit">
           <CardHeader className="text-center pb-4">
             <Avatar className="w-28 h-28 mx-auto border-4 border-background shadow-xl">
-              <AvatarImage className=''
+              <AvatarImage
                 src={
                   previewImage && previewImage.trim() !== ''
                     ? previewImage
@@ -204,12 +200,33 @@ export default function Profile() {
               </p>
             </div>
 
+            {/* Dashboard Links */}
+            <div className="pt-4 w-full">
+              {role === 'ADMIN' ? (
+                <Link
+                  href="/admin/monitoring"
+                  className="flex items-center justify-center gap-2 py-3 px-5 text-center font-medium text-primary hover:text-primary/80 transition-colors rounded-md hover:bg-gray-100/90 border border-primary/20 w-full"
+                >
+                  <span>Monitoring Dashboard</span>
+                  <span className="text-lg leading-none">→</span>
+                </Link>
+              ) : (
+                <Link
+                  href="/dashboard"
+                  className="flex items-center justify-center gap-2 py-3 px-5 text-center font-medium text-primary hover:text-primary/80 transition-colors rounded-md hover:bg-gray-100/90 border border-primary/20 w-full"
+                >
+                  <span>My Dashboard</span>
+                  <span className="text-lg leading-none">→</span>
+                </Link>
+              )}
+            </div>
+
             <Separator className="my-6" />
 
             {role === 'ADMIN' && (
               <>
-                <Link 
-                  href="/admin" 
+                <Link
+                  href="/admin"
                   className="flex items-center justify-center gap-2 py-2 px-4 text-center font-medium text-primary hover:text-primary/80 transition-colors rounded-md hover:bg-gray-100/90"
                 >
                   <span>Admin Dashboard</span>
@@ -218,8 +235,6 @@ export default function Profile() {
                 <Separator className="my-6" />
               </>
             )}
-
-            <Separator className="my-6" />
 
             <AppButton
               variant="outline"
@@ -307,7 +322,7 @@ export default function Profile() {
                                   maxFiles: 1,
                                   resourceType: 'image',
                                   clientAllowedFormats: ['png', 'jpg', 'jpeg', 'webp'],
-                                  maxFileSize: 5000000, // 5MB
+                                  maxFileSize: 5000000,
                                   cropping: true,
                                   croppingAspectRatio: 1,
                                   showSkipCropButton: false,
@@ -331,7 +346,6 @@ export default function Profile() {
                                 )}
                               </CldUploadWidget>
 
-                              {/* Show current / preview value */}
                               {previewImage && (
                                 <div className="text-sm text-muted-foreground break-all">
                                   Current: {previewImage}
@@ -345,7 +359,7 @@ export default function Profile() {
                           ) : (
                             <div className="flex flex-col items-start gap-1.5">
                               <Avatar className="w-16 h-16 border border-background shadow-lg">
-                                <AvatarImage className=''
+                                <AvatarImage
                                   src={
                                     previewImage?.trim() || user.image?.trim()
                                       ? (previewImage?.trim() || user.image!)

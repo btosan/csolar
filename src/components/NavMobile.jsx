@@ -11,7 +11,7 @@ import {
 
 import { useState } from "react"
 import Link from "next/link"
-import { useSession } from "next-auth/react"
+import { useSession, signOut } from "next-auth/react"
 
 import { RiMenu3Fill } from "react-icons/ri"
 import { MdClose } from "react-icons/md"
@@ -42,6 +42,7 @@ const links = [
   //     { name: "Performance Insights", href: "/solutions/insights" },
   //   ],
   // },
+  { name: "Solutions", href: "/solutions" },
   {
     name: "Products",
     href: "/products",
@@ -174,15 +175,17 @@ const NavMobile = () => {
                   {showProfilePanel && (
                     <>
                       <div
-                        className="fixed inset-0 z-40 bg-black/20 "
+                        className="fixed inset-0 z-40 bg-black/20"
                         onClick={() => setShowProfilePanel(false)}
                       />
 
-                      <div className="
-                        absolute left-6 right-6 bottom-10 z-50
-                        bg-white rounded-lg shadow-2xl border border-gray-200
-                        overflow-hidden 
-                      ">
+                      <div
+                        className="
+                          absolute left-6 right-6 bottom-10 z-50
+                          bg-white rounded-lg shadow-2xl border border-gray-200
+                          overflow-hidden
+                        "
+                      >
                         {/* Close X button */}
                         <button
                           onClick={() => setShowProfilePanel(false)}
@@ -200,16 +203,28 @@ const NavMobile = () => {
                         {/* Divider line */}
                         <div className="border-t border-gray-200" />
 
-                        <div className="py-1">
+                        {/* Menu items – only ONE divide-y container */}
+                        <div className="py-1 divide-y divide-gray-200">
                           <Link
                             href={user.role === "ADMIN" ? "/admin/profile" : "/profile"}
                             className="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 active:bg-gray-100 transition-colors"
                             onClick={() => {
-                              setShowProfilePanel(false)
-                              setIsOpen(false)
+                              setShowProfilePanel(false);
+                              setIsOpen(false);
                             }}
                           >
                             Profile
+                          </Link>
+
+                          <Link
+                            href={user.role === "ADMIN" ? "/admin/monitoring" : "/dashboard"}
+                            className="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 active:bg-gray-100 transition-colors"
+                            onClick={() => {
+                              setShowProfilePanel(false);
+                              setIsOpen(false);
+                            }}
+                          >
+                            System Monitoring
                           </Link>
 
                           {user.role === "ADMIN" && (
@@ -217,15 +232,27 @@ const NavMobile = () => {
                               href="/admin"
                               className="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 active:bg-gray-100 transition-colors"
                               onClick={() => {
-                                setShowProfilePanel(false)
-                                setIsOpen(false)
+                                setShowProfilePanel(false);
+                                setIsOpen(false);
                               }}
                             >
-                              Dashboard
+                              Admin Dashboard
                             </Link>
                           )}
+
+                          <button
+                            onClick={() => {
+                              signOut({ callbackUrl: "/signin" });
+                              setShowProfilePanel(false);
+                              setIsOpen(false);
+                            }}
+                            className="block w-full text-left px-4 py-3 text-sm text-red-600 hover:bg-red-50 active:bg-red-100 transition-colors"
+                          >
+                            Sign Out
+                          </button>
                         </div>
 
+                        {/* Small upward arrow */}
                         <div className="absolute left-8 -top-2 w-4 h-4 bg-white border-l border-t border-gray-200 rotate-45" />
                       </div>
                     </>

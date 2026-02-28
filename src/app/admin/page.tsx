@@ -95,16 +95,20 @@ export default async function AdminDashboard() {
           </div>
         </Link>
 
-        {/* Future cards – you can add more later */}
-        <div className="border rounded-xl p-6 opacity-60 cursor-not-allowed">
-          <div className="flex items-center gap-4 mb-4">
-            <div className="p-3 bg-gray-100 rounded-lg">
-              <ShieldCheck className="h-6 w-6 text-gray-500" />
+        <Link href="/admin/monitoring">
+          <div className="border rounded-xl p-6 hover:shadow-md transition-all hover:border-primary/50 hover:bg-accent/50 hover:text-black hover:font-medium cursor-pointer">
+            <div className="flex items-center gap-4 mb-4">
+              <div className="p-3 bg-primary/10 rounded-lg">
+                <Settings className="h-6 w-6 text-primary" />
+              </div>
+              <h3 className="text-xl font-semibold">Monitoring Dashboard</h3>
             </div>
-            <h3 className="text-xl font-semibold">System Settings</h3>
+            <p className="text-muted-foreground">
+              Monitor Solar Systems
+            </p>
           </div>
-          <p className="text-muted-foreground">Coming soon...</p>
-        </div>
+        </Link>
+
         <div className="border rounded-xl p-6 opacity-60 cursor-not-allowed">
           <div className="flex items-center gap-4 mb-4">
             <div className="p-3 bg-gray-100 rounded-lg">
@@ -120,16 +124,6 @@ export default async function AdminDashboard() {
               <TrendingUp className="h-6 w-6 text-gray-500" />
             </div>
             <h3 className="text-xl font-semibold">View Sales</h3>
-          </div>
-          <p className="text-muted-foreground">Coming soon...</p>
-        </div>
-
-        <div className="border rounded-xl p-6 opacity-60 cursor-not-allowed">
-          <div className="flex items-center gap-4 mb-4">
-            <div className="p-3 bg-gray-100 rounded-lg">
-              <Settings className="h-6 w-6 text-gray-500" />
-            </div>
-            <h3 className="text-xl font-semibold">Alerts & Monitoring</h3>
           </div>
           <p className="text-muted-foreground">Coming soon...</p>
         </div>

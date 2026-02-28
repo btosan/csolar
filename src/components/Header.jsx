@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useSession } from "next-auth/react";
+import { useSession, signOut} from "next-auth/react";
 import Link from "next/link";
 import Image from "next/image";
 import { CldImage } from 'next-cloudinary';
@@ -46,6 +46,7 @@ const navLinks = [
       },
     ],
   },
+  { name: "Solutions", href: "/solutions" },
   // {
   //   name: "Solutions",
   //   href: "/solutions",
@@ -268,24 +269,37 @@ const Header = () => {
                     </p>
                   </div>
 
-                  <div className="border-t border-gray-200" />
+                  <div className="border-t border-gray-300" />
 
-                  <div className="py-2">
+                  <div className="py-2 divide-y divide-gray-300">
                     <Link
                       href={user.role === "ADMIN" ? "/admin/profile" : "/profile"}
-                      className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary transition-colors"
+                      className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-100 hover:text-primary transition-colors"
                     >
                       Profile
+                    </Link>
+
+                    <Link
+                      href={user.role === "ADMIN" ? "/admin/monitoring" : "/dashboard"}
+                      className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-100 hover:text-primary transition-colors"
+                    >
+                      System Monitoring
                     </Link>
 
                     {user.role === "ADMIN" && (
                       <Link
                         href="/admin"
-                        className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary transition-colors"
+                        className="block px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-100 hover:text-primary transition-colors"
                       >
                         Dashboard
                       </Link>
                     )}
+                    <button
+                      onClick={() => signOut({ callbackUrl: "/signin" })}
+                      className="block w-full text-left px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 hover:text-red-700 transition-colors hover:cursor-pointer"
+                    >
+                      Sign Out
+                    </button>
                   </div>
 
                   {/* Small upward arrow */}

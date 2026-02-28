@@ -15,14 +15,13 @@ export default function SelfCheckForm({ systemId, onSubmit }: SelfCheckFormProps
     startTransition(async () => {
       try {
         await onSubmit(formData);
-        // NO router.push() needed here — server already redirected!
-        // If you ever remove server redirect, then add:
-        // router.push(`/dashboard/system/${systemId}`);
-        // router.refresh();
-      } catch (err) {
-        console.error('Form error:', err);
-        // Simple feedback — in real app use toast / error UI
-        alert('Failed to save self-check. Please try again.');
+      } catch (err: any) {
+        if (err?.digest?.includes("NEXT_REDIRECT")) {
+          throw err; // allow redirect to work
+        }
+
+        console.error("Form error:", err);
+        alert("Failed to save self-check. Please try again.");
       }
     });
   };
@@ -34,34 +33,70 @@ export default function SelfCheckForm({ systemId, onSubmit }: SelfCheckFormProps
       {/* Production */}
       <div className="space-y-2">
         <label className="block text-sm font-medium">Estimated Generation (kWh)</label>
-        <input name="estimatedGenerationKwh" type="number" step="0.01" className="w-full border rounded-md p-2" />
+        <input
+          name="estimatedGenerationKwh"
+          type="number"
+          step="0.01"
+          className="w-full border rounded-md p-2"
+          disabled={isPending}
+        />
       </div>
 
       <div className="space-y-2">
         <label className="block text-sm font-medium">Expected Generation (kWh)</label>
-        <input name="expectedGenerationKwh" type="number" step="0.01" className="w-full border rounded-md p-2" />
+        <input
+          name="expectedGenerationKwh"
+          type="number"
+          step="0.01"
+          className="w-full border rounded-md p-2"
+          disabled={isPending}
+        />
       </div>
 
       {/* Inverter */}
       <div className="space-y-2">
         <label className="block text-sm font-medium">Inverter Efficiency (%)</label>
-        <input name="inverterEfficiency" type="number" step="0.1" className="w-full border rounded-md p-2" />
+        <input
+          name="inverterEfficiency"
+          type="number"
+          step="0.1"
+          className="w-full border rounded-md p-2"
+          disabled={isPending}
+        />
       </div>
 
       <div className="space-y-2">
         <label className="block text-sm font-medium">Inverter Temperature (°C)</label>
-        <input name="inverterTempC" type="number" step="0.1" className="w-full border rounded-md p-2" />
+        <input
+          name="inverterTempC"
+          type="number"
+          step="0.1"
+          className="w-full border rounded-md p-2"
+          disabled={isPending}
+        />
       </div>
 
       {/* Battery */}
       <div className="space-y-2">
         <label className="block text-sm font-medium">Battery Charge (%)</label>
-        <input name="batteryChargePercent" type="number" step="0.1" className="w-full border rounded-md p-2" />
+        <input
+          name="batteryChargePercent"
+          type="number"
+          step="0.1"
+          className="w-full border rounded-md p-2"
+          disabled={isPending}
+        />
       </div>
 
       <div className="space-y-2">
         <label className="block text-sm font-medium">Battery Temperature (°C)</label>
-        <input name="batteryTempC" type="number" step="0.1" className="w-full border rounded-md p-2" />
+        <input
+          name="batteryTempC"
+          type="number"
+          step="0.1"
+          className="w-full border rounded-md p-2"
+          disabled={isPending}
+        />
       </div>
 
       {/* Notes */}
@@ -72,16 +107,29 @@ export default function SelfCheckForm({ systemId, onSubmit }: SelfCheckFormProps
           rows={4}
           className="w-full border rounded-md p-2"
           placeholder="Strange noise, low output, blinking lights..."
+          disabled={isPending}
         />
       </div>
 
-      <button
-        type="submit"
-        disabled={isPending}
-        className="bg-black text-white px-6 py-2 rounded-md disabled:opacity-50"
-      >
-        {isPending ? "Running System Check..." : "Run System Check"}
-      </button>
+      {/* Progress bar + Submit button */}
+      <div className="space-y-4">
+        <button
+          type="submit"
+          disabled={isPending}
+          className="bg-black text-white px-6 py-2 rounded-md disabled:opacity-50 w-full sm:w-auto"
+        >
+          {isPending ? "Running System Check..." : "Run System Check"}
+        </button>
+
+        {isPending && (
+          <div className="w-full bg-gray-200 rounded-full h-2.5 overflow-hidden">
+            <div
+              className="bg-blue-600 h-2.5 rounded-full animate-pulse"
+              style={{ width: "45%", transition: "width 1.5s ease-in-out" }}
+            ></div>
+          </div>
+        )}
+      </div>
     </form>
   );
 }

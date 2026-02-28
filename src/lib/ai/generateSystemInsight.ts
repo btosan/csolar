@@ -17,87 +17,80 @@ interface SystemInsightOutput {
   urgency: "LOW" | "MEDIUM" | "HIGH";
 }
 
-// Debug logs — remove later if you want
-console.log("=== generateSystemInsight LOADED ===");
-console.log("OPENROUTER_API_KEY exists:", !!process.env.OPENROUTER_API_KEY);
-console.log("OPENROUTER_MODEL:", process.env.OPENROUTER_MODEL || "NOT SET");
-console.log("=== END DEBUG ===");
-
 export async function generateSystemInsight(
   input: SystemInsightInput,
 ): Promise<SystemInsightOutput> {
-  const apiKey = process.env.OPENROUTER_API_KEY;
-
-  // Debug: log every time the function is called
-  console.log("[generateSystemInsight] Called with input:", {
-    systemName: input.systemName,
-    score: input.score,
-    activeAlerts: input.activeAlerts,
-  });
+  const apiKey = process.env.GROQ_API_KEY;
+  const model = process.env.GROQ_MODEL || "llama-3.1-8b-instant";
 
   if (!apiKey) {
-    console.error("[generateSystemInsight] Missing OPENROUTER_API_KEY — using fallback");
+    console.error("[generateSystemInsight] Missing GROQ_API_KEY — using fallback");
     return fallbackInsight(input);
   }
 
-  const model = process.env.OPENROUTER_MODEL || "meta-llama/llama-3.3-70b-instruct:free";
-
-  console.log("[generateSystemInsight] Using model:", model);
-
   const prompt = `
-You are an expert solar energy diagnostic assistant for homeowners and technicians.
+You are a solar monitoring assistant that ALWAYS responds with NOTHING but valid JSON. 
+No explanations, no markdown, no extra text, no fences like \`\`\`json — only the raw JSON object.
 
-System details:
+System status:
 - Name: ${input.systemName}
-- Overall Health Score: ${input.score}/100
+- Health Score: ${input.score}/100
 - Production Score: ${input.productionScore}/100
 - Inverter Score: ${input.inverterScore}/100
 - Battery Score: ${input.batteryScore}/100
-- Active unresolved alerts: ${input.activeAlerts}
-- Additional context: ${input.summary || "No additional details provided"}
+- Active Alerts: ${input.activeAlerts}
+- Additional context: ${input.summary || "No extra information"}
 
-Task:
-Respond ONLY with valid JSON. No extra text, no explanations, no markdown.
-
+Output exactly this JSON structure (use \\n for line breaks inside strings):
 {
-  "summary": "Short, friendly, customer-oriented explanation (2-4 sentences)",
-  "actionPlan": "Numbered list of clear next steps (3-6 items max)",
+  "summary": "One or two sentence explanation of current system health",
+  "actionPlan": "1. First recommended action\\n2. Second action\\n3. Third action if needed",
   "urgency": "LOW" | "MEDIUM" | "HIGH"
 }
+
+Your entire response must be valid parseable JSON — start with { and end with }.
 `;
 
   try {
+    console.log("[generateSystemInsight] Sending request to Groq", {
+      model,
+      promptLength: prompt.length,
+      temperature: 0.3,
+      maxTokens: 280,
+    });
+
     const response = await axios.post(
-      "https://openrouter.ai/api/v1/chat/completions",
+      "https://api.groq.com/openai/v1/chat/completions",
       {
         model,
         messages: [
           {
             role: "system",
-            content: "Respond strictly in JSON format only. No extra text.",
-          },
-          { role: "user", content: prompt },
+            content: prompt
+          }
         ],
-        temperature: 0.4,
-        max_tokens: 500,
-        response_format: { type: "json_object" },
+        temperature: 0.3,
+        max_tokens: 280,
       },
       {
         headers: {
           Authorization: `Bearer ${apiKey}`,
-          "Content-Type": "application/json",
+          "Content-Type": "application/json"
         },
-        timeout: 30000,
-      },
+        timeout: 15000
+      }
     );
 
-    const content = response.data.choices?.[0]?.message?.content?.trim() || "";
+    let content = response.data.choices[0].message.content.trim();
 
-    if (!content) {
-      throw new Error("Empty response from OpenRouter");
-    }
+    content = content
+      .replace(/^```json\s*/i, "")
+      .replace(/\s*```$/i, "")
+      .replace(/^`\s*/i, "")
+      .replace(/\s*`$/i, "")
+      .trim();
 
-    console.log("[generateSystemInsight] Raw AI response:", content.substring(0, 200) + "...");
+    console.log("[generateSystemInsight] Raw Groq content:", content.substring(0, 200) + "...");
 
     const parsed = JSON.parse(content);
 
@@ -106,17 +99,24 @@ Respond ONLY with valid JSON. No extra text, no explanations, no markdown.
       typeof parsed.actionPlan !== "string" ||
       !["LOW", "MEDIUM", "HIGH"].includes(parsed.urgency)
     ) {
-      throw new Error("Invalid AI response structure");
+      console.warn("[generateSystemInsight] Parsed but invalid structure — fallback", parsed);
+      return fallbackInsight(input);
     }
 
-    console.log("[generateSystemInsight] Success — returning real AI output");
-    return parsed as SystemInsightOutput;
+    return {
+      summary: parsed.summary.trim(),
+      actionPlan: parsed.actionPlan.trim(),
+      urgency: parsed.urgency
+    };
+
   } catch (error: any) {
-    console.error("[generateSystemInsight] Failed:", {
-      message: error.message,
+    console.error("[generateSystemInsight] Groq request failed:", {
       status: error.response?.status,
-      data: error.response?.data,
+      groqMessage: error.response?.data?.error?.message || error.response?.data || error.message,
+      code: error.code,
+      fullError: error.toString()
     });
+
     return fallbackInsight(input);
   }
 }
@@ -130,9 +130,8 @@ function fallbackInsight(input: SystemInsightInput): SystemInsightOutput {
   else if (score < 70 || alerts > 0) urgency = "MEDIUM";
 
   return {
-    summary: `Your system "${input.systemName}" has a health score of ${score}/100 with ${alerts} active alerts. We're currently unable to generate detailed AI insights.`,
-    actionPlan:
-      "1. Review alerts in the dashboard.\n2. Check system readings manually.\n3. Contact support if needed.",
-    urgency,
+    summary: `System "${input.systemName}" has health score ${score}/100 and ${alerts} active alert${alerts !== 1 ? "s" : ""}.`,
+    actionPlan: "1. Review alerts in dashboard.\n2. Check inverter/battery readings.\n3. Contact support if unresolved.",
+    urgency
   };
 }
