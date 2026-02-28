@@ -7,7 +7,8 @@ import { motion } from "framer-motion"
 import { fadeIn } from "@/variants"
 import TrustSection from "@/components/TrustSection"
 import Faq from "@/components/Faq"
-// talk to
+import { useSession } from "next-auth/react"
+
 const monitoringSolutions = [
   {
     title: "Real-Time Solar Health Monitoring",
@@ -44,6 +45,12 @@ const monitoringSolutions = [
 ]
 
 export default function MonitoringSolutionsPage() {
+  const { data: session } = useSession()
+  const isAdmin = session?.user?.role === "ADMIN"
+
+  // Determine the target URL for "Get Started" buttons
+  const getStartedUrl = isAdmin ? "/admin/monitoring" : "/dashboard"
+
   return (
     <main className="overflow-hidden">
 
@@ -117,7 +124,7 @@ export default function MonitoringSolutionsPage() {
                     {solution.shortDesc}
                   </p>
 
-                  <Button href="/dashboard" text={solution.cta} />
+                  <Button href={getStartedUrl} text={solution.cta} />
                 </div>
               </motion.div>
             ))}
