@@ -13,7 +13,7 @@ export default async function DashboardPage() {
     redirect("/login")
   }
 
-  // Get user with role + customer relation
+  // Get user with role + customer relation   doing more
   const user = await db.user.findUnique({
     where: { email: session.user.email },
     select: {
