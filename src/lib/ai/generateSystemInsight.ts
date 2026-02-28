@@ -17,17 +17,32 @@ interface SystemInsightOutput {
   urgency: "LOW" | "MEDIUM" | "HIGH";
 }
 
+// Debug logs — remove later if you want
+console.log("=== generateSystemInsight LOADED ===");
+console.log("OPENROUTER_API_KEY exists:", !!process.env.OPENROUTER_API_KEY);
+console.log("OPENROUTER_MODEL:", process.env.OPENROUTER_MODEL || "NOT SET");
+console.log("=== END DEBUG ===");
+
 export async function generateSystemInsight(
   input: SystemInsightInput,
 ): Promise<SystemInsightOutput> {
   const apiKey = process.env.OPENROUTER_API_KEY;
+
+  // Debug: log every time the function is called
+  console.log("[generateSystemInsight] Called with input:", {
+    systemName: input.systemName,
+    score: input.score,
+    activeAlerts: input.activeAlerts,
+  });
+
   if (!apiKey) {
-    console.error("[generateSystemInsight] Missing OPENROUTER_API_KEY");
+    console.error("[generateSystemInsight] Missing OPENROUTER_API_KEY — using fallback");
     return fallbackInsight(input);
   }
 
-  // Use .env model or fallback to a free one
   const model = process.env.OPENROUTER_MODEL || "meta-llama/llama-3.3-70b-instruct:free";
+
+  console.log("[generateSystemInsight] Using model:", model);
 
   const prompt = `
 You are an expert solar energy diagnostic assistant for homeowners and technicians.
@@ -59,7 +74,7 @@ Respond ONLY with valid JSON. No extra text, no explanations, no markdown.
         messages: [
           {
             role: "system",
-            content: "Respond strictly in JSON format only.",
+            content: "Respond strictly in JSON format only. No extra text.",
           },
           { role: "user", content: prompt },
         ],
@@ -79,8 +94,10 @@ Respond ONLY with valid JSON. No extra text, no explanations, no markdown.
     const content = response.data.choices?.[0]?.message?.content?.trim() || "";
 
     if (!content) {
-      throw new Error("Empty response from AI");
+      throw new Error("Empty response from OpenRouter");
     }
+
+    console.log("[generateSystemInsight] Raw AI response:", content.substring(0, 200) + "...");
 
     const parsed = JSON.parse(content);
 
@@ -92,9 +109,14 @@ Respond ONLY with valid JSON. No extra text, no explanations, no markdown.
       throw new Error("Invalid AI response structure");
     }
 
+    console.log("[generateSystemInsight] Success — returning real AI output");
     return parsed as SystemInsightOutput;
   } catch (error: any) {
-    console.error("[generateSystemInsight] Failed:", error.message);
+    console.error("[generateSystemInsight] Failed:", {
+      message: error.message,
+      status: error.response?.status,
+      data: error.response?.data,
+    });
     return fallbackInsight(input);
   }
 }
