@@ -155,7 +155,10 @@ export async function createMonitoringSnapshot(
     console.error("[createMonitoringSnapshot] Failed", {
       systemId,
       source: rawInput.source,
-      inputFields: Object.keys(rawInput).filter((k) => rawInput[k] != null),
+      // Fixed: use keyof to tell TS that k is a valid key of CreateSnapshotInput
+      inputFields: Object.keys(rawInput).filter(
+        (k): k is keyof CreateSnapshotInput => rawInput[k as keyof CreateSnapshotInput] != null
+      ),
       error: error instanceof Error ? error.message : String(error),
       stack: error instanceof Error ? error.stack : undefined,
     });
