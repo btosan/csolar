@@ -5,22 +5,22 @@ import SelfCheckForm from '@/components/monitoring/SelfCheckForm';
 import { createMonitoringSnapshot } from '@/lib/actions/monitoring';
 import type { CreateSnapshotInput } from '@/lib/actions/monitoring';
 import { MonitoringSource } from '@prisma/client';
-import { db } from '@/lib/db'; // ← import your db instance
+import { db } from '@/lib/db';
 
 interface PageProps {
   params: Promise<{ id: string }>;
 }
 
 export default async function SelfCheckPage({ params }: PageProps) {
-  const { id } = await params; 
+  const { id } = await params;
 
-  // Fetch the system name for nice display (optional but recommended)
+  // Fetch system name for display
   const system = await db.solarSystem.findUnique({
     where: { id },
     select: { name: true },
   });
 
-  const displayName = system?.name || `System ${id}`; 
+  const displayName = system?.name || `System ${id}`;
 
   async function handleSelfCheck(formData: FormData) {
     'use server';
@@ -32,7 +32,7 @@ export default async function SelfCheckPage({ params }: PageProps) {
     };
 
     const input: CreateSnapshotInput = {
-      systemId: id, 
+      systemId: id,
       source: MonitoringSource.MANUAL,
 
       estimatedGenerationKwh: parseNumber(formData.get('estimatedGenerationKwh')),
@@ -55,15 +55,21 @@ export default async function SelfCheckPage({ params }: PageProps) {
       await createMonitoringSnapshot(input);
       redirect(`/dashboard/system/${id}`);
     } catch (error) {
-      console.error('Self-check failed:', error);
-      throw error; 
+      // Only log REAL errors — ignore the intentional redirect throw
+      if (error instanceof Error && error.message.includes('NEXT_REDIRECT')) {
+        throw error; // Let Next.js handle the redirect silently
+      }
+
+      // Real failure (DB error, etc.)
+      console.error('Self-check failed (real error):', error);
+      throw new Error("Failed to save self-check. Please try again.");
     }
   }
 
   return (
     <div className="max-w-5xl mx-auto px-6 py-16">
       <h1 className="text-2xl font-medium mb-6">
-        Run Self Check for <span className=' font-bold'>{displayName}</span> 
+        Run Self Check for <span className="font-bold">{displayName}</span>
       </h1>
 
       <SelfCheckForm systemId={id} onSubmit={handleSelfCheck} />
