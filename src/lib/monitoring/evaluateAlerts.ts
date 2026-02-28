@@ -1,24 +1,22 @@
-// lib/monitoring/evaluateAlerts.ts
-
-import { PrismaClient, AlertSeverity } from "@prisma/client"
+import { PrismaClient, AlertSeverity } from "@prisma/client";
+import { Prisma } from '@prisma/client';
 
 export async function evaluateAlerts(
-  tx: PrismaClient,
+  tx: Prisma.TransactionClient,   // ← Changed from PrismaClient to Prisma.TransactionClient
   systemId: string
 ) {
   const snapshot = await tx.monitoringSnapshot.findFirst({
     where: { systemId },
     orderBy: { date: "desc" },
-  })
+  });
 
-  if (!snapshot) return
+  if (!snapshot) return;
 
   // LOW PRODUCTION
   if (
     snapshot.expectedGenerationKwh &&
     snapshot.estimatedGenerationKwh &&
-    snapshot.estimatedGenerationKwh <
-      snapshot.expectedGenerationKwh * 0.7
+    snapshot.estimatedGenerationKwh < snapshot.expectedGenerationKwh * 0.7
   ) {
     await tx.alert.create({
       data: {
@@ -28,7 +26,7 @@ export async function evaluateAlerts(
         severity: AlertSeverity.MEDIUM,
         actionHint: "Inspect panels for shading or debris.",
       },
-    })
+    });
   }
 
   // HIGH BATTERY TEMP
@@ -41,7 +39,7 @@ export async function evaluateAlerts(
         severity: AlertSeverity.HIGH,
         actionHint: "Immediate inspection recommended.",
       },
-    })
+    });
   }
 
   // LOW INVERTER EFFICIENCY
@@ -57,6 +55,6 @@ export async function evaluateAlerts(
         severity: AlertSeverity.MEDIUM,
         actionHint: "Check inverter diagnostics.",
       },
-    })
+    });
   }
 }
