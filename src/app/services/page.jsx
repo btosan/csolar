@@ -1,8 +1,11 @@
 import React from 'react'
+import ServicesPage from '@/components/pages/Services'
 
 function page() {
   return (
-    <div>Services page coming soon</div>
+    <div>
+      <ServicesPage />
+    </div>
   )
 }
 

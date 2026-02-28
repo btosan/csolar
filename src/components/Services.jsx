@@ -32,7 +32,7 @@ const serviceData = [
       "Mini-Grid, Off-Grid & Hybrid Systems",
       "Smart & Future-proof Solar Streetlights",
       "Inverter System Design & Setup",
-      "Solar Borehole",
+      "Solar Boreholes",
       "Commissioning & Handover",
     ],
     thumbs: [

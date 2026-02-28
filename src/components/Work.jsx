@@ -28,7 +28,7 @@ const workData = [
   {
     img: "/assets/people/about.jpg",
     name: "installation",
-    description: "Solar farm, Bayelsa",
+    description: "Solar dryer, Bayelsa",
     href: "/projects"
   },
 ]

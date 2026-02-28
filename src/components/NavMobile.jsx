@@ -32,16 +32,16 @@ const links = [
       { name: "Consulting & Energy Planning", href: "/services/consulting" },
     ],
   },
-  {
-    name: "Solutions",
-    href: "/solutions",
-    submenu: [
-      { name: "Solar Health Monitoring", href: "/solutions/health-monitoring" },
-      { name: "Smart Alerts & Diagnostics", href: "/solutions/alerts" },
-      { name: "Maintenance Tracking", href: "/solutions/tracking" },
-      { name: "Performance Insights", href: "/solutions/insights" },
-    ],
-  },
+  // {
+  //   name: "Solutions",
+  //   href: "/solutions",
+  //   submenu: [
+  //     { name: "Solar Health Monitoring", href: "/solutions/health-monitoring" },
+  //     { name: "Smart Alerts & Diagnostics", href: "/solutions/alerts" },
+  //     { name: "Maintenance Tracking", href: "/solutions/tracking" },
+  //     { name: "Performance Insights", href: "/solutions/insights" },
+  //   ],
+  // },
   {
     name: "Products",
     href: "/products",
