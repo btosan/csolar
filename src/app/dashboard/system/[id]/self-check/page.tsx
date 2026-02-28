@@ -1,13 +1,27 @@
 // src/app/dashboard/system/[id]/self-check/page.tsx
+
 import { redirect } from 'next/navigation';
 import SelfCheckForm from '@/components/monitoring/SelfCheckForm';
 import { createMonitoringSnapshot } from '@/lib/actions/monitoring';
+import type { CreateSnapshotInput } from '@/lib/actions/monitoring';
 import { MonitoringSource } from '@prisma/client';
+import { db } from '@/lib/db'; // ← import your db instance
 
-export default function SelfCheckPage({ params }: { params: { id: string } }) {
-  const systemId = params.id;
+interface PageProps {
+  params: Promise<{ id: string }>;
+}
 
-  // Server Action – runs on server, redirects on success
+export default async function SelfCheckPage({ params }: PageProps) {
+  const { id } = await params; 
+
+  // Fetch the system name for nice display (optional but recommended)
+  const system = await db.solarSystem.findUnique({
+    where: { id },
+    select: { name: true },
+  });
+
+  const displayName = system?.name || `System ${id}`; 
+
   async function handleSelfCheck(formData: FormData) {
     'use server';
 
@@ -18,7 +32,7 @@ export default function SelfCheckPage({ params }: { params: { id: string } }) {
     };
 
     const input: CreateSnapshotInput = {
-      systemId,
+      systemId: id, 
       source: MonitoringSource.MANUAL,
 
       estimatedGenerationKwh: parseNumber(formData.get('estimatedGenerationKwh')),
@@ -39,25 +53,20 @@ export default function SelfCheckPage({ params }: { params: { id: string } }) {
 
     try {
       await createMonitoringSnapshot(input);
-      // Success → redirect server-side (recommended)
-      redirect(`/dashboard/system/${systemId}`);
+      redirect(`/dashboard/system/${id}`);
     } catch (error) {
-      console.error('Self-check submission failed:', error);
-      // In production you might want better error handling:
-      // - throw new Error("Submission failed")
-      // - or return { error: "..." } and show message in client
-      throw error;
+      console.error('Self-check failed:', error);
+      throw error; 
     }
   }
 
   return (
-    <div className="p-6 max-w-4xl mx-auto">
-      <h1 className="text-2xl font-bold mb-6">Run Self Check – System {systemId}</h1>
-      
-      <SelfCheckForm 
-        systemId={systemId} 
-        onSubmit={handleSelfCheck}
-      />
+    <div className="max-w-5xl mx-auto px-6 py-16">
+      <h1 className="text-2xl font-bold mb-6">
+        Run Self Check for {displayName}
+      </h1>
+
+      <SelfCheckForm systemId={id} onSubmit={handleSelfCheck} />
     </div>
   );
 }

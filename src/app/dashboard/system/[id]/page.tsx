@@ -61,7 +61,7 @@ export default async function SystemDetailPage(props: PageProps) {
   const recommendation = system.aiRecommendations[0]
 
   return (
-    <div className="max-w-5xl mx-auto px-6 py-10">
+    <div className="max-w-5xl mx-auto px-6 py-16">
       <Link
         href="/dashboard"
         className="text-sm text-gray-500 mb-6 inline-block"
@@ -194,7 +194,14 @@ export default async function SystemDetailPage(props: PageProps) {
       {/* ========================= */}
       {/* 🔹 REQUEST TECHNICIAN */}
       {/* ========================= */}
-      <div className="text-right">
+      <div className="text-right flex items-center justify-between">
+        <Link
+          href={`/dashboard/system/${system.id}/self-check`}
+          className="bg-black text-white px-6 py-3 rounded-xl hover:opacity-90 transition"
+        >
+          Run SelfCheck
+        </Link>
+
         <Link
           href={`/dashboard/system/${system.id}/request-service`}
           className="bg-black text-white px-6 py-3 rounded-xl hover:opacity-90 transition"

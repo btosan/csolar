@@ -28,7 +28,7 @@ export default function SelfCheckForm({ systemId, onSubmit }: SelfCheckFormProps
   };
 
   return (
-    <form action={handleSubmit} className="space-y-6 max-w-2xl">
+    <form action={handleSubmit} className="max-w-2xl space-y-6">
       <h2 className="text-xl font-semibold">Run System Self Check</h2>
 
       {/* Production */}
