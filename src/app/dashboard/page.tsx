@@ -67,9 +67,9 @@ export default async function DashboardPage() {
   return (
     <div className="max-w-6xl mx-auto px-6 py-16">
       {/* Header with welcome + new button */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
-        <h1 className="text-2xl md:text-3xl lg:text-4xl font-semibold">
-          Welcome back{user.name ? `, ${user.name}` : ""}
+      <div className="flex flex-col sm:flex-row justify-between items-center mb-8 gap-4">
+        <h1 className="text-lg md:text-xl lg:text-2xl w-full mx-auto flex items-center justify-center text-center">
+          Welcome back <span className='font-semibold '>{user.name ? `, ${user.name}` : ""}</span> 
         </h1>
 
         {/* NEW: Always-visible button to register another/new system */}
@@ -96,6 +96,9 @@ export default async function DashboardPage() {
       ) : (
         <>
           <div className="grid md:grid-cols-2 gap-6">
+            <div className='w-full mx-auto flex items-center justify-center'>
+              <p className='text-xl md:text-2xl lg:text-3xl'>My Systems</p>
+            </div>
             {systems.map((system) => {
               const latestHealth = system.healthScores[0]
               const activeAlertsCount = system.alerts.length
