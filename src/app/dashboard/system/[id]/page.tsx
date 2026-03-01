@@ -194,17 +194,17 @@ export default async function SystemDetailPage(props: PageProps) {
       {/* ========================= */}
       {/* 🔹 REQUEST TECHNICIAN */}
       {/* ========================= */}
-      <div className="text-right flex items-center justify-between">
+      <div className="md:text-right text-center flex items-center justify-between">
         <Link
           href={`/dashboard/system/${system.id}/self-check`}
-          className="bg-black text-white px-6 py-3 rounded-xl hover:opacity-90 transition"
+          className="bg-black text-white md:text-base text-sm md:px-6 px-4 md:py-4 py-3 font-semibold rounded-xl hover:opacity-90 transition"
         >
           Run SelfCheck
         </Link>
 
         <Link
           href={`/dashboard/system/${system.id}/request-service`}
-          className="bg-black text-white px-6 py-3 rounded-xl hover:opacity-90 transition"
+          className="bg-accent text-black md:text-base text-sm md:px-6 px-4 md:py-4 py-3 font-semibold rounded-xl hover:opacity-90 transition"
         >
           Request Technician
         </Link>

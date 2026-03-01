@@ -97,7 +97,7 @@ export default async function DashboardPage() {
         <>
           <div className="grid md:grid-cols-2 gap-6">
             <div className='w-full mx-auto flex items-center justify-center'>
-              <p className='text-xl md:text-2xl lg:text-3xl'>My Systems</p>
+              <p className='text-xl md:text-2xl lg:text-3xl font-bold uppercase my-2'>My Systems</p>
             </div>
             {systems.map((system) => {
               const latestHealth = system.healthScores[0]
