@@ -1,40 +1,53 @@
 "use client"
 
-import { useTransition } from "react"
+import { useActionState, useEffect } from "react"  // ← added useEffect
 import { useRouter } from "next/navigation"
 import { createSolarSystem } from "@/lib/actions/system"
 
 export default function RegisterSystemForm() {
   const router = useRouter()
-  const [isPending, startTransition] = useTransition()
 
-  const handleSubmit = async (formData: FormData) => {
-    startTransition(async () => {
-      const systemId = await createSolarSystem({
-        name: formData.get("name") as string,
-        location: formData.get("location") as string,
-        installationDate: formData.get("installationDate") as string,
-        systemType: formData.get("systemType") as any,
-        inverterModel: formData.get("inverterModel") as string,
+  const [state, formAction, isPending] = useActionState<
+    { success?: boolean; systemId?: string; error?: string },
+    FormData
+  >(
+    async (_prevState, formData) => {
+      try {
+        const systemId = await createSolarSystem({
+          name: formData.get("name") as string,
+          location: formData.get("location") as string,
+          installationDate: formData.get("installationDate") as string,
+          systemType: formData.get("systemType") as any,
+          inverterModel: formData.get("inverterModel") as string,
 
-        panelCapacity: Number(formData.get("panelCapacity")) || undefined,
-        panelQuantity: Number(formData.get("panelQuantity")) || undefined,
+          panelCapacity: Number(formData.get("panelCapacity")) || undefined,
+          panelQuantity: Number(formData.get("panelQuantity")) || undefined,
 
-        batteryCapacity: Number(formData.get("batteryCapacity")) || undefined,
-        batteryType: formData.get("batteryType") as any,
+          batteryCapacity: Number(formData.get("batteryCapacity")) || undefined,
+          batteryType: formData.get("batteryType") as any,
 
-        inverterBrand: formData.get("inverterBrand") as string,
-        inverterCapacity:
-          Number(formData.get("inverterCapacity")) || undefined,
-      })
+          inverterBrand: formData.get("inverterBrand") as string,
+          inverterCapacity: Number(formData.get("inverterCapacity")) || undefined,
+        })
 
-      router.push(`/dashboard/system/${systemId}`)
+        return { success: true, systemId }
+      } catch (err: any) {
+        return { error: err.message || "Failed to register system. Please try again." }
+      }
+    },
+    { success: false } // initial state
+  )
+
+  // ← NEW: Move navigation to useEffect (runs after render)
+  useEffect(() => {
+    if (state.success && state.systemId) {
+      router.push(`/dashboard/system/${state.systemId}`)
       router.refresh()
-    })
-  }
+    }
+  }, [state.success, state.systemId, router]) // dependencies: only re-run when these change
 
   return (
-    <form action={handleSubmit} className="max-w-2xl space-y-6">
+    <form action={formAction} className="max-w-2xl space-y-6">
 
       <h2 className="text-2xl font-semibold">Register Solar System</h2>
 
@@ -123,6 +136,12 @@ export default function RegisterSystemForm() {
         placeholder="Inverter Capacity (kW)"
         className="w-full border rounded p-2"
       />
+
+      {state.error && (
+        <p className="text-red-600 bg-red-50 p-3 rounded">
+          {state.error}
+        </p>
+      )}
 
       <button
         type="submit"

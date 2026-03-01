@@ -1,5 +1,3 @@
-// app/dashboard/page.tsx
-
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
 import { redirect } from "next/navigation"
@@ -13,7 +11,7 @@ export default async function DashboardPage() {
     redirect("/login")
   }
 
-  // Get user with role + customer relation   doing more
+  // Get user with role + customer relation
   const user = await db.user.findUnique({
     where: { email: session.user.email },
     select: {
@@ -68,14 +66,25 @@ export default async function DashboardPage() {
 
   return (
     <div className="max-w-6xl mx-auto px-6 py-16">
-      <h1 className="w-full mx-auto flex items-center justify-center text-center text-2xl md:text-3xl lg:text-4xl font-semibold mb-8">
-        Welcome back{user.name ? `, ${user.name}` : ""}
-      </h1>
+      {/* Header with welcome + new button */}
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
+        <h1 className="text-2xl md:text-3xl lg:text-4xl font-semibold">
+          Welcome back{user.name ? `, ${user.name}` : ""}
+        </h1>
+
+        {/* NEW: Always-visible button to register another/new system */}
+        <Link
+          href="/dashboard/system/new"
+          className="bg-black text-white px-6 py-3 rounded-xl hover:opacity-90 transition whitespace-nowrap"
+        >
+          Register New System
+        </Link>
+      </div>
 
       {systems.length === 0 ? (
         <div className="bg-white shadow rounded-2xl p-8 text-center">
-          <p className="text-gray-600 mb-4">
-            You don’t have any registered solar systems yet.
+          <p className="text-gray-600 mb-6">
+            You don’t have any registered solar systems yet. Get started by registering your first system!
           </p>
           <Link
             href="/dashboard/system/new"
@@ -85,61 +94,73 @@ export default async function DashboardPage() {
           </Link>
         </div>
       ) : (
-        <div className="grid md:grid-cols-2 gap-6">
-          {systems.map((system) => {
-            const latestHealth = system.healthScores[0]
-            const activeAlertsCount = system.alerts.length
+        <>
+          <div className="grid md:grid-cols-2 gap-6">
+            {systems.map((system) => {
+              const latestHealth = system.healthScores[0]
+              const activeAlertsCount = system.alerts.length
 
-            return (
-              <Link
-                key={system.id}
-                href={`/dashboard/system/${system.id}`}
-                className="block bg-white shadow hover:shadow-lg transition rounded-2xl p-6"
-              >
-                <div className="flex justify-between items-start mb-4">
-                  <h2 className="text-xl font-semibold">{system.name}</h2>
+              return (
+                <Link
+                  key={system.id}
+                  href={`/dashboard/system/${system.id}`}
+                  className="block bg-white shadow hover:shadow-lg transition rounded-2xl p-6"
+                >
+                  <div className="flex justify-between items-start mb-4">
+                    <h2 className="text-xl font-semibold">{system.name}</h2>
 
-                  <span
-                    className={`px-3 py-1 text-sm rounded-full ${
-                      system.status === "ACTIVE"
-                        ? "bg-green-100 text-green-700"
-                        : system.status === "NEEDS_ATTENTION"
-                        ? "bg-yellow-100 text-yellow-700"
-                        : "bg-red-100 text-red-700"
-                    }`}
-                  >
-                    {system.status}
-                  </span>
-                </div>
-
-                {latestHealth ? (
-                  <div className="mb-3">
-                    <p className="text-4xl font-bold">
-                      {latestHealth.score}
-                      <span className="text-lg font-medium text-gray-500">
-                        /100
-                      </span>
-                    </p>
-                    <p className="text-sm text-gray-500">
-                      System Health Score
-                    </p>
+                    <span
+                      className={`px-3 py-1 text-sm rounded-full ${
+                        system.status === "ACTIVE"
+                          ? "bg-green-100 text-green-700"
+                          : system.status === "NEEDS_ATTENTION"
+                          ? "bg-yellow-100 text-yellow-700"
+                          : "bg-red-100 text-red-700"
+                      }`}
+                    >
+                      {system.status}
+                    </span>
                   </div>
-                ) : (
-                  <p className="text-gray-500 mb-3">
-                    No health data yet.
-                  </p>
-                )}
 
-                {activeAlertsCount > 0 && (
-                  <p className="text-sm text-red-600 font-medium">
-                    {activeAlertsCount} Active Alert
-                    {activeAlertsCount > 1 ? "s" : ""}
-                  </p>
-                )}
-              </Link>
-            )
-          })}
-        </div>
+                  {latestHealth ? (
+                    <div className="mb-3">
+                      <p className="text-4xl font-bold">
+                        {latestHealth.score}
+                        <span className="text-lg font-medium text-gray-500">
+                          /100
+                        </span>
+                      </p>
+                      <p className="text-sm text-gray-500">
+                        System Health Score
+                      </p>
+                    </div>
+                  ) : (
+                    <p className="text-gray-500 mb-3">
+                      No health data yet.
+                    </p>
+                  )}
+
+                  {activeAlertsCount > 0 && (
+                    <p className="text-sm text-red-600 font-medium">
+                      {activeAlertsCount} Active Alert
+                      {activeAlertsCount > 1 ? "s" : ""}
+                    </p>
+                  )}
+                </Link>
+              )
+            })}
+          </div>
+
+          {/* Optional: Secondary button at bottom for longer lists */}
+          <div className="mt-10 text-center">
+            <Link
+              href="/dashboard/system/new"
+              className="inline-block bg-gray-100 text-gray-800 px-6 py-3 rounded-xl hover:bg-gray-200 transition border border-gray-300"
+            >
+              + Register Another System
+            </Link>
+          </div>
+        </>
       )}
     </div>
   )
