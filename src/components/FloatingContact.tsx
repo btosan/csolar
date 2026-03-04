@@ -84,7 +84,7 @@ export default function FloatingContact() {
             <p className="lg:text-sm text-xs mb-4">Ready for a sustainable energy upgrade, expert solar installation, or smart power monitoring? We're here to help.</p>
             <button
               onClick={handleOpenWindow}
-              className="w-full bg-yellow-200 text-black hover:cursor-pointer px-4 py-2 rounded-full font-semibold hover:bg-yellow-50 transition-all"
+              className="w-full bg-accent/90 text-black hover:cursor-pointer px-4 py-2 rounded-full font-semibold hover:bg-yellow-50 transition-all"
             >
               Let's chat now
             </button>
