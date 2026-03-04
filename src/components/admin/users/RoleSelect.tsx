@@ -1,6 +1,6 @@
 'use client';
 
-import { updateUserRole } from '@/lib/actions/users.ts';
+import { updateUserRole } from '@/lib/actions/users';
 import { Role } from '@prisma/client';
 
 interface Props {
