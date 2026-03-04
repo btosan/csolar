@@ -10,7 +10,7 @@ import Logo from "./Logo";
 
 const Footer = () => {
   const phoneNumber = "+2348033319391";
-  const emailAddress = "containedsolar@gmail.com";
+  const emailAddress = "containedenergyservices@gmail.com";
   const officeAddress = "No 91/93 Aina Street, Ojodu Berger, Lagos, Nigeria";
 
   return (
@@ -81,7 +81,7 @@ const Footer = () => {
       {/* Bottom Bar */}
       <div className="container mx-auto py-12 xl:px-0 border-t border-border/10 flex flex-col gap-6 xl:flex-row items-center justify-between">
         <p className="text-border">
-          Copyright © {new Date().getFullYear()} Contained Solar. All rights reserved.
+          Copyright © {new Date().getFullYear()} Contained Solar, a subsidiary of Contained Energy Services Ltd. All rights reserved.
         </p>
         <Socials containerStyles="flex gap-6 text-white" iconsStyles="hover:text-accent transition-all" />
       </div>

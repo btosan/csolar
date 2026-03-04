@@ -3,7 +3,9 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { db } from '@/lib/db';
 import Link from 'next/link';
-import { Edit, Trash2 } from 'lucide-react';
+import { Edit } from 'lucide-react';
+import { DeleteUserButton } from '@/components/admin/DeleteUserButton';
+import { RoleSelect } from '@/components/admin/users/RoleSelect';
 
 export const dynamic = 'force-dynamic';
 
@@ -31,8 +33,11 @@ export default async function AdminUsersPage() {
       <div className="mb-8 flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">All Users</h1>
-          <p className="mt-2 text-muted-foreground">{users.length} registered users</p>
+          <p className="mt-2 text-muted-foreground">
+            {users.length} registered users
+          </p>
         </div>
+
         <Link
           href="/admin"
           className="text-primary hover:underline text-sm"
@@ -52,9 +57,11 @@ export default async function AdminUsersPage() {
               <th className="text-right p-4 font-medium">Actions</th>
             </tr>
           </thead>
+
           <tbody>
             {users.map((user) => (
               <tr key={user.id} className="border-t hover:bg-muted/50">
+                {/* USER INFO */}
                 <td className="p-4">
                   <div className="flex items-center gap-3">
                     {user.image ? (
@@ -68,26 +75,30 @@ export default async function AdminUsersPage() {
                         {user.name?.[0]?.toUpperCase() || '?'}
                       </div>
                     )}
-                    <span className="font-medium">{user.name || '—'}</span>
+
+                    <span className="font-medium">
+                      {user.name || '—'}
+                    </span>
                   </div>
                 </td>
+
+                {/* EMAIL */}
                 <td className="p-4">{user.email}</td>
+
+                {/* ROLE DROPDOWN (Production Safe) */}
                 <td className="p-4">
-                  <span
-                    className={`px-2.5 py-1 text-xs font-medium rounded-full ${
-                      user.role === 'ADMIN'
-                        ? 'bg-red-100 text-red-800'
-                        : user.role === 'TECHNICIAN'
-                        ? 'bg-blue-100 text-blue-800'
-                        : 'bg-green-100 text-green-800'
-                    }`}
-                  >
-                    {user.role}
-                  </span>
+                  <RoleSelect
+                    userId={user.id}
+                    currentRole={user.role}
+                  />
                 </td>
+
+                {/* JOIN DATE */}
                 <td className="p-4 text-muted-foreground">
                   {new Date(user.createdAt).toLocaleDateString()}
                 </td>
+
+                {/* ACTIONS */}
                 <td className="p-4 text-right space-x-3">
                   <Link
                     href={`/admin/users/${user.id}/edit`}
@@ -96,24 +107,8 @@ export default async function AdminUsersPage() {
                     <Edit className="h-4 w-4" />
                     Edit
                   </Link>
-                  <form
-                    action={`/api/admin/${encodeURIComponent(user.email)}`}
-                    method="DELETE"
-                    className="inline"
-                    onSubmit={async (e) => {
-                      if (!confirm('Delete this user permanently?')) {
-                        e.preventDefault();
-                      }
-                    }}
-                  >
-                    <button
-                      type="submit"
-                      className="text-red-600 hover:text-red-800 inline-flex items-center gap-1"
-                    >
-                      <Trash2 className="h-4 w-4" />
-                      Delete
-                    </button>
-                  </form>
+
+                  <DeleteUserButton userId={user.id} />
                 </td>
               </tr>
             ))}

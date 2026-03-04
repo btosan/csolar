@@ -96,7 +96,7 @@ export default function AboutPage() {
             </h2>
 
             <p className="mb-6">
-              Contained Solar is a Nigerian renewable energy company focused
+              Contained Solar (a subsidiary of Contained Energy Services Ltd) is a Nigerian renewable energy company focused
               on delivering dependable solar systems that continue performing
               long after installation. For over 26 years, we have treated
               solar as a living system — requiring intelligent design,
