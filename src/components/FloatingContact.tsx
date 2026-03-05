@@ -13,7 +13,7 @@ export default function FloatingContact() {
   const phoneNumber = "+2348033319391";
   const whatsappNumber = "+2348033319391";
   const whatsappMessage = "Hello! I'd like to know more about your renewable energy solutions & products.";
-  const emailAddress = "containedenergyservices@gmail.com";
+  const emailAddress = "containedsolar@gmail.com";
   const emailSubject = "Inquiry about Contained Energy Services";
   const emailBody = "Hi,\n\nI'd like to know more about your solar installation, inverters, storage system, & solar products.\n\nThank you!";
 

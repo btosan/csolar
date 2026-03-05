@@ -17,7 +17,7 @@ const Topbar = () => {
               <div className="w-8 h-8 bg-primary text-white flex items-center justify-center">
                 <RiMailFill />
               </div>
-              <a href="mailto:containedenergyservices@gmail.com" className="font-medium text-lg text-primary tracking-wider">containedenergyservices@gmail.com</a>
+              <a href="mailto:containedsolar@gmail.com" className="font-medium text-lg text-primary tracking-wider">containedsolar@gmail.com</a>
             </div>
           </div>
           <Socials containerStyles="flex items-center gap-8 mx-auto xl:mx-0" iconsStyles="text-primary"/>

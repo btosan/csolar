@@ -10,7 +10,7 @@ import Logo from "./Logo";
 
 const Footer = () => {
   const phoneNumber = "+2348033319391";
-  const emailAddress = "containedenergyservices@gmail.com";
+  const emailAddress = "containedsolar@gmail.com";
   const officeAddress = "No 91/93 Aina Street, Ojodu Berger, Lagos, Nigeria";
 
   return (
