@@ -130,10 +130,10 @@ export default async function ProjectDetailPage({ params }: Props) {
             </Link>
 
             <Link
-              href="/contact"
+              href="/projects"
               className="border border-black px-6 py-3 rounded-lg hover:bg-black hover:text-white transition"
             >
-              Request Consultation
+              See All Projects
             </Link>
           </div>
         </div>
