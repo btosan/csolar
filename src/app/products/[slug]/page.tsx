@@ -3,7 +3,6 @@ import Image from "next/image";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth"; 
 import Link from "next/link";
-import { getPublicProductBySlug } from "@/lib/actions/products";
 import RichTextRenderer from "@/components/editor/RichTextRenderer";
 import DeleteProductButton from "@/components/admin/products/DeleteProductButton";
 import { getPublicProductBySlug, getRelatedProducts } from "@/lib/actions/products";
