@@ -90,12 +90,9 @@ export default function ProductForm({ mode, product }: Props) {
       if (isEdit && product) {
         await updateProduct(product.id, {
           ...form,
-          specifications: form.specifications || null,
-          gallery,
-        });
-      } else {
-        await createProduct({
-          ...form,
+          specifications: form.specifications?.length
+            ? form.specifications
+            : undefined,
           gallery,
         });
       }

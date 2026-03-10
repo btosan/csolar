@@ -212,18 +212,21 @@ export async function updateProduct(
         kva: data.kva,
         ah: data.ah,
         voltage: data.voltage,
-        specifications:
-          data.specifications !== undefined
-            ? {
-                deleteMany: {},
-                create: data.specifications
-                  .filter((s: any) => s.key?.trim() && s.value?.trim())
-                  .map((s: any) => ({
-                    key: s.key.trim(),
-                    value: s.value.trim(),
-                  })),
-              }
-            : undefined,
+      specifications:
+        data.specifications !== undefined &&
+        data.specifications.some(
+          (s: any) => s.key?.trim() && s.value?.trim()
+        )
+          ? {
+              deleteMany: {},
+              create: data.specifications
+                .filter((s: any) => s.key?.trim() && s.value?.trim())
+                .map((s: any) => ({
+                  key: s.key.trim(),
+                  value: s.value.trim(),
+                })),
+            }
+          : undefined,
         },
     });
 

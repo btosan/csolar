@@ -49,7 +49,7 @@ export default async function ProductsPage() {
             </div>
               <Link
                 href={`/products/category/${section.slug}`}
-                className="text-sm md:text-base lg:text-lg font-medium hover:underline flex items-center justify-center mx-auto w-full"
+                className="text-sm md:text-base lg:text-lg font-medium hover:underline flex items-center justify-center mx-auto w-full pt-4 mt-4 md:pt-8 md:mt-8"
               >
                 View All →
               </Link>
