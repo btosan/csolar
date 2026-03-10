@@ -6,9 +6,19 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { ProductType, Role } from "@prisma/client";
 
-/////////////////////////////////////////////////
-// 🔐 ADMIN GUARD //specifications: data.specifications?.length
-/////////////////////////////////////////////////
+
+function getCategorySlug(type: ProductType) {
+  switch (type) {
+    case ProductType.PANEL:
+      return "panels";
+    case ProductType.BATTERY:
+      return "batteries";
+    case ProductType.INVERTER:
+      return "inverters";
+    case ProductType.ACCESSORY:
+      return "accessories";
+  }
+}
 
 async function requireAdmin() {
   const session = await getServerSession(authOptions);
@@ -149,7 +159,10 @@ export async function createProduct(data: {
   });
 
   revalidatePath("/admin/products");
+  revalidatePath(`/admin/products/${id}`);
   revalidatePath("/products");
+  const path = getCategorySlug(data.type);
+  revalidatePath(`/products/category/${path}`);
 
   return product;
 }
@@ -251,6 +264,8 @@ export async function updateProduct(
   revalidatePath("/admin/products");
   revalidatePath(`/admin/products/${id}`);
   revalidatePath("/products");
+  const path = getCategorySlug(data.type);
+  revalidatePath(`/products/category/${path}`);
 
   if (product.slug) {
     revalidatePath(`/products/${product.slug}`);
