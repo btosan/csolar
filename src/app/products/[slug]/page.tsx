@@ -6,6 +6,8 @@ import Link from "next/link";
 import { getPublicProductBySlug } from "@/lib/actions/products";
 import RichTextRenderer from "@/components/editor/RichTextRenderer";
 import DeleteProductButton from "@/components/admin/products/DeleteProductButton";
+import { getPublicProductBySlug, getRelatedProducts } from "@/lib/actions/products";
+import { getFrequentlyBoughtTogether } from "@/lib/actions/products";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -16,9 +18,14 @@ export default async function ProductDetailPage({ params }: Props) {
 
   const product = await getPublicProductBySlug(slug);
 
+  const relatedProducts = await getRelatedProducts( product.id, product.type, product.name );
+
   if (!product) return notFound();
 
+  const frequentlyBought = await getFrequentlyBoughtTogether(product.id);
+
   const session = await getServerSession(authOptions);
+
   const isAdmin = session?.user?.role === "ADMIN";
 
   const {
@@ -269,6 +276,118 @@ export default async function ProductDetailPage({ params }: Props) {
           </div>
         </div>
       )}
+
+      {/* ================= RELATED PRODUCTS ================= */}
+      {relatedProducts.length > 0 && (
+        <div className="mt-20">
+          <h2 className="text-2xl font-semibold mb-6">
+            Related Products
+          </h2>
+
+          <div className="grid md:grid-cols-3 gap-6">
+            {relatedProducts.map((item) => {
+              const image =
+                item.mainImageUrl && item.mainImageUrl.trim() !== ""
+                  ? item.mainImageUrl
+                  : "/placeholder-product.png";
+
+              const hasPercentage =
+                item.discount?.active && item.discount?.percentage;
+
+              const hasAmount =
+                item.discount?.active && item.discount?.amount;
+
+              const final =
+                hasPercentage
+                  ? Math.round(
+                      item.price -
+                        (item.price * item.discount!.percentage!) /
+                          100
+                    )
+                  : hasAmount
+                  ? item.price - item.discount!.amount!
+                  : item.price;
+
+              return (
+                <Link
+                  key={item.id}
+                  href={`/products/${item.slug}`}
+                  className="border rounded-lg overflow-hidden hover:shadow-md transition"
+                >
+                  <div className="bg-gray-100 aspect-square relative">
+                    <Image
+                      src={image}
+                      alt={item.name}
+                      fill
+                      className="object-contain p-4"
+                    />
+                  </div>
+
+                  <div className="p-4 space-y-2">
+                    <h3 className="font-medium line-clamp-2">
+                      {item.name}
+                    </h3>
+
+                    <p className="text-sm text-muted-foreground">
+                      {item.brand}
+                    </p>
+
+                    <div className="flex items-center gap-2">
+                      <span className="font-semibold">
+                        ₦{final.toLocaleString()}
+                      </span>
+
+                      {(hasPercentage || hasAmount) && (
+                        <span className="text-sm line-through text-muted-foreground">
+                          ₦{item.price.toLocaleString()}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {frequentlyBought.length > 0 && (
+      <div className="mt-20">
+        <h2 className="text-2xl font-semibold mb-6">
+          Frequently Bought Together
+        </h2>
+
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {frequentlyBought.map((item) => (
+            <Link
+              key={item.id}
+              href={`/products/${item.slug}`}
+              className="border rounded-xl p-4 hover:shadow-md transition"
+            >
+              <div className="aspect-square bg-gray-100 rounded-lg mb-3 overflow-hidden">
+                <Image
+                  src={item.mainImageUrl || "/placeholder-product.png"}
+                  alt={item.name}
+                  width={300}
+                  height={300}
+                  className="object-contain w-full h-full"
+                />
+              </div>
+
+              <h3 className="font-medium text-sm">{item.name}</h3>
+
+              <p className="text-sm text-muted-foreground">
+                {item.brand}
+              </p>
+
+              <p className="font-semibold mt-2">
+                ₦{item.price.toLocaleString()}
+              </p>
+            </Link>
+          ))}
+        </div>
+      </div>
+    )}
 
       {/* ================= REVIEWS SECTION ================= */}
       {reviews && reviews.length > 0 && (

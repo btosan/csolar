@@ -383,3 +383,79 @@ export async function deleteReview(reviewId: number) {
   return review;
 }
 
+
+/////////////////////////////////////////////////
+// 🔗 RELATED PRODUCTS
+/////////////////////////////////////////////////
+
+export async function getRelatedProducts(
+  productId: string,
+  type: ProductType,
+  name: string
+) {
+  const keywords = name
+    .toLowerCase()
+    .split(" ")
+    .filter((w) => w.length > 3);
+
+  return db.product.findMany({
+    where: {
+      active: true,
+      id: { not: productId },
+      type,
+      OR: keywords.map((word) => ({
+        name: {
+          contains: word,
+          mode: "insensitive",
+        },
+      })),
+    },
+    take: 3,
+    orderBy: {
+      rating: "desc",
+    },
+    include: {
+      discount: true,
+      gallery: true,
+    },
+  });
+}
+
+/////////////////////////////////////////////////
+// 🛒 FREQUENTLY BOUGHT TOGETHER
+/////////////////////////////////////////////////
+
+export async function getFrequentlyBoughtTogether(productId: string) {
+  const orders = await db.orderItem.findMany({
+    where: {
+      productId,
+    },
+    include: {
+      order: {
+        include: {
+          items: {
+            include: {
+              product: {
+                include: {
+                  discount: true,
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  });
+
+  const products: any[] = [];
+
+  orders.forEach((orderItem) => {
+    orderItem.order.items.forEach((item) => {
+      if (item.productId !== productId) {
+        products.push(item.product);
+      }
+    });
+  });
+
+  return products.slice(0, 3);
+}
