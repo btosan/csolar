@@ -85,7 +85,7 @@ export default function ProductTable({ products }: ProductTableProps) {
                   </Link>
                 </td>
                 <td className="px-6 py-4 font-medium">
-                  ₦{(product.price / 100).toLocaleString()}
+                  ₦{(product.price).toLocaleString()}
                 </td>
                 <td className="px-6 py-4">{product.stock}</td>
                 <td className="px-6 py-4">
