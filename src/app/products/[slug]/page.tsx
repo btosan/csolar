@@ -17,9 +17,13 @@ export default async function ProductDetailPage({ params }: Props) {
 
   const product = await getPublicProductBySlug(slug);
 
-  const relatedProducts = await getRelatedProducts( product.id, product.type, product.name );
-
   if (!product) return notFound();
+
+  const relatedProducts = await getRelatedProducts(
+    product.id,
+    product.type,
+    product.name
+  );
 
   const frequentlyBought = await getFrequentlyBoughtTogether(product.id);
 
