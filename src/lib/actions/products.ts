@@ -263,8 +263,11 @@ export async function updateProduct(
   revalidatePath("/admin/products");
   revalidatePath(`/admin/products/${id}`);
   revalidatePath("/products");
-  const path = getCategorySlug(data.type);
-  revalidatePath(`/products/category/${path}`);
+  
+  if (data.type) {
+    const path = getCategorySlug(data.type);
+    revalidatePath(`/products/category/${path}`);
+  }
 
   if (product.slug) {
     revalidatePath(`/products/${product.slug}`);
