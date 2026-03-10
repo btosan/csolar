@@ -25,7 +25,7 @@ export default async function AdminProductsPage() {
         <p className="text-muted-foreground mb-6">
           Update and manage store products.
         </p>
-        <Link href='/admin' className="p-4 w-fit mx-auto bg-accent text-xl lg:text-2xl text-primary">Admin  Dashboard</Link>
+        <Link href='/admin' className="px-4 py-2 rounded-3xl w-fit mx-auto bg-accent text-lg lg:text-xl text-primary">Admin  Dashboard</Link>
       </div>
 
       <ProductTable products={products} />
