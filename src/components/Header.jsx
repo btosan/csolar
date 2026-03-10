@@ -47,36 +47,7 @@ const navLinks = [
     ],
   },
   { name: "Solutions", href: "/solutions" },
-  // {
-  //   name: "Solutions",
-  //   href: "/solutions",
-  //   submenu: [
-  //     {
-  //       title: "Solar Health Monitoring",
-  //       description: "Real-time visibility into system performance and condition.",
-  //       image: "/assets/csolar/monitoring2.jpg",
-  //       href: "/solutions/health-monitoring",
-  //     },
-  //     {
-  //       title: "Smart Alerts & Diagnostics",
-  //       description: "Early issue detection to prevent downtime.",
-  //       image: "/assets/csolar/diagnostics2.jpg",
-  //       href: "/solutions/alerts",
-  //     },
-  //     {
-  //       title: "Maintenance Tracking",
-  //       description: "Service reminders and technician records in one place.",
-  //       image: "/assets/csolar/maintenance.jpg",
-  //       href: "/solutions/tracking",
-  //     },
-  //     {
-  //       title: "Performance Insights",
-  //       description: "Usage trends and optimization recommendations.",
-  //       image: "/assets/csolar/performance.jpg",
-  //       href: "/solutions/insights",
-  //     },
-  //   ],
-  // },
+
   {
     name: "Products",
     href: "/products",

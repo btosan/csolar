@@ -5,6 +5,7 @@ import { authOptions } from "@/lib/auth";
 import Link from "next/link";
 import { getPublicProductBySlug } from "@/lib/actions/products";
 import RichTextRenderer from "@/components/editor/RichTextRenderer";
+import DeleteProductButton from "@/components/admin/products/DeleteProductButton";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -104,21 +105,30 @@ export default async function ProductDetailPage({ params }: Props) {
           <div>
             <h1 className="text-3xl font-bold mb-2">{name}</h1>
 
-            {isAdmin && (
-              <Link
-                href={`/admin/products/${id}/edit`} 
-                className="inline-block my-4 bg-accent text-black px-4 py-2 rounded-md text-sm hover:bg-black/70 hover:text-white transition"
-              >
-                Edit Product
-              </Link>
-            )}
+            <div className='w-full flex mx-auto items-center justify-between'>
+              {isAdmin && (
+                <Link
+                  href={`/admin/products/${id}/edit`} 
+                  className="inline-block my-4 bg-accent text-black px-4 py-2 rounded-md text-sm hover:bg-black/70 hover:text-white transition"
+                >
+                  Edit Product
+                </Link>
+              )}
 
-            {featured && (
-              <span className="inline-block mt-2 text-xs px-3 py-1 rounded-full bg-yellow-500/10 text-gray-600 font-medium">
-                Featured Product
-              </span>
-            )}
+              {isAdmin && (
+                <div
+                  className=""
+                 >
+                    <DeleteProductButton />
+                  </div>
+                )}
 
+                {featured && (
+                  <span className="inline-block mt-2 text-xs px-3 py-1 rounded-full bg-yellow-500/10 text-gray-600 font-medium">
+                    Featured Product
+                  </span>
+                )}
+            </div>
             <p className="text-sm text-muted-foreground">
               Brand: <span className="font-medium">{brand}</span>
               {model && <> | Model: {model}</>}
