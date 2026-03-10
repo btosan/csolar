@@ -87,22 +87,14 @@ export default function ProductForm({ mode, product }: Props) {
     setLoading(true);
 
     try {
-      const payload: any = {
-        ...form,
-        gallery,
-      };
-
-      // CRITICAL: Only include specifications if user actually modified them
-      if (form.specifications && form.specifications.length > 0) {
-        payload.specifications = form.specifications;
-      } else {
-        delete payload.specifications;
-      }
-
       if (isEdit && product) {
-        await updateProduct(product.id, payload);
-      } else {
-        await createProduct(payload);
+        await updateProduct(product.id, {
+          ...form,
+          specifications: form.specifications?.length
+            ? form.specifications
+            : undefined,
+          gallery,
+        });
       }
 
       router.push("/admin/products");
