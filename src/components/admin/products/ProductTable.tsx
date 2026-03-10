@@ -99,7 +99,7 @@ export default function ProductTable({ products }: ProductTableProps) {
                     {product.active ? "Active" : "Hidden"}
                   </span>
                 </td>
-                <td className="px-6 py-4 text-right space-x-2 flex items-center justify-center">
+                <td className="px-6 py-4 text-right space-x-2 flex items-center justify-between">
                   <Link
                     href={`/admin/products/${product.id}/edit`}
                     className="px-4 py-2 text-sm rounded-lg bg-primary text-white hover:opacity-90 transition"
