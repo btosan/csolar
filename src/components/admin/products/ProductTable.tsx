@@ -77,10 +77,12 @@ export default function ProductTable({ products }: ProductTableProps) {
                 className="border-t hover:bg-gray-50 transition"
               >
                 <td className="px-6 py-4">
-                  <div className="font-semibold text-primary">{product.name}</div>
-                  <div className="text-sm text-gray-500">
-                    {product.brand} • {product.type}
-                  </div>
+                  <Link href={`/admin/products/${product.id}`}>
+                    <div className="font-semibold text-primary">{product.name}</div>
+                    <div className="text-sm text-gray-500">
+                      {product.brand} • {product.type}
+                    </div>
+                  </Link>
                 </td>
                 <td className="px-6 py-4 font-medium">
                   ₦{(product.price / 100).toLocaleString()}
