@@ -392,7 +392,7 @@ export default async function ProductDetailPage({ params }: Props) {
       </div>
     )}
 
-      {/* ================= REVIEWS SECTION ================= */}
+    {/* REVIEWS */}
       {reviews && reviews.length > 0 && (
         <div className="mt-16">
           <h2 className="text-2xl font-semibold mb-6">
