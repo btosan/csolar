@@ -3,28 +3,30 @@
 import { useState } from "react";
 import { Trash2 } from "lucide-react";
 import { deleteProduct } from "@/lib/actions/products";
+import { useRouter } from "next/navigation";
 
 type Props = {
   id: string;
-  onDeleted?: () => void; // optional callback after deletion
 };
 
-export default function DeleteProductButton({ id, onDeleted }: Props) {
+export default function DeleteProductButton({ id }: Props) {
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
 
   const handleDelete = async () => {
     if (!confirm("Are you sure you want to delete this product?")) return;
 
     setLoading(true);
-    setError(null);
 
     try {
-      await deleteProduct(id); // calls server action
-      onDeleted?.(); // optional callback to refresh parent table
+      await deleteProduct(id);
+
+      // redirect after deletion
+      router.push("/admin/products");
+      router.refresh();
     } catch (err) {
       console.error("Failed to delete product:", err);
-      setError("Failed to delete product. Try again.");
+      alert("Failed to delete product.");
     } finally {
       setLoading(false);
     }

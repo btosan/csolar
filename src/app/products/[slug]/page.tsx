@@ -116,12 +116,10 @@ export default async function ProductDetailPage({ params }: Props) {
               )}
 
               {isAdmin && (
-                <div
-                  className=""
-                 >
-                    <DeleteProductButton />
-                  </div>
-                )}
+                <div>
+                  <DeleteProductButton id={id} />
+                </div>
+              )}
 
                 {featured && (
                   <span className="inline-block mt-2 text-xs px-3 py-1 rounded-full bg-yellow-500/10 text-gray-600 font-medium">
