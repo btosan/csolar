@@ -427,35 +427,27 @@ export async function getRelatedProducts(
 
 export async function getFrequentlyBoughtTogether(productId: string) {
   const orders = await db.orderItem.findMany({
-    where: {
-      productId,
-    },
+    where: { productId },
     include: {
       order: {
         include: {
           items: {
-            include: {
-              product: {
-                include: {
-                  discount: true,
-                },
-              },
-            },
+            include: { product: true },
           },
         },
       },
     },
   });
 
-  const products: any[] = [];
+  const map = new Map();
 
   orders.forEach((orderItem) => {
     orderItem.order.items.forEach((item) => {
       if (item.productId !== productId) {
-        products.push(item.product);
+        map.set(item.productId, item.product);
       }
     });
   });
 
-  return products.slice(0, 3);
+  return Array.from(map.values()).slice(0, 3);
 }
