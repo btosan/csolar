@@ -77,7 +77,7 @@ export default function ProductTable({ products }: ProductTableProps) {
                 className="border-t hover:bg-gray-50 transition"
               >
                 <td className="px-6 py-4">
-                  <Link href={`/admin/products/${product.id}`}>
+                  <Link href={`/products/${product.slug}`}>
                     <div className="font-semibold text-primary">{product.name}</div>
                     <div className="text-sm text-gray-500">
                       {product.brand} • {product.type}
