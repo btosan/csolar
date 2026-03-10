@@ -159,7 +159,6 @@ export async function createProduct(data: {
   });
 
   revalidatePath("/admin/products");
-  revalidatePath(`/admin/products/${id}`);
   revalidatePath("/products");
   const path = getCategorySlug(data.type);
   revalidatePath(`/products/category/${path}`);
