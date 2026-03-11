@@ -12,6 +12,7 @@ type ProductCardProps = {
     price: number;
     mainImageUrl: string | null;
     rating: number;
+    gallery?: { url: string }[];
   };
 };
 
