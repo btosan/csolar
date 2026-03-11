@@ -231,7 +231,7 @@ export default async function ProductDetailPage({ params }: Props) {
             <AddToCartButton
               productId={id}
               name={name}
-              mainImageUrl={mainImageUrl || data.gallery?.[0]?.url} 
+              mainImageUrl={mainImageUrl || gallery?.[0]?.url} 
             />
 
             <Link
