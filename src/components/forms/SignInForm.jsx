@@ -22,6 +22,7 @@ import Link from 'next/link';
 import GoogleSignInButton from '../Buttons/GoogleSignInButton';
 import { motion } from 'framer-motion';
 import { PasswordInput } from '../ui/PasswordInput';
+import { mergeGuestCart } from "@/lib/actions/cart-merge";
 
 const FormSchema = z.object({
   email: z.string().min(1, 'Email is required').email('Invalid email'),
@@ -77,9 +78,21 @@ export default function SignInForm() {
         return;
       }
 
-      toast.success('Signed in successfully!');
-      router.refresh();
-      router.replace(callbackUrl);
+      // ← THIS IS WHERE YOU PUT THE NEW BLOCK
+      if (result?.ok) {
+        toast.success("Signed in successfully!");
+
+        const guestCart = JSON.parse(localStorage.getItem("guest_cart") || "[]");
+        if (guestCart.length > 0) {
+          await mergeGuestCart(guestCart);
+          localStorage.removeItem("guest_cart");
+        }
+
+        router.push(callbackUrl);
+        router.refresh();
+
+        window.dispatchEvent(new Event("cart-updated"));
+      }
 
     } catch (err) {
       console.error(err);
@@ -182,7 +195,7 @@ export default function SignInForm() {
               </span>
             </div>
           </div>
-
+{/* toast.success */}
           <GoogleSignInButton>Sign in with Google</GoogleSignInButton>
 
           <p className="text-center text-sm xl:text-lg text-muted-foreground">

@@ -14,6 +14,9 @@ import {
 } from "@/components/ui/tooltip";
 import Logo from "./Logo";
 import NavMobile from "./NavMobile";
+import CartIcon from "@/components/products/cart/CartIcon";
+import CartCount from "@/components/products/cart/CartCount";
+import MobileFloatingCart from "@/components/products/cart/MobileFloatingCart";
 
 const navLinks = [
   {
@@ -203,6 +206,14 @@ const Header = () => {
               </button>
             </Link>
 
+            {/* Cart */}
+            <Link href="/cart" className="relative *:flex items-center">
+              <CartIcon />
+                <span className='absolute -top-4 -right-4'>
+                  <CartCount />
+                </span>
+            </Link>
+
             {/* Authenticated user avatar + hover panel */}
             {isAuthenticated && user ? (
               <div className="relative group">
@@ -300,6 +311,7 @@ const Header = () => {
           </div>
         </div>
       </div>
+       <MobileFloatingCart />
     </header>
   );
 };

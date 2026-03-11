@@ -16,10 +16,12 @@ import { useSession, signOut } from "next-auth/react"
 import { RiMenu3Fill } from "react-icons/ri"
 import { MdClose } from "react-icons/md"
 import { CldImage } from 'next-cloudinary'
-import { CircleUserIcon, X } from "lucide-react"   // ← added X icon import
+import { CircleUserIcon, X } from "lucide-react"   
 
 import Logo from "./Logo"
 import Socials from "./Socials"
+import CartIcon from "@/components/products/cart/CartIcon";
+import CartCount from "@/components/products/cart/CartCount";
 
 const links = [
   {
@@ -32,16 +34,6 @@ const links = [
       { name: "Consulting & Energy Planning", href: "/services/consulting" },
     ],
   },
-  // {
-  //   name: "Solutions",
-  //   href: "/solutions",
-  //   submenu: [
-  //     { name: "Solar Health Monitoring", href: "/solutions/health-monitoring" },
-  //     { name: "Smart Alerts & Diagnostics", href: "/solutions/alerts" },
-  //     { name: "Maintenance Tracking", href: "/solutions/tracking" },
-  //     { name: "Performance Insights", href: "/solutions/insights" },
-  //   ],
-  // },
   { name: "Solutions", href: "/solutions" },
   {
     name: "Products",
@@ -79,13 +71,20 @@ const NavMobile = () => {
 
       <SheetContent
         side="left"
-        className="bg-primary z-100 border-none text-white w-72 md:w-md px-6 md:px-16 [&>button]:hidden overflow-y-auto"
+        className="bg-primary z-100 border-none text-white w-[90%] md:w-md px-6 md:px-16 [&>button]:hidden overflow-y-auto"
       >
         <div className="flex flex-col h-full pt-6 md:pt-8 pb-8 ">
           <SheetHeader className="flex flex-row w-full items-center justify-between mb-8 md:mb-16 ">
             <SheetTitle>
               <Logo />
             </SheetTitle>
+
+            <Link href="/cart" className="relative *:flex items-center">
+              <CartIcon />
+                <span className='absolute -top-5 -right-4'>
+                  <CartCount />
+                </span>
+            </Link>
 
             <SheetClose asChild>
               <button className="text-white text-2xl hover:rotate-90 hover:cursor-pointer transition">
@@ -138,7 +137,7 @@ const NavMobile = () => {
               <Link
                 href="/contact"
                 onClick={() => setIsOpen(false)}
-                className="inline-block bg-white text-primary px-8 py-4 uppercase font-primary font-bold tracking-[1.2px]"
+                className="inline-block bg-accent text-primary px-6 py-3 uppercase font-primary font-semibold tracking-[1.2px]"
               >
                 Contact Us
               </Link>

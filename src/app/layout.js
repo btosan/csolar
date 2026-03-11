@@ -7,6 +7,7 @@ import Footer from "@/components/Footer"
 import NextAuthProviders from './NextAuthProviders';
 import HolyLoader from "holy-loader";
 import FloatingContact from "@/components/FloatingContact";
+import { Toaster } from "@/components/ui/toaster"
 
 const dmSans = DM_Sans({
   variable: "--font-dmSans",
@@ -49,6 +50,7 @@ export default function RootLayout({ children }) {
       >
         <HolyLoader color="#ffca3b" />
         <NextAuthProviders>
+          <Toaster />
           <TooltipProvider>
           <Topbar />
           <Header />
@@ -56,6 +58,7 @@ export default function RootLayout({ children }) {
               {children}
               <FloatingContact />
             </main>
+             
           <Footer />
           </TooltipProvider>
         </NextAuthProviders>
@@ -64,4 +67,3 @@ export default function RootLayout({ children }) {
   )
 }
 
-// 4A148C

@@ -7,6 +7,7 @@ import RichTextRenderer from "@/components/editor/RichTextRenderer";
 import DeleteProductButton from "@/components/admin/products/DeleteProductButton";
 import { getPublicProductBySlug, getRelatedProducts } from "@/lib/actions/products";
 import { getFrequentlyBoughtTogether } from "@/lib/actions/products";
+import AddToCartButton from "@/components/products/AddToCartButton";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -226,13 +227,17 @@ export default async function ProductDetailPage({ params }: Props) {
             </p>
           )}
 
-          {/* CTA */}
           <div className="flex flex-col sm:flex-row gap-4 pt-4">
-            <Link href='/contact' className="bg-black text-white px-6 py-3 rounded-lg hover:opacity-90 transition">
-              Request Quote
-            </Link>
+            <AddToCartButton
+              productId={id}
+              name={name}
+              mainImageUrl={mainImageUrl || data.gallery?.[0]?.url} 
+            />
 
-            <Link href='/contact' className="border border-black px-6 py-3 rounded-lg hover:bg-black hover:text-white transition">
+            <Link
+              href="/contact"
+              className="border border-black px-6 py-3 rounded-lg text-center hover:bg-black hover:text-white transition"
+            >
               Contact Sales
             </Link>
           </div>

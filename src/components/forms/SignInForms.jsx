@@ -22,6 +22,7 @@ import { Input } from '@/components/ui/input';
 import { AppButton } from '@/components/ui/AppButton';
 import { PasswordInput } from '@/components/ui/PasswordInput';
 import GoogleSignInButton from '@/components/Buttons/GoogleSignInButton';
+import { mergeGuestCart } from "@/lib/actions/cart-merge"; // adjust path if needed
 
 // ────────────────────────────────────────────────
 // Zod schema (unchanged – matches your backend/auth setup)
@@ -68,10 +69,23 @@ const SignInForm = () => {
       }
 
       if (result?.ok) {
-        toast.success('Signed in successfully!');
+        // Merge guest cart
+        const guestCart = JSON.parse(localStorage.getItem("guest_cart") || "[]");
+        if (guestCart.length > 0) {
+          try {
+            await mergeGuestCart(guestCart); // merge into DB
+            localStorage.removeItem("guest_cart");
+            router.refresh(); // ✅ refresh UI so cart count updates
+          } catch (mergeError) {
+            console.error("Failed to merge guest cart:", mergeError);
+            toast.error("Some items in your guest cart could not be merged.");
+          }
+        }
+
+        toast.success("Signed in successfully!");
         router.push(callbackUrl);
-        router.refresh();
-      }
+      };
+
     } catch (err) {
       setError('An unexpected error occurred');
       toast.error('An unexpected error occurred');
