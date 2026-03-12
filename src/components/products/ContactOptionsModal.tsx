@@ -42,7 +42,7 @@ export default function ContactOptionsModal({
 
   const handleWhatsApp = () => {
     const message = encodeURIComponent(
-      `Hi! I would like to know more about ${cleanName}.\n\nProduct link: ${productUrl}`
+      `Hi! Is this Contained Solar? I want to buy ${cleanName}.\n\nProduct link: ${productUrl}`
     );
     const waUrl = `https://wa.me/${whatsappNumber}?text=${message}`;
     window.open(waUrl, "_blank", "noopener,noreferrer");
@@ -57,7 +57,7 @@ export default function ContactOptionsModal({
   const handleEmail = () => {
     const subject = encodeURIComponent(`Enquiry about ${cleanName}`);
     const body = encodeURIComponent(
-      `Hello,\n\nI would like to know more about the product: ${cleanName}.\nProduct link: ${productUrl}\n\nThank you!`
+      `Hello,\n\nIs this Contained Solar? I want to buy this product: ${cleanName}.\nProduct link: ${productUrl}\n\nThank you!`
     );
     const mailUrl = `mailto:containedsolar@gmail.com?subject=${subject}&body=${body}`;
     window.location.href = mailUrl;
