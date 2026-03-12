@@ -288,7 +288,7 @@ export async function mergeGuestCart(items: any[]) {
 
   revalidatePath("/cart");
 
-  // after updating cart in addToCart / updateCartItemQuantity / removeCartItem
+  // after updating cart in addToCart / updateCartItemQuantity / removeCartItem 
 revalidatePath("/cart");
 
 }

@@ -54,7 +54,7 @@ export default async function CartPage() {
               </h2>
 
               <p className="text-gray-500">
-                ₦{(item.product.price / 100).toLocaleString()}
+                ₦{(item.product.price).toLocaleString()}
               </p>
 
               <CartQuantity
@@ -70,7 +70,7 @@ export default async function CartPage() {
 
       <div className="mt-10 flex lg:flex-row flex-col lg:justify-between justify-center items-center gap-6 lg:gap-0">
         <h2 className="text-xl font-semibold">
-          Total: ₦{(total / 100).toLocaleString()}
+          Total: ₦{(total).toLocaleString()}
         </h2>
 
         <Link

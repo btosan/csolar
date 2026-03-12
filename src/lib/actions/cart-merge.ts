@@ -43,7 +43,6 @@ export async function mergeGuestCart(items: GuestCartItem[]) {
 
   revalidatePath("/cart");
 
-  // Trigger header/cart count refresh
   if (typeof window !== "undefined") {
     window.dispatchEvent(new Event("cart-updated"));
   }
