@@ -2,6 +2,12 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+
 
 type ContactOptionsModalProps = {
   isOpen: boolean;
@@ -85,7 +91,16 @@ export default function ContactOptionsModal({
                 onClick={handlePhone}
                 className="bg-accent hover:bg-yellow-500 text-black text-base md:text-lg font-medium py-4 hover:cursor-pointer rounded-md transition"
               >
-                Call Us Now
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <p className='text-black'>Call Us Now </p>
+                  </TooltipTrigger>
+                   <TooltipContent side="bottom" sideOffset={12} className="p-4 text-sm lg:text-base font-demibold uppercase tracking-widest text-primary bg-gray-50">
+                     +2348033319391
+                    </TooltipContent>
+                  
+                </Tooltip>
+                
               </button>
 
               <button
