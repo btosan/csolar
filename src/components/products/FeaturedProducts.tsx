@@ -23,7 +23,7 @@ export default function FeaturedProducts() {
       <section className="container mx-auto py-16">
         <div className="h-10 md:h-12 lg:h-14 w-64 md:w-80 lg:w-96 mx-auto mb-10 bg-gray-200 rounded animate-shimmer" />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
           {Array.from({ length: 8 }).map((_, i) => (
             <div
               key={i}
@@ -58,7 +58,7 @@ export default function FeaturedProducts() {
         Featured Products
       </h2>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
         {products.map((product) => (
           <ProductCard key={product.id} data={product} />
         ))}
