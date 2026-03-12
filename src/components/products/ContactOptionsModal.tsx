@@ -125,7 +125,7 @@ export default function ContactOptionsModal({
                     Send Email
                   </button>
 
-                  {/* New reliable fallback */}
+
                   <div className="bg-gray-50 p-4 rounded-md border border-gray-200 text-sm hidden lg:block">
                     <p className="font-medium mb-2 text-gray-800">Or copy & paste this into your email:</p>
                     <div className="bg-white p-3 rounded border mb-3 whitespace-pre-wrap font-mono text-gray-700 text-xs md:text-sm">
