@@ -81,7 +81,7 @@ export default function AddToCartButton({
     <button
       onClick={handleAdd}
       disabled={pending}
-      className="bg-black text-white px-6 py-3 rounded-lg hover:opacity-90 disabled:opacity-50 hover:cursor-pointer"
+      className="bg-accent text-black font-medium px-6 py-3 hover:opacity-80 disabled:opacity-50 hover:cursor-pointer"
     >
       {pending ? "Adding..." : "Add to Cart"}
     </button>

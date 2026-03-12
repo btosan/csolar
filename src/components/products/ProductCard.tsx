@@ -1,8 +1,16 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import AddToCartButton from "@/components/products/AddToCartButton";
+import ContactOptionsModal from "@/components/products/ContactOptionsModal";
+
+const BASE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL ||
+  (process.env.NODE_ENV === "production"
+    ? "https://www.containedsolar.com"
+    : "http://localhost:3000");
 
 type ProductCardProps = {
   data: {
@@ -24,11 +32,17 @@ export default function ProductCard({ data }: ProductCardProps) {
       ? mainImageUrl
       : "/assets/csolar/solar-inverter.jpeg";
 
+  const [modalOpen, setModalOpen] = useState(false); // ← add this
+
+  const productUrl = slug
+      ? `${BASE_URL}/products/${slug}`
+      : "";
+
   return (
-    <div className="flex flex-col border border-black/5 shadow-md p-4 rounded-xl">
+    <div className="flex flex-col justify-center items-center border border-black/5 shadow-md rounded-xl pb-4">
 
       <Link href={`/products/${slug}`} className="group">
-        <div className="bg-[#F0EEED] rounded-xl w-full aspect-square mb-4 overflow-hidden">
+        <div className="bg-[#F0EEED] rounded-t-xl w-full aspect-square mb-4 overflow-hidden">
           <Image
             src={imageSrc}
             alt={name}
@@ -38,12 +52,12 @@ export default function ProductCard({ data }: ProductCardProps) {
           />
         </div>
 
-        <h3 className="font-bold text-base md:text-lg text-black mb-1 line-clamp-2">
+        <h3 className="px-4 text-center font-bold text-base md:text-lg text-black mb-1 line-clamp-2">
           {name}
         </h3>
       </Link>
 
-      <div className="flex items-center gap-2 mb-2">
+      <div className="px-4 flex items-center gap-2 mb-2">
         <div className="text-yellow-500 text-sm">
           {"★".repeat(Math.round(rating || 0))}
           {"☆".repeat(5 - Math.round(rating || 0))}
@@ -58,10 +72,25 @@ export default function ProductCard({ data }: ProductCardProps) {
         ₦{price.toLocaleString()}
       </div>
 
-      <AddToCartButton
-        productId={id}
-        name={name}
-        mainImageUrl={mainImageUrl || data.gallery?.[0]?.url} 
+      <div className="w-full px-4 mx-auto flex md:flex-col items-center md:items-stretch md:justify-center justify-between md:gap-2">
+        <AddToCartButton
+          productId={id}
+          name={name}
+          mainImageUrl={mainImageUrl || data.gallery?.[0]?.url} 
+        />
+        <button
+          onClick={() => setModalOpen(true)}
+          className="bg-black text-white font-medium text-center px-6 py-3 hover:opacity-80 transition hover:cursor-pointer"
+        >
+          Contact Sales
+        </button>
+      </div>
+      <ContactOptionsModal
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        productName={name}
+        productUrl={productUrl}
+        // whatsappNumber="23480xxxxxxxx"  // ← optional: override per card if needed
       />
     </div>
   );

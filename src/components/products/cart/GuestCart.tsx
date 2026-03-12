@@ -13,11 +13,11 @@ export default function GuestCart() {
 
   if (items.length === 0) {
     return (
-      <div className="max-w-3xl mx-auto py-20 text-center">
+      <div className="max-w-3xl mx-auto py-20 text-center px-6">
         <h1 className="text-2xl font-semibold">Your cart is empty</h1>
         <Link
           href="/products"
-          className="mt-6 inline-block bg-black text-white px-6 py-3 rounded"
+          className="mt-6 inline-block bg-black text-white py-3 rounded"
         >
           Browse Products
         </Link>
@@ -26,7 +26,7 @@ export default function GuestCart() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto py-10">
+    <div className="max-w-4xl mx-auto py-10 px-6">
       <h1 className="text-3xl font-semibold mb-6">Shopping Cart</h1>
 
       {items.map((item, i) => (

@@ -6,54 +6,69 @@ import ProductCategoryCard from "./ProductCategoryCard";
 
 const ProductCategory = () => {
   return (
-    <div className="px-0 ">
-      <section className="container w-full mx-auto bg-accent px-6 pb-6 pt-10 md:p-17.5 md:rounded-[40px] text-center">
+    <div className="px-0">
+      <section
+        className={cn(
+          "container w-full mx-auto bg-white",
+          "px-0 sm:px-4 lg:px-2 py-0 md:py-1 lg:py-2",
+          "md:rounded-3xl lg:rounded-4xl",
+          "shadow-md"
+        )}
+      >
         <motion.h2
-          initial={{ y: "100px", opacity: 0 }}
-          whileInView={{ y: "0", opacity: 1 }}
+          initial={{ y: 60, opacity: 0 }}
+          whileInView={{ y: 0, opacity: 1 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className={cn([
+          transition={{ duration: 0.7 }}
+          className={cn(
             integralCF.className,
-            "text-[32px] leading-9 md:text-5xl mb-8 md:mb-14 capitalize",
-          ])}
+            "text-2xl sm:text-3xl md:text-4xl lg:text-5xl",
+            "font-bold tracking-tight mb-10 md:mb-12 lg:mb-16",
+            "text-center text-gray-900 bg-white"
+          )}
         >
-          BROWSE BY CATEGORY
+          Browse by Category
         </motion.h2>
+
+        {/* First row */}
         <motion.div
-          initial={{ y: "100px", opacity: 0 }}
-          whileInView={{ y: "0", opacity: 1 }}
+          initial={{ y: 60, opacity: 0 }}
+          whileInView={{ y: 0, opacity: 1 }}
           viewport={{ once: true }}
-          transition={{ delay: 0.6, duration: 0.6 }}
-          className="flex flex-col sm:flex-row md:h-72.25 space-y-4 sm:space-y-0 sm:space-x-5 mb-4 sm:mb-5"
+          transition={{ delay: 0.2, duration: 0.7 }}
+          className="grid grid-cols-1 sm:grid-cols-2 gap-5 md:gap-6 lg:gap-8 mb-5 md:mb-8"
         >
           <ProductCategoryCard
             title="Inverters"
             url="/products/inverters"
-            className="md:max-w-65 lg:max-w-90 xl:max-w-101.75 h-160 bg-[url('/assets/inverters/hybrid-inverter.jpeg')]"
+            className="aspect-4/3 md:aspect-auto md:h-80 lg:h-95 bg-[url('/assets/inverters/hybrid-inverter.jpeg')] bg-cover bg-center"
           />
+
           <ProductCategoryCard
             title="Storage System"
             url="/products/batteries"
-            className="md:max-w-171 h-47.5 bg-[url('/assets/batteries/storage.png')]"
+            className="aspect-4/3 md:aspect-auto md:h-80 lg:h-95 bg-[url('/assets/batteries/storage.png')] bg-cover bg-center"
           />
         </motion.div>
+
+        {/* Second row */}
         <motion.div
-          initial={{ y: "100px", opacity: 0 }}
-          whileInView={{ y: "0", opacity: 1 }}
+          initial={{ y: 60, opacity: 0 }}
+          whileInView={{ y: 0, opacity: 1 }}
           viewport={{ once: true }}
-          transition={{ delay: 1, duration: 0.6 }}
-          className="flex flex-col sm:flex-row md:h-72.25 space-y-5 sm:space-y-0 sm:space-x-5"
+          transition={{ delay: 0.4, duration: 0.7 }}
+          className="grid grid-cols-1 sm:grid-cols-2 gap-5 md:gap-6 lg:gap-8"
         >
           <ProductCategoryCard
             title="Solar Panels"
             url="/products/solar-panels"
-            className="md:max-w-171 h-47.5 bg-[url('/assets/panels/solarpanels.jpg')]"
+            className="aspect-4/3 md:aspect-auto md:h-80 lg:h-95 bg-[url('/assets/panels/solarpanels.jpg')] bg-cover bg-center"
           />
+
           <ProductCategoryCard
             title="Solar Accessories"
             url="/products/accessories"
-            className="md:max-w-65 lg:max-w-90 xl:max-w-101.75 h-47.5 bg-[url('/assets/accessories/accessories-solar.jpeg')]"
+            className="aspect-4/3 md:aspect-auto md:h-80 lg:h-95 bg-[url('/assets/accessories/accessories-solar.jpeg')] bg-cover bg-center"
           />
         </motion.div>
       </section>

@@ -15,7 +15,7 @@ export default async function CartPage() {
 
   if (cart.items.length === 0) {
     return (
-      <div className="max-w-3xl mx-auto py-20 text-center">
+      <div className="max-w-3xl mx-auto py-20 text-center px-6">
         <h1 className="text-2xl font-semibold">Your cart is empty</h1>
         <Link
           href="/products"

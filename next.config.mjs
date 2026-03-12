@@ -4,7 +4,7 @@ const nextConfig = {
     optimizeCss: false,
   },
   turbopack: {
-    resolveAlias: {},   // keep your aliases here if you add any later
+    resolveAlias: {},  
   },
 
   reactStrictMode: true,

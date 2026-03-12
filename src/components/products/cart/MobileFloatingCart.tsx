@@ -45,7 +45,7 @@ export default function MobileFloatingCart() {
         fixed bottom-6 left-6
         z-999
         md:hidden
-        bg-black text-white
+        bg-black/70 text-white
         p-4 rounded-full
         shadow-lg
         flex items-center justify-center
