@@ -7,6 +7,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { Copy, Check } from "lucide-react";
 
 
 type ContactOptionsModalProps = {
@@ -26,6 +27,19 @@ export default function ContactOptionsModal({
 }: ContactOptionsModalProps) {
   const cleanName = productName.trim();
 
+  const [copied, setCopied] = useState(false);
+  const emailSubject = `Inquiry about ${cleanName}`;
+  const emailBody = `Hello,\n\nI would like to know more about the product: ${cleanName}.\nProduct link: ${productUrl}\n\nThank you!`;
+
+  const fullEmailText = `Subject: ${emailSubject}\n\n${emailBody}`;
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(fullEmailText).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  };
+
   const handleWhatsApp = () => {
     const message = encodeURIComponent(
       `Hi! I would like to know more about ${cleanName}.\n\nProduct link: ${productUrl}`
@@ -41,7 +55,7 @@ export default function ContactOptionsModal({
   };
 
   const handleEmail = () => {
-    const subject = encodeURIComponent(`Inquiry about ${cleanName}`);
+    const subject = encodeURIComponent(`Enquiry about ${cleanName}`);
     const body = encodeURIComponent(
       `Hello,\n\nI would like to know more about the product: ${cleanName}.\nProduct link: ${productUrl}\n\nThank you!`
     );
@@ -103,16 +117,34 @@ export default function ContactOptionsModal({
                 
               </button>
 
-              <button
-                onClick={handleEmail}
-                className="bg-primary hover:bg-gray-800 text-white text-base md:text-lg font-medium py-4 hover:cursor-pointer rounded-md transition"
-              >
-                Send Email
-              </button>
+              <div className="space-y-3">
+                  <button
+                    onClick={handleEmail}
+                    className="w-full bg-primary hover:bg-gray-800 text-white text-base md:text-lg font-medium py-4 rounded-md transition hover:cursor-pointer"
+                  >
+                    Send Email
+                  </button>
+
+                  {/* New reliable fallback */}
+                  <div className="bg-gray-50 p-4 rounded-md border border-gray-200 text-sm">
+                    <p className="font-medium mb-2 text-gray-800">Or copy & paste this into your email:</p>
+                    <div className="bg-white p-3 rounded border mb-3 whitespace-pre-wrap font-mono text-gray-700 text-xs md:text-sm">
+                      {fullEmailText}
+                    </div>
+
+                    <button
+                      onClick={handleCopy}
+                      className="flex items-center gap-2 bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-2 rounded-md transition w-full justify-center"
+                    >
+                      {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+                      {copied ? "Copied!" : "Copy Message"}
+                    </button>
+                  </div>
+                </div>
 
               <button
                 onClick={onClose}
-                className="text-gray-500 text-sm mt-2 hover:text-gray-700 underline"
+                className="text-gray-600 text-sm mt-2 hover:text-gray-800 underline"
               >
                 Cancel
               </button>
