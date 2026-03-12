@@ -93,7 +93,7 @@ const NavMobile = () => {
             </SheetClose>
           </SheetHeader>
 
-          <ul className="flex flex-col gap-6 md:gap-12 flex-1">
+          <ul className="flex flex-col gap-6 md:gap-12 flex-1 px-6">
             {links.map((link, index) => (
               <li key={index}>
                 <div className="flex justify-between items-center ">
