@@ -427,7 +427,7 @@ export async function getRelatedProducts(
         },
       })),
     },
-    take: 3,
+    take: 4,
     orderBy: {
       rating: "desc",
     },
