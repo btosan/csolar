@@ -79,7 +79,7 @@ const NavMobile = () => {
               <Logo />
             </SheetTitle>
 
-            <Link href="/cart" className="relative *:flex items-center">
+            <Link href="/cart" onClick={() => setIsOpen(false)} className="relative *:flex items-center">
               <CartIcon />
                 <span className='absolute -top-5 -right-4'>
                   <CartCount />
