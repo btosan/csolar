@@ -24,7 +24,7 @@ export default function FeaturedProducts() {
         <div className="h-10 md:h-12 lg:h-14 w-64 md:w-80 lg:w-96 mx-auto mb-10 bg-gray-200 rounded animate-shimmer" />
 
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
-          {Array.from({ length: 8 }).map((_, i) => (
+          {Array.from({ length: 12 }).map((_, i) => (
             <div
               key={i}
               className="bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm animate-shimmer"
