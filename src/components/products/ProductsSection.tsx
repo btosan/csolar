@@ -45,7 +45,7 @@ export default function ProductsSection() {
   const accessories = products.filter(p => p.type === "ACCESSORY").slice(0, 4);
 
   const sections = [
-    { title: "Solar Panels", data: panels, slug: "panels" },
+    { title: "Solar Panels", data: panels, slug: "solar-panels" },
     { title: "Batteries", data: batteries, slug: "batteries" },
     { title: "Inverters", data: inverters, slug: "inverters" },
     { title: "Accessories", data: accessories, slug: "accessories" },

@@ -24,10 +24,10 @@ export default async function ProductsPage() {
   ]);
 
   const sections = [
-    { title: "Inverters", data: inverters, slug: "inverter" },
-    { title: "Solar Panels", data: panels, slug: "panel" },
-    { title: "Batteries", data: batteries, slug: "battery" },
-    { title: "Accessories", data: accessories, slug: "accessory" },
+    { title: "Inverters", data: inverters, slug: "inverters" },
+    { title: "Solar Panels", data: panels, slug: "solar-panels" },
+    { title: "Batteries", data: batteries, slug: "batteries" },
+    { title: "Accessories", data: accessories, slug: "accessories" },
   ];
 
   return (
@@ -48,7 +48,7 @@ export default async function ProductsPage() {
               ))}
             </div>
               <Link
-                href={`/products/category/${section.slug}`}
+                href={`/products/${section.slug}`}
                 className="text-sm md:text-base lg:text-lg font-medium hover:underline flex items-center justify-center mx-auto w-full pt-4 mt-4 md:pt-8 md:mt-8"
               >
                 View All →
