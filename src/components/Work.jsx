@@ -59,7 +59,7 @@ const Work = () => {
                   <p>{item.description}</p>
                 </div>
               </div>
-              <Link href={item.href} className="w-11 xl:w-15 xl:h-15 bg-accent text-primary text-2xl flex justify-center items-center absolute right-3">
+              <Link href={item.href} className="w-11 xl:w-15 xl:h-15 bg-accent/95 text-primary text-2xl flex justify-center items-center absolute right-3">
                 <RiArrowRightUpLine />
               </Link>
             </div>
