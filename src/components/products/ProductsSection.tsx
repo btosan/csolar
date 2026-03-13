@@ -11,7 +11,7 @@ type Product = {
   type: "PANEL" | "BATTERY" | "INVERTER" | "ACCESSORY";
   brand: string;
   model?: string | null;
-  mainImageUrl?: string | null;
+  mainImageUrl: string | null;
   price: number;
   rating: number;
   active: boolean;
