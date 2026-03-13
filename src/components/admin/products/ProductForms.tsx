@@ -115,7 +115,7 @@ export default function ProductForm({ mode, product }: Props) {
 
       {/* MAIN IMAGE */}
       <div className="space-y-4">
-        <h2 className="text-xl font-semibold">Main Image</h2>
+        <h2 className="text-xl font-semibold">Product Image</h2>
 
         {form.mainImageUrl && (
           <img
