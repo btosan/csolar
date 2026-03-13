@@ -12,16 +12,18 @@ const BASE_URL =
     ? "https://www.containedsolar.com"
     : "http://localhost:3000");
 
-type ProductCardProps = {
-  data: {
-    id: string;
-    name: string;
-    slug: string | null;
-    price: number;
-    mainImageUrl: string | null;
-    rating: number;
-    gallery?: { url: string }[];
-  };
+type Product = {
+  id: string;
+  name: string;
+  slug: string | null;
+  type: "PANEL" | "BATTERY" | "INVERTER" | "ACCESSORY";
+  brand: string;
+  model?: string | null;
+  mainImageUrl: string | null;
+  price: number;
+  rating: number;
+  active: boolean;
+  featured?: boolean;
 };
 
 export default function ProductCard2({ data }: ProductCardProps) {
