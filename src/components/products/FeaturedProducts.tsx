@@ -54,9 +54,10 @@ export default function FeaturedProducts() {
 
   return (
     <section className="container mx-auto py-16">
-      <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-10 text-center uppercase">
+      <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4 text-center uppercase">
         Featured Products
       </h2>
+      <p className="mb-10 text-center text-sm md:text-base lg:text-lg">New Arrivals</p>
 
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
         {products.map((product) => (

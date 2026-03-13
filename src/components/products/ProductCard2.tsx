@@ -24,7 +24,7 @@ type ProductCardProps = {
   };
 };
 
-export default function ProductCard({ data }: ProductCardProps) {
+export default function ProductCard2({ data }: ProductCardProps) {
   const { id, name, slug, price, mainImageUrl, rating } = data;
 
   const imageSrc =
@@ -32,59 +32,59 @@ export default function ProductCard({ data }: ProductCardProps) {
       ? mainImageUrl
       : "/assets/csolar/solar-inverter.jpeg";
 
-  const [modalOpen, setModalOpen] = useState(false); // ← add this
+  const [modalOpen, setModalOpen] = useState(false);
 
-  const productUrl = slug
-      ? `${BASE_URL}/products/${slug}`
-      : "";
+  const productUrl = slug ? `${BASE_URL}/products/${slug}` : "";
 
   return (
-    <div className="flex flex-col justify-center items-center border border-black/5 shadow-md rounded-xl pb-4">
+    <div className="flex flex-col border border-black/5 shadow-sm rounded-lg pb-3 max-w-55 w-full bg-white">
 
       <Link href={`/products/${slug}`} className="group">
-        <div className="bg-[#F0EEED] rounded-t-xl w-full aspect-square mb-4 overflow-hidden">
+        <div className="bg-[#F0EEED] rounded-t-lg w-full aspect-square mb-2 overflow-hidden ">
           <Image
             src={imageSrc}
             alt={name}
-            width={400}
-            height={400}
-            className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-500"
+            width={300}
+            height={300}
+            className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
           />
         </div>
 
-        <h3 className="px-4 text-center font-bold text-base md:text-lg text-black mb-1 line-clamp-2">
+        <h3 className="px-3 text-sm font-semibold text-black mb-1 line-clamp-2 leading-tight">
           {name}
         </h3>
       </Link>
 
-      <div className="px-4 flex items-center gap-2 mb-2">
-        <div className="text-yellow-500 text-sm">
+      <div className="px-3 flex items-center gap-1 mb-1">
+        <div className="text-yellow-500 text-xs">
           {"★".repeat(Math.round(rating || 0))}
           {"☆".repeat(5 - Math.round(rating || 0))}
         </div>
 
-        <span className="text-xs text-muted-foreground">
-          {rating?.toFixed(1) || "0.0"}/5
+        <span className="text-[11px] text-muted-foreground">
+          {rating?.toFixed(1) || "0.0"}
         </span>
       </div>
 
-      <div className="font-bold text-lg md:text-xl text-black mb-4">
+      <div className="px-3 font-bold text-base text-black mb-2">
         ₦{price.toLocaleString()}
       </div>
 
-      <div className="w-full px-4 mx-auto flex md:flex-col items-center md:items-stretch md:justify-center justify-between md:gap-2">
+      <div className="w-full px-3 flex flex-col gap-1">
         {/* <AddToCartButton
           productId={id}
           name={name}
-          mainImageUrl={mainImageUrl || data.gallery?.[0]?.url} 
+          mainImageUrl={mainImageUrl || data.gallery?.[0]?.url}
         /> */}
+
         <button
           onClick={() => setModalOpen(true)}
-          className="bg-black text-white font-medium text-center px-6 py-3 hover:opacity-80 transition hover:cursor-pointer"
+          className="bg-black text-white font-medium text-center px-2 md:px-6 py-3 hover:opacity-80 transition hover:cursor-pointer"
         >
           Contact Sales
         </button>
       </div>
+
       <ContactOptionsModal
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}

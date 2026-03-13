@@ -9,7 +9,6 @@ import {
 } from "@/components/ui/tooltip";
 import { Copy, Check } from "lucide-react";
 
-
 type ContactOptionsModalProps = {
   isOpen: boolean;
   onClose: () => void;
@@ -24,7 +23,8 @@ export default function ContactOptionsModal({
   productName,
   productUrl,
   whatsappNumber = "2348033319391", 
-}: ContactOptionsModalProps) {
+  phoneNumber = "+2348033319391",
+}: ContactOptionsModalProps & { phoneNumber?: string }) {
   const cleanName = productName.trim();
 
   const [copied, setCopied] = useState(false);
@@ -50,7 +50,7 @@ export default function ContactOptionsModal({
   };
 
   const handlePhone = () => {
-    window.location.href = `tel:${whatsappNumber}`; 
+    window.location.href = `tel:${phoneNumber}`; 
     onClose();
   };
 
@@ -79,7 +79,12 @@ export default function ContactOptionsModal({
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.92, opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="bg-white rounded-2xl p-6 w-full max-w-md border border-gray-200 shadow-xl relative"
+            className="
+              bg-white rounded-2xl p-6 md:mt-16 xl:mt-8
+              w-full max-w-md 
+              border border-gray-200 shadow-xl relative
+              max-h-[84vh] overflow-y-auto overscroll-y-contain
+            "
             onClick={(e) => e.stopPropagation()}
           >
             <button
@@ -109,38 +114,55 @@ export default function ContactOptionsModal({
                   <TooltipTrigger asChild>
                     <p className='text-black'>Call Us Now </p>
                   </TooltipTrigger>
-                   <TooltipContent side="bottom" sideOffset={12} className="p-4 text-sm lg:text-base font-demibold uppercase tracking-widest text-primary bg-gray-50">
-                     +2348033319391
-                    </TooltipContent>
-                  
+                  <TooltipContent 
+                    side="bottom" 
+                    sideOffset={12} 
+                    className="p-4 text-sm lg:text-base font-demibold uppercase tracking-widest text-primary bg-gray-50"
+                  >
+                    +2348033319391
+                  </TooltipContent>
                 </Tooltip>
-                
               </button>
 
               <div className="space-y-3">
-                  <button
-                    onClick={handleEmail}
-                    className="w-full bg-primary hover:bg-gray-800 text-white text-base md:text-lg font-medium py-4 rounded-md transition hover:cursor-pointer"
+                <button
+                  onClick={handleEmail}
+                  className="w-full bg-primary hover:bg-gray-800 text-white text-base md:text-lg font-medium py-4 rounded-md transition hover:cursor-pointer"
+                >
+                  Send Email
+                </button>
+
+                <div 
+                  className="
+                    bg-gray-50 p-4 rounded-md border border-gray-200 text-sm 
+                    hidden lg:block
+                    max-h-64 overflow-y-auto lg:max-h-none 
+                  "
+                >
+                  <p className="font-medium mb-2 text-gray-800">
+                    Or copy & paste this into your email:
+                  </p>
+                  <div 
+                    className="
+                      bg-white p-3 rounded border mb-3 
+                      overflow-x-hidden 
+                      whitespace-pre-wrap 
+                      wrap-break-word
+                      font-mono text-gray-700 text-xs md:text-sm
+                    "
                   >
-                    Send Email
-                  </button>
-
-
-                  <div className="bg-gray-50 p-4 rounded-md border border-gray-200 text-sm hidden lg:block">
-                    <p className="font-medium mb-2 text-gray-800">Or copy & paste this into your email:</p>
-                    <div className="bg-white p-3 rounded border mb-3 whitespace-pre-wrap font-mono text-gray-700 text-xs md:text-sm">
-                      {fullEmailText}
-                    </div>
-
-                    <button
-                      onClick={handleCopy}
-                      className="flex items-center gap-2 bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-2 rounded-md transition w-full justify-center"
-                    >
-                      {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
-                      {copied ? "Copied!" : "Copy Message"}
-                    </button>
+                    {fullEmailText}
                   </div>
+
+                  <button
+                    onClick={handleCopy}
+                    className="flex items-center gap-2 bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-2 rounded-md transition w-full justify-center"
+                  >
+                    {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+                    {copied ? "Copied!" : "Copy Message"}
+                  </button>
                 </div>
+              </div>
 
               <button
                 onClick={onClose}

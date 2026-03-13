@@ -8,6 +8,7 @@ import Work from "@/components/Work";
 import ProductCategory from "@/components/products/ProductCategories";
 import FeaturedProducts from "@/components/products/FeaturedProducts";
 import FeaturedProjects from "@/components/projects/FeaturedProjects";
+import ProductsSection from "@/components/products/ProductsSection";
 
 export const metadata = {
   title: "Contained Energy | Contained Solar – Smart Renewable Energy Solutions",
@@ -60,6 +61,7 @@ export default function Home() {
       <div className="my-12.5 sm:my-20">
         <ProductCategory />
       </div>
+      <ProductsSection />
       <Services />
       <About />
       <Stats />
