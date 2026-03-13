@@ -8,7 +8,7 @@ type Product = {
   id: string;
   name: string;
   slug: string | null;
-  type: "PANEL" | "BATTERY" | "INVERTER" | "ACCESSORY";
+  type: "PANEL" | "BATTERY" | "INVERTER" | "ACCESSORY" | "EQUIPMENT";
   brand: string;
   model?: string | null;
   mainImageUrl: string | null;
@@ -43,12 +43,14 @@ export default function ProductsSection() {
   const batteries = products.filter(p => p.type === "BATTERY").slice(0, 4);
   const inverters = products.filter(p => p.type === "INVERTER").slice(0, 4);
   const accessories = products.filter(p => p.type === "ACCESSORY").slice(0, 4);
+  const equipment = products.filter(p => p.type === "EQUIPMENT").slice(0, 4);
 
   const sections = [
     { title: "Solar Panels", data: panels, slug: "solar-panels" },
-    { title: "Batteries", data: batteries, slug: "batteries" },
-    { title: "Inverters", data: inverters, slug: "inverters" },
-    { title: "Accessories", data: accessories, slug: "accessories" },
+    { title: "Batteries & Storage", data: batteries, slug: "batteries" },
+    { title: "Reliable Inverters", data: inverters, slug: "inverters" },
+    { title: "Solar Accessories", data: accessories, slug: "accessories" },
+    { title: "Solar Equipment", data: equipment, slug: "solar-equipment" },
   ];
 
   if (loading) {

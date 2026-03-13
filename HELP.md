@@ -24,7 +24,7 @@ rm -rf package-lock.json .next
 
 <!-- ORDER OF PRISMA PRODUCTION MIGRATION AFTER UPDATING SCHEMA.PRISMA -->
 # STEP 1:
-npx prisma migrate dev --name add-monitoring-enhancements
+npx prisma migrate dev --name add-equipment
 
 # STEP 2:
 git add prisma/migrations

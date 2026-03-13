@@ -10,13 +10,15 @@ import { ProductType, Role } from "@prisma/client";
 function getCategorySlug(type: ProductType) {
   switch (type) {
     case ProductType.PANEL:
-      return "panels";
+      return "solar-panels";
     case ProductType.BATTERY:
       return "batteries";
     case ProductType.INVERTER:
       return "inverters";
     case ProductType.ACCESSORY:
       return "accessories";
+    case ProductType.EQUIPMENT:
+      return "solar-equipment";
   }
 }
 
@@ -161,7 +163,7 @@ export async function createProduct(data: {
   revalidatePath("/admin/products");
   revalidatePath("/products");
   const path = getCategorySlug(data.type);
-  revalidatePath(`/products/category/${path}`);
+  revalidatePath(`/products/${path}`);
 
   return product;
 }
@@ -266,7 +268,7 @@ export async function updateProduct(
   
   if (data.type) {
     const path = getCategorySlug(data.type);
-    revalidatePath(`/products/category/${path}`);
+    revalidatePath(`/products/${path}`);
   }
 
   if (product.slug) {

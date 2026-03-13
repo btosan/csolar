@@ -63,6 +63,7 @@ enum ProductType {
   BATTERY
   INVERTER
   ACCESSORY
+  EQUIPMENT
 }
 
 enum OrderStatus {

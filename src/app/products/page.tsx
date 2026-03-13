@@ -16,11 +16,12 @@ async function getProductsByType(type: any) {
 }
 
 export default async function ProductsPage() {
-  const [inverters, panels, batteries, accessories] = await Promise.all([
+  const [inverters, panels, batteries, accessories, equipment] = await Promise.all([
     getProductsByType("INVERTER"),
     getProductsByType("PANEL"),
     getProductsByType("BATTERY"),
     getProductsByType("ACCESSORY"),
+    getProductsByType("EQUIPMENT"),
   ]);
 
   const sections = [
@@ -28,6 +29,7 @@ export default async function ProductsPage() {
     { title: "Solar Panels", data: panels, slug: "solar-panels" },
     { title: "Batteries", data: batteries, slug: "batteries" },
     { title: "Accessories", data: accessories, slug: "accessories" },
+    { title: "Solar Equipment", data: equipment, slug: "solar-equipment" },
   ];
 
   return (
