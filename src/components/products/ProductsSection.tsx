@@ -7,7 +7,7 @@ import ProductCard2 from "@/components/products/ProductCard2";
 type Product = {
   id: string;
   name: string;
-  slug?: string | null;
+  slug: string | null;
   type: "PANEL" | "BATTERY" | "INVERTER" | "ACCESSORY";
   brand: string;
   model?: string | null;
