@@ -188,7 +188,6 @@ export default function ProductForm({ mode, product }: Props) {
         </CldUploadWidget>
       </div>
 
-      {/* Rest of form continues exactly as previously provided... */}
     </form>
   );
 }
