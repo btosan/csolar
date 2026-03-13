@@ -66,9 +66,9 @@ export default function ProductCard2({ data }: ProductCardProps) {
         </span>
       </div>
 
-      <div className="px-3 font-bold text-base text-black mb-2">
+      {/* <div className="px-3 font-bold text-base text-black mb-2">
         ₦{price.toLocaleString()}
-      </div>
+      </div> */}
 
       <div className="w-full px-3 flex flex-col gap-1">
         {/* <AddToCartButton
