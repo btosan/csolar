@@ -78,9 +78,15 @@ export default function ProductCard({ data }: ProductCardProps) {
           name={name}
           mainImageUrl={mainImageUrl || data.gallery?.[0]?.url} 
         /> */}
-        <button
+        {/* <button
           onClick={() => setModalOpen(true)}
           className="bg-black text-white font-medium text-center px-6 py-3 hover:opacity-80 transition hover:cursor-pointer"
+        >
+          Contact Sales
+        </button> */}
+        <button
+          onClick={() => setModalOpen(true)}
+          className="bg-accent text-black font-medium text-center px-6 py-3 hover:opacity-80 transition hover:cursor-pointer"
         >
           Contact Sales
         </button>
