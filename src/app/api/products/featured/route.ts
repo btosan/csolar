@@ -10,7 +10,7 @@ export async function GET() {
     orderBy: {
       createdAt: "desc",
     },
-    take: 16,
+    take: 8,
   });
 
   return NextResponse.json(products);
