@@ -17,7 +17,7 @@ export default async function AccessoryPage() {
 
   return (
     <div className="container mx-auto py-16">
-      <h1 className="text-3xl font-bold mb-8">Solar System Accessories & Components</h1>
+      <h1 className="text-3xl lg:text-4xl font-bold mb-8">Solar System Accessories & Components</h1>
 
       {products.length === 0 ? (
         <p>No accessories available.</p>

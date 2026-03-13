@@ -17,7 +17,7 @@ export default async function PanelsPage() {
 
   return (
     <div className="container mx-auto py-16">
-      <h1 className="text-3xl font-bold mb-8">Solar Panels</h1>
+      <h1 className="text-3xl lg:text-4xl font-bold mb-8">Solar Panels</h1>
 
       {products.length === 0 ? (
         <p>No panels available.</p>
