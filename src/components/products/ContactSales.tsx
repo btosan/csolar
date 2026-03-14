@@ -15,7 +15,7 @@ export default function ContactSales({ productName, productUrl }: Props) {
     <>
       <button
         onClick={() => setOpen(true)}
-        className="border border-black px-6 py-3 rounded-lg text-center hover:bg-black hover:text-white transition"
+        className="border border-black px-6 py-3 text-center hover:bg-black hover:text-white hover:cursor-pointer transition"
       >
         Contact Sales
       </button>
