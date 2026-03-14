@@ -30,8 +30,8 @@ export default async function AccessoryPage() {
           ))}
         </div>
       )}
-      <div className='w-full mx-auto flex items-center justify-center py-6 lg:placeholder-sky-800'>
-        <Link href='/products'>
+      <div className='w-full mx-auto py-6 lg:placeholder-sky-800'>
+        <Link href='/products' className='w-full mx-auto flex items-center justify-center'>
           <span> 
             View All Products
           </span>
