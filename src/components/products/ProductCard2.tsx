@@ -16,7 +16,7 @@ type Product = {
   id: string;
   name: string;
   slug: string | null;
-  type: "PANEL" | "BATTERY" | "INVERTER" | "ACCESSORY";
+  type: "PANEL" | "BATTERY" | "INVERTER" | "ACCESSORY" | "EQUIPMENT";
   brand: string;
   model?: string | null;
   mainImageUrl: string | null;
