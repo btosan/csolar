@@ -1,3 +1,5 @@
+import Link from 'next/link'
+import { ArrowRightIcon } from '@heroicons/react/24/solid';
 import { db } from "@/lib/db";
 import ProductCard from "@/components/products/ProductCard";
 import { ProductType } from "@prisma/client";
@@ -28,6 +30,14 @@ export default async function PanelsPage() {
           ))}
         </div>
       )}
+      <div className='w-full mx-auto flex items-center justify-center py-6 lg:placeholder-sky-800'>
+        <Link href='/products'>
+          <span> 
+            View All Products
+          </span>
+          <ArrowRightIcon className='w-7 h-7 lg:w-8 lg:h-8'/>
+        </Link>
+      </div>
     </div>
   );
 }
