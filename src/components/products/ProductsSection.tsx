@@ -87,7 +87,7 @@ export default function ProductsSection() {
         section.data.length > 0 ? (
           <section key={section.slug}>
             <div className="flex flex-col items-center mb-10">
-              <h2 className="text-2xl md:text-3xl lg:text-4xl uppercase font-bold text-center">
+              <h2 className="text-lg md:text-xl lg:text-2xl uppercase font-bold text-center">
                 {section.title}
               </h2>
             </div>
