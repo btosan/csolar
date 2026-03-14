@@ -31,11 +31,11 @@ export default async function PanelsPage() {
         </div>
       )}
       <div className='w-full py-6 lg:placeholder-sky-800'>
-        <Link href='/products' className='w-full mx-auto flex items-center justify-center'>
+        <Link href='/products' className='w-full mx-auto flex items-center justify-center text-base md:text-lg lg:text-xl'>
           <span> 
             View All Products
           </span>
-          <ArrowRightIcon className='w-7 h-7 lg:w-8 lg:h-8'/>
+          <ArrowRightIcon className='w-4 h-4 md:w-5 md:h-5 lg:w-6 lg:h-6'/>
         </Link>
       </div>
     </div>
