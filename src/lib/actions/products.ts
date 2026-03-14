@@ -429,7 +429,7 @@ export async function getRelatedProducts(
         },
       })),
     },
-    take: 4,
+    take: 6,
     orderBy: {
       rating: "desc",
     },
