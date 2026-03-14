@@ -8,6 +8,13 @@ import DeleteProductButton from "@/components/admin/products/DeleteProductButton
 import { getPublicProductBySlug, getRelatedProducts } from "@/lib/actions/products";
 import { getFrequentlyBoughtTogether } from "@/lib/actions/products";
 import AddToCartButton from "@/components/products/AddToCartButton";
+import ContactSales from "@/components/products/ContactSales";
+
+const BASE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL ||
+  (process.env.NODE_ENV === "production"
+    ? "https://www.containedsolar.com"
+    : "http://localhost:3000");
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -234,12 +241,10 @@ export default async function ProductDetailPage({ params }: Props) {
               mainImageUrl={mainImageUrl || gallery?.[0]?.url} 
             />
 
-            <Link
-              href="/contact"
-              className="border border-black px-6 py-3 rounded-lg text-center hover:bg-black hover:text-white transition"
-            >
-              Contact Sales
-            </Link>
+            <ContactSales
+              productName={name}
+              productUrl={`${process.env.NEXT_PUBLIC_SITE_URL}/products/${slug}`}
+            />
           </div>
 
           {/* Long Description */}
