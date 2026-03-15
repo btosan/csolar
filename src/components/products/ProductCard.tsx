@@ -42,7 +42,7 @@ export default function ProductCard({ data }: ProductCardProps) {
     <div className="flex flex-col justify-center items-center border border-black/5 shadow-md rounded-xl pb-4">
 
       <Link href={`/products/${slug}`} className="group">
-        <div className="bg-[#F0EEED] rounded-t-xl w-full aspect-square mb-4 overflow-hidden">
+        <div className="bg-white rounded-t-xl w-full aspect-square mb-4 overflow-hidden">
           <Image
             src={imageSrc}
             alt={name}
