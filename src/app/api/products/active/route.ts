@@ -6,7 +6,7 @@ export async function GET() {
     const products = await db.product.findMany({
       where: { active: true },
       orderBy: { createdAt: "desc" },
-      take: 36, // safety limit — we only display 20 max anyway
+      take: 40, // safety limit — we only display 20 max anyway
       select: {
         id: true,
         name: true,
