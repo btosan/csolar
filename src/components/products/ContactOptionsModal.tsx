@@ -22,7 +22,7 @@ export default function ContactOptionsModal({
   onClose,
   productName,
   productUrl,
-  whatsappNumber = "2348033319391", 
+  whatsappNumber = "2348099549798", 
   phoneNumber = "+2348033319391",
 }: ContactOptionsModalProps & { phoneNumber?: string }) {
   const cleanName = productName.trim();

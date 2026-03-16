@@ -9,6 +9,8 @@ import ProductCategory from "@/components/products/ProductCategories";
 import FeaturedProducts from "@/components/products/FeaturedProducts";
 import FeaturedProjects from "@/components/projects/FeaturedProjects";
 import ProductsSection from "@/components/products/ProductsSection";
+import SolutionsBanner from "@/components/SolutionsBanner";
+import HowItWorks from "../components/HowItWorks";
 
 export const metadata = {
   title: "Contained Energy | Contained Solar – Smart Renewable Energy Solutions",
@@ -57,12 +59,14 @@ export default function Home() {
   return (
     <div className="overflow-hidden">
       <Hero />
+      <Services />
+      <SolutionsBanner />
+      <HowItWorks />
       <FeaturedProducts />
       <div className="my-12.5 sm:my-20">
         <ProductCategory />
       </div>
       <ProductsSection />
-      <Services />
       <About />
       <Stats />
       <Work />

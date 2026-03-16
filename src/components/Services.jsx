@@ -9,6 +9,7 @@ import {
   PiWrenchFill,
   PiUserGearFill,
 } from "react-icons/pi"
+import { MonitorDot, Lightbulb, SolarPanel, BaggageClaim } from "lucide-react"
 import Image from "next/image"
 import PreTitle from "./PreTitle"
 import Button from "./Button"
@@ -22,7 +23,7 @@ import "swiper/css"
 const serviceData = [
   {
     name: "installation",
-    icon: <PiWallFill className="h-9! w-9!" />,
+    icon: <SolarPanel className="lg:h-9! lg:w-9! w-6 h-6" />,
     title: "Solar & Inverter Installation",
     description:
       "We design and install solar and inverter systems tailored to real energy needs, ensuring safety, efficiency, and long-term reliability from day one.",
@@ -42,7 +43,7 @@ const serviceData = [
   },
   {
     name: "sales",
-    icon: <PiPaintRollerFill className="h-9! w-9!" />,
+    icon: <BaggageClaim className="lg:h-9! lg:w-9! w-6 h-6" />,
     title: "Sales of Solar Equipment",
     description:
       "We supply carefully selected solar equipment that balances performance, compatibility, and long-term durability.",
@@ -61,7 +62,7 @@ const serviceData = [
   },
   {
     name: "maintenance",
-    icon: <PiWrenchFill className="h-9! w-9!" />,
+    icon: <PiWrenchFill className="lg:h-9! lg:w-9! w-6 h-6" />,
     title: "Maintenance & After-Sales Support",
     description:
       "We keep solar systems running efficiently through preventive care, timely repairs, and dependable after-sales support.",
@@ -80,7 +81,7 @@ const serviceData = [
   },
   {
     name: "monitoring",
-    icon: <PiUserGearFill className="h-9! w-9!" />,
+    icon: <MonitorDot className="lg:h-9! lg:w-9! w-6 h-6" />,
     title: "System Monitoring & Health Management",
     description:
       "We track system performance and health to detect issues early, reduce downtime, and guide timely maintenance decisions.",
@@ -99,7 +100,7 @@ const serviceData = [
   },
   {
     name: "consulting",
-    icon: <PiUserGearFill className="h-9! w-9!" />,
+    icon: <Lightbulb className="lg:h-9! lg:w-9! w-6 h-6" />,
     title: "Consulting Services",
     description:
       "We provide clear, brand-agnostic guidance to help customers make informed decisions about their solar systems.",
@@ -131,7 +132,7 @@ const Services = () => {
   }, [activeTab])
 
   return (
-    <section id="services" className="pt-16 xl:pt-32">
+    <section id="services" className="py-16 md:py-24 xl:py-32 ">
       <div className="container mx-auto">
         <motion.div
           variants={fadeIn("up", 0.2)}
@@ -172,7 +173,7 @@ const Services = () => {
                   shrink-0
                   h-9
                   md:h-11
-                  px-6
+                  px-4
                   rounded-full
                   shadow
                   whitespace-nowrap
@@ -182,6 +183,7 @@ const Services = () => {
                   data-[state=inactive]:text-primary
                 "
               >
+                {item.icon}
                 {item.name}
               </TabsTrigger>
             ))}

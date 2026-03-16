@@ -8,7 +8,7 @@ import { fadeIn } from "@/variants"
 
 const Contact = () => {
   const phoneNumber = "+2348033319391"
-  const whatsappNumber = "+2348033319391"
+  const whatsappNumber = "+2348099549798"
   const emailAddress = "containedsolar@gmail.com"
 
   return (
