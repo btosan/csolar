@@ -8,7 +8,7 @@ export default async function DashboardPage() {
   const session = await getServerSession(authOptions)
 
   if (!session?.user?.email) {
-    redirect("/login")
+    redirect("/signin")
   }
 
   // Get user with role + customer relation
@@ -25,7 +25,7 @@ export default async function DashboardPage() {
   })
 
   if (!user) {
-    redirect("/login")
+    redirect("/signin")
   }
 
   /**
@@ -47,7 +47,7 @@ export default async function DashboardPage() {
     }
 
     // ADMIN / TECHNICIAN without customer should not access this page
-    redirect("/login")
+    redirect("/signin")
   }
 
   const systems = await db.solarSystem.findMany({
