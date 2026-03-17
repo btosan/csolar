@@ -34,3 +34,6 @@ git push
 # STEP 3:
 npx prisma migrate deploy
 
+# STEP 4:
+npx prisma db push
+

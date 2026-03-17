@@ -76,6 +76,7 @@ enum OrderStatus {
 
 enum PaymentStatus {
   INITIATED
+  PENDING
   SUCCESS
   FAILED
 }
@@ -225,9 +226,9 @@ model MonitoringSnapshot {
   expectedGenerationKwh Float?
   consumptionKwh        Float?
 
-  inverterTempC        Float?
-  inverterEfficiency   Float?
-  inverterOutputKw     Float?
+  inverterTempC      Float?
+  inverterEfficiency Float?
+  inverterOutputKw   Float?
 
   batteryChargePercent Float?
   batteryTempC         Float?
@@ -329,7 +330,7 @@ model Package {
   maxSystems     Int
   selfCheckLimit Int? // null = unlimited
 
-  aiTier AITier @default(NONE)
+  aiTier        AITier  @default(NONE)
   hasTechnician Boolean @default(false)
 
   durationDays Int // e.g. 30
@@ -337,15 +338,15 @@ model Package {
   createdAt DateTime @default(now())
 
   subscriptions Subscription[]
-
   paymentProofs PaymentProof[]
+  orders        Order[]
 }
 
 model Subscription {
   id String @id @default(cuid())
 
   userId String
-  user   User @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id])
 
   packageId String
   package   Package @relation(fields: [packageId], references: [id])
@@ -355,7 +356,7 @@ model Subscription {
 
   active Boolean @default(true)
 
-  paymentId String? @unique
+  paymentId String?  @unique
   payment   Payment? @relation(fields: [paymentId], references: [id])
 
   createdAt DateTime @default(now())
@@ -367,18 +368,20 @@ model PaymentProof {
   id String @id @default(cuid())
 
   userId String
-  user   User @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id])
 
   packageId String
   package   Package @relation(fields: [packageId], references: [id])
 
   proofUrl String
 
+  orderId String @unique
+  order   Order  @relation(fields: [orderId], references: [id])
+
   status String @default("PENDING") // PENDING, APPROVED, REJECTED
 
   createdAt DateTime @default(now())
 }
-
 
 //////////////////////////////////////
 // SERVICE & MAINTENANCE
@@ -429,17 +432,17 @@ model Product {
   price            Int
   stock            Int?        @default(0)
   active           Boolean     @default(true)
-  featured         Boolean @default(false)
+  featured         Boolean     @default(false)
 
   specifications Specification[]
 
   rating Float @default(0)
 
   // 🔋 Solar Specs
-  wattage          Int?
-  kva              Float?
-  ah               Int?
-  voltage          String?
+  wattage Int?
+  kva     Float?
+  ah      Int?
+  voltage String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -452,17 +455,17 @@ model Product {
   cartItems CartItem[]
 
   upgradeSuggestions UpgradeOpportunity[]
-  
+
   productViews ProductView[]
 }
 
 model Specification {
-  id        String   @id @default(cuid())
+  id        String  @id @default(cuid())
   productId String
-  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
 
-  key       String
-  value     String 
+  key   String
+  value String
 
   @@index([productId])
 }
@@ -530,8 +533,13 @@ model Order {
   systemId String?
   system   SolarSystem? @relation(fields: [systemId], references: [id])
 
+  packageId String?
+  package   Package? @relation(fields: [packageId], references: [id])
+
   items   OrderItem[]
   payment Payment?
+
+  paymentProof PaymentProof?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -594,7 +602,7 @@ model Project {
   id String @id @default(cuid())
 
   title       String
-  slug        String @unique
+  slug        String  @unique
   description String? @db.Text
   location    String?
 
@@ -606,7 +614,7 @@ model Project {
 
   // mark featured projects (homepage, highlights, etc.)
   featured Boolean @default(false)
-  deleted Boolean @default(false)
+  deleted  Boolean @default(false)
 
   projectDate DateTime @default(now())
 

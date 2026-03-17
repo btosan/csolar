@@ -27,7 +27,7 @@ export default async function AdminDashboard() {
   }
 
   return (
-    <div className="container max-w-6xl mx-auto py-10 px-4 sm:px-6">
+    <div className="container max-w-6xl mx-auto py-12 px-4 sm:px-6">
       <div className="mb-10">
         <h1 className="text-3xl font-bold tracking-tight text-primary">
           Admin Dashboard
@@ -90,6 +90,20 @@ export default async function AdminDashboard() {
             </div>
             <p className="text-muted-foreground">
               Create a package
+            </p>
+          </div>
+        </Link>
+
+        <Link href="/admin/packages">
+          <div className="border rounded-xl p-6 hover:shadow-md transition-all hover:border-primary/50 hover:bg-accent/50 hover:text-black hover:font-medium cursor-pointer">
+            <div className="flex items-center gap-4 mb-4">
+              <div className="p-3 bg-primary/10 rounded-lg">
+                <Sun className="h-6 w-6 text-primary" />
+              </div>
+              <h3 className="text-xl font-semibold">Update or Delete Packages</h3>
+            </div>
+            <p className="text-muted-foreground">
+              Update a package
             </p>
           </div>
         </Link>
