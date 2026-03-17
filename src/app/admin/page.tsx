@@ -80,6 +80,19 @@ export default async function AdminDashboard() {
           </div>
         </Link>
 
+        <Link href="/admin/packages/create">
+          <div className="border rounded-xl p-6 hover:shadow-md transition-all hover:border-primary/50 hover:bg-accent/50 hover:text-black hover:font-medium cursor-pointer">
+            <div className="flex items-center gap-4 mb-4">
+              <div className="p-3 bg-primary/10 rounded-lg">
+                <Sun className="h-6 w-6 text-primary" />
+              </div>
+              <h3 className="text-xl font-semibold">Create Packages</h3>
+            </div>
+            <p className="text-muted-foreground">
+              Create a package
+            </p>
+          </div>
+        </Link>
         
         <Link href="/admin/projects/create">
           <div className="border rounded-xl p-6 hover:shadow-md transition-all hover:border-primary/50 hover:bg-accent/50 hover:text-black hover:font-medium cursor-pointer">

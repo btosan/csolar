@@ -88,6 +88,12 @@ enum UpgradeStatus {
   IMPLEMENTED
 }
 
+enum AITier {
+  NONE
+  BASIC
+  ADVANCED
+}
+
 //////////////////////////////////////
 // USER & CUSTOMER
 //////////////////////////////////////
@@ -323,7 +329,7 @@ model Package {
   maxSystems     Int
   selfCheckLimit Int? // null = unlimited
 
-  hasAI         Boolean @default(false)
+  aiTier AITier @default(NONE)
   hasTechnician Boolean @default(false)
 
   durationDays Int // e.g. 30

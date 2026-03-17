@@ -29,27 +29,27 @@ export async function generateSystemInsight(
   }
 
   const prompt = `
-You are a solar monitoring assistant that ALWAYS responds with NOTHING but valid JSON. 
-No explanations, no markdown, no extra text, no fences like \`\`\`json — only the raw JSON object.
+  You are a solar monitoring assistant that ALWAYS responds with NOTHING but valid JSON. 
+  No explanations, no markdown, no extra text, no fences like \`\`\`json — only the raw JSON object.
 
-System status:
-- Name: ${input.systemName}
-- Health Score: ${input.score}/100
-- Production Score: ${input.productionScore}/100
-- Inverter Score: ${input.inverterScore}/100
-- Battery Score: ${input.batteryScore}/100
-- Active Alerts: ${input.activeAlerts}
-- Additional context: ${input.summary || "No extra information"}
+  System status:
+  - Name: ${input.systemName}
+  - Health Score: ${input.score}/100
+  - Production Score: ${input.productionScore}/100
+  - Inverter Score: ${input.inverterScore}/100
+  - Battery Score: ${input.batteryScore}/100
+  - Active Alerts: ${input.activeAlerts}
+  - Additional context: ${input.summary || "No extra information"}
 
-Output exactly this JSON structure (use \\n for line breaks inside strings):
-{
-  "summary": "One or two sentence explanation of current system health",
-  "actionPlan": "1. First recommended action\\n2. Second action\\n3. Third action if needed",
-  "urgency": "LOW" | "MEDIUM" | "HIGH"
-}
+  Output exactly this JSON structure (use \\n for line breaks inside strings):
+  {
+    "summary": "One or two sentence explanation of current system health",
+    "actionPlan": "1. First recommended action\\n2. Second action\\n3. Third action if needed",
+    "urgency": "LOW" | "MEDIUM" | "HIGH"
+  }
 
-Your entire response must be valid parseable JSON — start with { and end with }.
-`;
+  Your entire response must be valid parseable JSON — start with { and end with }.
+  `;
 
   try {
     console.log("[generateSystemInsight] Sending request to Groq", {
