@@ -2,14 +2,13 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import PaystackPop from "@paystack/inline-js";
 import { AITier, Package } from "@prisma/client";
 import { toast } from "@/hooks/use-toast";
 import {
   createFreeSubscription,
   initializePackagePaystack,
 } from "@/lib/actions/subscriptions";
-
-const PAYSTACK_PUBLIC_KEY = process.env.NEXT_PUBLIC_PAYSTACK_KEY!;
 
 interface PackageCheckoutProps {
   pkg: Package;
@@ -29,9 +28,7 @@ function formatAITier(aiTier: AITier) {
   }
 }
 
-export default function PackageCheckout({
-  pkg,
-}: PackageCheckoutProps) {
+export default function PackageCheckout({ pkg }: PackageCheckoutProps) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
@@ -65,30 +62,17 @@ export default function PackageCheckout({
 
       const payment = await initializePackagePaystack(pkg.id);
 
-      const handler = (window as any).PaystackPop.setup({
-        key: PAYSTACK_PUBLIC_KEY,
-        email: payment.email,
-        amount: payment.amount * 100,
-        currency: "NGN",
-        ref: payment.reference,
-        callback: function (response: any) {
-          toast({
-            title: "Payment initiated successfully",
-            description: `Reference: ${response.reference}`,
-          });
+      if (!payment.accessCode) {
+        throw new Error("Missing Paystack access code.");
+      }
 
-          router.push(`/packages/${pkg.id}/checkout/success?reference=${response.reference}`);
-        },
-        onClose: function () {
-          toast({
-            title: "Payment cancelled",
-            description: "You closed the Paystack popup.",
-            variant: "destructive",
-          });
-        },
+      const popup = new PaystackPop();
+      popup.resumeTransaction(payment.accessCode);
+
+      toast({
+        title: "Payment started",
+        description: `Invoice: ${payment.invoiceNumber}`,
       });
-
-      handler.openIframe();
     } catch (err: any) {
       toast({
         title: "Payment failed",

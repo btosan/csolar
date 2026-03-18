@@ -67,8 +67,8 @@ enum ProductType {
 }
 
 enum OrderStatus {
-  DRAFT // Quote or admin-created
-  PENDING // Awaiting payment
+  DRAFT
+  PENDING
   PAID
   CANCELLED
   FAILED
@@ -481,7 +481,7 @@ model Review {
 model Package {
   id    String @id @default(cuid())
   name  String
-  price Int // in kobo
+  price Int
 
   maxSystems     Int
   selfCheckLimit Int? // null = unlimited
@@ -554,7 +554,7 @@ model PaymentProof {
 model Order {
   id          String      @id @default(cuid())
   status      OrderStatus @default(DRAFT)
-  totalAmount Int // in kobo
+  totalAmount Int
 
   customerId String
   customer   Customer @relation(fields: [customerId], references: [id])

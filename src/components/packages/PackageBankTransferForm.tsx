@@ -21,6 +21,17 @@ export default function PackageBankTransferForm({
       try {
         await submitPackagePaymentProof({
           packageId,
+          payerName: formData.get("payerName") as string,
+          payerEmail: (formData.get("payerEmail") as string) || undefined,
+          payerPhone: (formData.get("payerPhone") as string) || undefined,
+          bankName: (formData.get("bankName") as string) || undefined,
+          transferAmount: formData.get("transferAmount")
+            ? Number(formData.get("transferAmount"))
+            : undefined,
+          transferDate: (formData.get("transferDate") as string) || undefined,
+          senderReference:
+            (formData.get("senderReference") as string) || undefined,
+          notes: (formData.get("notes") as string) || undefined,
           proofUrl: formData.get("proofUrl") as string,
         });
 
@@ -45,15 +56,67 @@ export default function PackageBankTransferForm({
   return (
     <form action={formAction} className="border rounded-xl p-6 bg-white shadow-sm space-y-6">
       <div className="space-y-2">
-        <h2 className="text-xl font-semibold">Submit Payment Proof</h2>
+        <h2 className="text-xl font-semibold">Submit Proof of Payment</h2>
         <p className="text-sm text-gray-600">
-          Paste the uploaded receipt image URL or proof link below.
+          Fill in your transfer details and submit your receipt or proof link.
         </p>
       </div>
 
       <input
+        name="payerName"
+        placeholder="Payer Name"
+        required
+        className="w-full border rounded p-2"
+      />
+
+      <input
+        name="payerEmail"
+        type="email"
+        placeholder="Payer Email"
+        className="w-full border rounded p-2"
+      />
+
+      <input
+        name="payerPhone"
+        placeholder="Payer Phone"
+        className="w-full border rounded p-2"
+      />
+
+      <input
+        name="bankName"
+        placeholder="Sender Bank Name"
+        className="w-full border rounded p-2"
+      />
+
+      <input
+        name="transferAmount"
+        type="number"
+        placeholder="Transfer Amount (naira)"
+        className="w-full border rounded p-2"
+      />
+
+      <input
+        name="transferDate"
+        type="datetime-local"
+        className="w-full border rounded p-2"
+      />
+
+      <input
+        name="senderReference"
+        placeholder="Transfer Reference / Session ID"
+        className="w-full border rounded p-2"
+      />
+
+      <textarea
+        name="notes"
+        rows={4}
+        placeholder="Additional notes"
+        className="w-full border rounded p-2"
+      />
+
+      <input
         name="proofUrl"
-        placeholder="https://..."
+        placeholder="Proof URL"
         required
         className="w-full border rounded p-2"
       />

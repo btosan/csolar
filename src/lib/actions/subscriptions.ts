@@ -5,10 +5,12 @@ import { revalidatePath } from "next/cache";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import {
+  PaymentMethod,
   PaymentProofStatus,
   PaymentStatus,
   Role,
 } from "@prisma/client";
+import { createInvoiceForOrder } from "@/lib/invoice";
 
 async function requireUser() {
   const session = await getServerSession(authOptions);
@@ -58,44 +60,30 @@ async function activateSubscriptionFromOrder(orderId: string, paymentId?: string
     include: {
       customer: true,
       package: true,
+      invoice: true,
     },
   });
 
-  if (!order) {
-    throw new Error("Order not found.");
-  }
-
-  if (!order.package) {
-    throw new Error("Package order not found.");
-  }
-
-  const user = await db.user.findUnique({
-    where: { id: order.customer.userId },
-  });
-
-  if (!user) {
-    throw new Error("User not found.");
-  }
-
-  const existingActive = await db.subscription.findFirst({
-    where: {
-      userId: user.id,
-      packageId: order.package.id,
-      active: true,
-    },
-  });
-
-  if (existingActive) {
-    return existingActive;
-  }
+  if (!order) throw new Error("Order not found.");
+  if (!order.package) throw new Error("Package not found.");
 
   const now = new Date();
   const endDate = addDays(now, order.package.durationDays);
 
-  const subscription = await db.$transaction(async (tx) => {
+  const existingActive = await db.subscription.findFirst({
+    where: {
+      userId: order.customer.userId,
+      packageId: order.packageId!,
+      active: true,
+    },
+  });
+
+  if (existingActive) return existingActive;
+
+  return db.$transaction(async (tx) => {
     await tx.subscription.updateMany({
       where: {
-        userId: user.id,
+        userId: order.customer.userId,
         active: true,
       },
       data: {
@@ -110,10 +98,19 @@ async function activateSubscriptionFromOrder(orderId: string, paymentId?: string
       },
     });
 
+    if (order.invoice) {
+      await tx.invoice.update({
+        where: { id: order.invoice.id },
+        data: {
+          status: "PAID",
+        },
+      });
+    }
+
     return tx.subscription.create({
       data: {
-        userId: user.id,
-        packageId: order.package.id,
+        userId: order.customer.userId,
+        packageId: order.packageId!,
         startDate: now,
         endDate,
         active: true,
@@ -121,12 +118,6 @@ async function activateSubscriptionFromOrder(orderId: string, paymentId?: string
       },
     });
   });
-
-  revalidatePath("/dashboard");
-  revalidatePath("/packages");
-  revalidatePath(`/packages/${order.package.id}/checkout`);
-
-  return subscription;
 }
 
 export async function getPublicPackageById(id: string) {
@@ -150,7 +141,7 @@ export async function createOrGetPackageOrder(packageId: string) {
   const existing = await db.order.findFirst({
     where: {
       customerId: customer.id,
-      packageId: pkg.id,
+      packageId,
       status: {
         in: ["DRAFT", "PENDING"],
       },
@@ -159,33 +150,51 @@ export async function createOrGetPackageOrder(packageId: string) {
       createdAt: "desc",
     },
     include: {
+      invoice: true,
+      package: true,
       payment: true,
       paymentProof: true,
-      package: true,
     },
   });
 
   if (existing) {
-    return existing;
+    if (!existing.invoice) {
+      await createInvoiceForOrder(existing.id);
+    }
+
+    return db.order.findUnique({
+      where: { id: existing.id },
+      include: {
+        invoice: true,
+        package: true,
+        payment: true,
+        paymentProof: true,
+      },
+    });
   }
 
   const order = await db.order.create({
     data: {
       customerId: customer.id,
-      packageId: pkg.id,
+      packageId,
       status: "PENDING",
       totalAmount: pkg.price,
     },
-    include: {
-      payment: true,
-      paymentProof: true,
-      package: true,
-    },
   });
+
+  await createInvoiceForOrder(order.id);
 
   revalidatePath(`/packages/${packageId}/checkout`);
 
-  return order;
+  return db.order.findUnique({
+    where: { id: order.id },
+    include: {
+      invoice: true,
+      package: true,
+      payment: true,
+      paymentProof: true,
+    },
+  });
 }
 
 export async function createFreeSubscription(packageId: string) {
@@ -196,20 +205,24 @@ export async function createFreeSubscription(packageId: string) {
     where: { id: packageId },
   });
 
-  if (!pkg) {
-    throw new Error("Package not found.");
-  }
-
-  if (pkg.price > 0) {
-    throw new Error("This package is not free.");
-  }
+  if (!pkg) throw new Error("Package not found.");
+  if (pkg.price > 0) throw new Error("This package is not free.");
 
   const order = await db.order.create({
     data: {
       customerId: customer.id,
-      packageId: pkg.id,
+      packageId,
       status: "PAID",
       totalAmount: 0,
+    },
+  });
+
+  const invoice = await createInvoiceForOrder(order.id);
+
+  await db.invoice.update({
+    where: { id: invoice.id },
+    data: {
+      status: "PAID",
     },
   });
 
@@ -230,45 +243,86 @@ export async function initializePackagePaystack(packageId: string) {
 
   const order = await createOrGetPackageOrder(packageId);
 
-  if (!order.package) {
-    throw new Error("Order package not found.");
+  if (!order) throw new Error("Order not found.");
+  if (!order.package) throw new Error("Package not found.");
+  if (!order.invoice) throw new Error("Invoice not found.");
+
+  const secretKey = process.env.PAYSTACK_SECRET_KEY;
+
+  if (!secretKey) {
+    throw new Error("Missing PAYSTACK_SECRET_KEY.");
   }
 
-  if (order.package.price <= 0) {
-    throw new Error("Free package does not require Paystack.");
-  }
-
+  // Always create a fresh reference for each initialize attempt
   const reference = `pkg-${order.id}-${Date.now()}`;
 
-  let payment = await db.payment.findUnique({
-    where: {
-      orderId: order.id,
+  const response = await fetch("https://api.paystack.co/transaction/initialize", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${secretKey}`,
+      "Content-Type": "application/json",
     },
+    body: JSON.stringify({
+      email: user.email,
+      amount: order.totalAmount * 100, // Paystack expects kobo
+      reference,
+      currency: "NGN",
+      metadata: {
+        orderId: order.id,
+        packageId: order.package.id,
+        invoiceNumber: order.invoice.invoiceNumber,
+        userId: user.id,
+        source: "package_checkout",
+      },
+      callback_url: `${process.env.NEXTAUTH_URL}/packages/${packageId}/checkout/success`,
+    }),
+  });
+
+  const payload = await response.json();
+
+  if (!response.ok || !payload.status || !payload.data) {
+    throw new Error(
+      payload?.message || "Failed to initialize Paystack transaction."
+    );
+  }
+
+  let payment = await db.payment.findUnique({
+    where: { orderId: order.id },
   });
 
   if (!payment) {
     payment = await db.payment.create({
       data: {
         orderId: order.id,
-        amount: order.totalAmount,
+        amount: order.totalAmount * 100, // store in kobo here
         status: PaymentStatus.INITIATED,
-        paystackRef: reference,
+        paystackRef: payload.data.reference,
       },
     });
-  } else if (!payment.paystackRef) {
+  } else {
     payment = await db.payment.update({
       where: { id: payment.id },
       data: {
-        paystackRef: reference,
+        amount: order.totalAmount * 100,
+        status: PaymentStatus.INITIATED,
+        paystackRef: payload.data.reference,
       },
     });
   }
 
+  await db.invoice.update({
+    where: { id: order.invoice.id },
+    data: {
+      paymentMethod: PaymentMethod.PAYSTACK,
+      status: "PENDING",
+    },
+  });
+
   return {
-    email: user.email,
-    amount: order.totalAmount,
-    reference: payment.paystackRef,
-    orderId: order.id,
+    accessCode: payload.data.access_code as string,
+    reference: payload.data.reference as string,
+    authorizationUrl: payload.data.authorization_url as string,
+    invoiceNumber: order.invoice.invoiceNumber,
     packageName: order.package.name,
   };
 }
@@ -277,13 +331,12 @@ export async function verifyPackagePayment(reference: string) {
   const user = await requireUser();
 
   const payment = await db.payment.findUnique({
-    where: {
-      paystackRef: reference,
-    },
+    where: { paystackRef: reference },
     include: {
       order: {
         include: {
           customer: true,
+          invoice: true,
           package: true,
         },
       },
@@ -296,21 +349,45 @@ export async function verifyPackagePayment(reference: string) {
   }
 
   if (payment.order.customer.userId !== user.id) {
-    throw new Error("Not authorized to verify this payment.");
+    throw new Error("Not authorized.");
   }
 
   if (payment.status === PaymentStatus.SUCCESS && payment.subscription) {
-    return {
-      success: true,
-      alreadyVerified: true,
-      packageId: payment.order.packageId,
-    };
+    return { success: true };
+  }
+
+  const secretKey = process.env.PAYSTACK_SECRET_KEY;
+
+  if (!secretKey) {
+    throw new Error("Missing PAYSTACK_SECRET_KEY.");
+  }
+
+  const response = await fetch(
+    `https://api.paystack.co/transaction/verify/${encodeURIComponent(reference)}`,
+    {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${secretKey}`,
+      },
+    }
+  );
+
+  const payload = await response.json();
+
+  if (!response.ok || !payload.status || !payload.data) {
+    throw new Error(payload?.message || "Failed to verify payment.");
+  }
+
+  if (payload.data.status !== "success") {
+    throw new Error(`Payment not successful. Current status: ${payload.data.status}`);
   }
 
   await db.payment.update({
     where: { id: payment.id },
     data: {
       status: PaymentStatus.SUCCESS,
+      channel: payload.data.channel || undefined,
+      authorizationCode: payload.data.authorization?.authorization_code || undefined,
     },
   });
 
@@ -319,37 +396,42 @@ export async function verifyPackagePayment(reference: string) {
   revalidatePath("/dashboard");
   revalidatePath(`/packages/${payment.order.packageId}/checkout`);
 
-  return {
-    success: true,
-    alreadyVerified: false,
-    packageId: payment.order.packageId,
-  };
+  return { success: true };
 }
 
 export async function submitPackagePaymentProof(data: {
   packageId: string;
+  payerName: string;
+  payerEmail?: string;
+  payerPhone?: string;
+  bankName?: string;
+  transferAmount?: number;
+  transferDate?: string;
+  senderReference?: string;
+  notes?: string;
   proofUrl: string;
 }) {
   const user = await requireUser();
 
+  if (!data.payerName.trim()) {
+    throw new Error("Payer name is required.");
+  }
+
   if (!data.proofUrl.trim()) {
-    throw new Error("Payment proof is required.");
+    throw new Error("Proof of payment is required.");
   }
 
   const order = await createOrGetPackageOrder(data.packageId);
 
-  if (!order.package) {
-    throw new Error("Package order not found.");
-  }
+  if (!order) throw new Error("Order not found.");
+  if (!order.invoice) throw new Error("Invoice not found.");
 
   const existingProof = await db.paymentProof.findUnique({
-    where: {
-      orderId: order.id,
-    },
+    where: { orderId: order.id },
   });
 
   if (existingProof) {
-    throw new Error("Payment proof has already been submitted for this order.");
+    throw new Error("Proof of payment has already been submitted.");
   }
 
   const proof = await db.paymentProof.create({
@@ -357,8 +439,24 @@ export async function submitPackagePaymentProof(data: {
       userId: user.id,
       packageId: data.packageId,
       orderId: order.id,
+      invoiceId: order.invoice.id,
+      payerName: data.payerName.trim(),
+      payerEmail: data.payerEmail?.trim() || undefined,
+      payerPhone: data.payerPhone?.trim() || undefined,
+      bankName: data.bankName?.trim() || undefined,
+      transferAmount: data.transferAmount,
+      transferDate: data.transferDate ? new Date(data.transferDate) : undefined,
+      senderReference: data.senderReference?.trim() || undefined,
+      notes: data.notes?.trim() || undefined,
       proofUrl: data.proofUrl.trim(),
       status: PaymentProofStatus.PENDING,
+    },
+  });
+
+  await db.invoice.update({
+    where: { id: order.invoice.id },
+    data: {
+      paymentMethod: PaymentMethod.BANK_TRANSFER,
     },
   });
 
@@ -381,7 +479,11 @@ export async function getPendingPaymentProofs() {
     include: {
       user: true,
       package: true,
-      order: true,
+      order: {
+        include: {
+          invoice: true,
+        },
+      },
     },
   });
 }
@@ -392,15 +494,15 @@ export async function approvePaymentProof(proofId: string) {
   const proof = await db.paymentProof.findUnique({
     where: { id: proofId },
     include: {
-      order: true,
-      package: true,
+      order: {
+        include: {
+          invoice: true,
+        },
+      },
     },
   });
 
-  if (!proof) {
-    throw new Error("Payment proof not found.");
-  }
-
+  if (!proof) throw new Error("Payment proof not found.");
   if (proof.status !== PaymentProofStatus.PENDING) {
     throw new Error("This proof has already been processed.");
   }
@@ -409,13 +511,6 @@ export async function approvePaymentProof(proofId: string) {
     where: { id: proofId },
     data: {
       status: PaymentProofStatus.APPROVED,
-    },
-  });
-
-  await db.order.update({
-    where: { id: proof.orderId },
-    data: {
-      status: "PAID",
     },
   });
 
@@ -432,12 +527,16 @@ export async function rejectPaymentProof(proofId: string) {
 
   const proof = await db.paymentProof.findUnique({
     where: { id: proofId },
+    include: {
+      order: {
+        include: {
+          invoice: true,
+        },
+      },
+    },
   });
 
-  if (!proof) {
-    throw new Error("Payment proof not found.");
-  }
-
+  if (!proof) throw new Error("Payment proof not found.");
   if (proof.status !== PaymentProofStatus.PENDING) {
     throw new Error("This proof has already been processed.");
   }
@@ -455,6 +554,15 @@ export async function rejectPaymentProof(proofId: string) {
       status: "FAILED",
     },
   });
+
+  if (proof.order.invoice) {
+    await db.invoice.update({
+      where: { id: proof.order.invoice.id },
+      data: {
+        status: "CANCELLED",
+      },
+    });
+  }
 
   revalidatePath("/admin/payment-proofs");
 

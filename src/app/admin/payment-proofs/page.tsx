@@ -47,6 +47,9 @@ export default async function AdminPaymentProofsPage() {
                   Amount: ₦{proof.order.totalAmount.toLocaleString()}
                 </p>
                 <p className="text-sm text-gray-600">
+                  Invoice: {proof.order.invoice?.invoiceNumber || "N/A"}
+                </p>
+                <p className="text-sm text-gray-600">
                   Submitted: {new Date(proof.createdAt).toLocaleDateString()}
                 </p>
               </div>
