@@ -30,6 +30,10 @@ export default async function PackageCheckoutPage({
 
   const order = await createOrGetPackageOrder(id);
 
+  if (!order) {
+    redirect("/packages");
+  }
+
   return (
     <div className="py-12">
       <PackageCheckout pkg={pkg} orderId={order.id} />
