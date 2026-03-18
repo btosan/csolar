@@ -81,6 +81,23 @@ enum PaymentStatus {
   FAILED
 }
 
+enum PaymentProofStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum PaymentMethod {
+  PAYSTACK
+  BANK_TRANSFER
+}
+
+enum InvoiceStatus {
+  PENDING
+  PAID
+  CANCELLED
+}
+
 enum UpgradeStatus {
   OPEN
   REVIEWED
@@ -319,71 +336,6 @@ model Alert {
 }
 
 //////////////////////////////////////
-// SUBSCRIPTIONS & PACKAGES
-//////////////////////////////////////
-
-model Package {
-  id    String @id @default(cuid())
-  name  String
-  price Int // in kobo
-
-  maxSystems     Int
-  selfCheckLimit Int? // null = unlimited
-
-  aiTier        AITier  @default(NONE)
-  hasTechnician Boolean @default(false)
-
-  durationDays Int // e.g. 30
-
-  createdAt DateTime @default(now())
-
-  subscriptions Subscription[]
-  paymentProofs PaymentProof[]
-  orders        Order[]
-}
-
-model Subscription {
-  id String @id @default(cuid())
-
-  userId String
-  user   User   @relation(fields: [userId], references: [id])
-
-  packageId String
-  package   Package @relation(fields: [packageId], references: [id])
-
-  startDate DateTime
-  endDate   DateTime
-
-  active Boolean @default(true)
-
-  paymentId String?  @unique
-  payment   Payment? @relation(fields: [paymentId], references: [id])
-
-  createdAt DateTime @default(now())
-
-  @@index([userId, active])
-}
-
-model PaymentProof {
-  id String @id @default(cuid())
-
-  userId String
-  user   User   @relation(fields: [userId], references: [id])
-
-  packageId String
-  package   Package @relation(fields: [packageId], references: [id])
-
-  proofUrl String
-
-  orderId String @unique
-  order   Order  @relation(fields: [orderId], references: [id])
-
-  status String @default("PENDING") // PENDING, APPROVED, REJECTED
-
-  createdAt DateTime @default(now())
-}
-
-//////////////////////////////////////
 // SERVICE & MAINTENANCE
 //////////////////////////////////////
 
@@ -522,6 +474,83 @@ model Review {
   createdAt DateTime @default(now())
 }
 
+//////////////////////////////////////
+// SUBSCRIPTIONS & PACKAGES
+//////////////////////////////////////
+
+model Package {
+  id    String @id @default(cuid())
+  name  String
+  price Int // in kobo
+
+  maxSystems     Int
+  selfCheckLimit Int? // null = unlimited
+
+  aiTier        AITier  @default(NONE)
+  hasTechnician Boolean @default(false)
+
+  durationDays Int // e.g. 30
+
+  createdAt DateTime @default(now())
+
+  subscriptions Subscription[]
+  paymentProofs PaymentProof[]
+  orders        Order[]
+}
+
+model Subscription {
+  id String @id @default(cuid())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  packageId String
+  package   Package @relation(fields: [packageId], references: [id])
+
+  startDate DateTime
+  endDate   DateTime
+
+  active Boolean @default(true)
+
+  paymentId String?  @unique
+  payment   Payment? @relation(fields: [paymentId], references: [id])
+
+  createdAt DateTime @default(now())
+
+  @@index([userId, active])
+}
+
+model PaymentProof {
+  id String @id @default(cuid())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  packageId String
+  package   Package @relation(fields: [packageId], references: [id])
+
+  orderId String @unique
+  order   Order  @relation(fields: [orderId], references: [id])
+
+  invoiceId String?
+  invoice   Invoice? @relation(fields: [invoiceId], references: [id])
+
+  payerName       String?
+  payerEmail      String?
+  payerPhone      String?
+  bankName        String?
+  transferAmount  Int?
+  transferDate    DateTime?
+  senderReference String?
+  notes           String?
+  proofUrl        String
+
+  status PaymentProofStatus @default(PENDING)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 model Order {
   id          String      @id @default(cuid())
   status      OrderStatus @default(DRAFT)
@@ -540,6 +569,8 @@ model Order {
   payment Payment?
 
   paymentProof PaymentProof?
+
+  invoice Invoice?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -592,6 +623,20 @@ model Payment {
   subscription Subscription?
 
   createdAt DateTime @default(now())
+}
+
+model Invoice {
+  id            String         @id @default(cuid())
+  invoiceNumber String         @unique
+  status        InvoiceStatus  @default(PENDING)
+  paymentMethod PaymentMethod?
+
+  orderId String @unique
+  order   Order  @relation(fields: [orderId], references: [id])
+
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  paymentProofs PaymentProof[]
 }
 
 //////////////////////////////////////

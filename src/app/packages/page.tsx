@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { getPublicPackages } from "@/lib/actions/packages";
 
 function formatAITier(aiTier: string) {
@@ -69,9 +70,12 @@ export default async function PackagesPage() {
                 </p>
               </div>
 
-              <button className="w-full bg-black text-white py-3 rounded">
+              <Link
+                href={`/packages/${pkg.id}/checkout`}
+                className="block w-full bg-black text-white py-3 rounded text-center"
+              >
                 Choose Package
-              </button>
+              </Link>
             </div>
           ))}
         </div>
