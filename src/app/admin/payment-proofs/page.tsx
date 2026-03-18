@@ -40,15 +40,35 @@ export default async function AdminPaymentProofsPage() {
             >
               <div className="space-y-1">
                 <h2 className="text-xl font-semibold">{proof.package.name}</h2>
+
                 <p className="text-sm text-gray-600">
                   User: {proof.user.name || proof.user.email}
                 </p>
+
                 <p className="text-sm text-gray-600">
                   Amount: ₦{proof.order.totalAmount.toLocaleString()}
                 </p>
+
                 <p className="text-sm text-gray-600">
                   Invoice: {proof.order.invoice?.invoiceNumber || "N/A"}
                 </p>
+
+                <p className="text-sm text-gray-600">
+                  Payer: {proof.payerName || "N/A"}
+                </p>
+
+                <p className="text-sm text-gray-600">
+                  Bank: {proof.bankName || "N/A"}
+                </p>
+
+                <p className="text-sm text-gray-600">
+                  Transfer Amount: {proof.transferAmount ? `₦${proof.transferAmount.toLocaleString()}` : "N/A"}
+                </p>
+
+                <p className="text-sm text-gray-600">
+                  Transfer Reference: {proof.senderReference || "N/A"}
+                </p>
+
                 <p className="text-sm text-gray-600">
                   Submitted: {new Date(proof.createdAt).toLocaleDateString()}
                 </p>

@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import PaystackPop from "@paystack/inline-js";
 import { AITier, Package } from "@prisma/client";
 import { toast } from "@/hooks/use-toast";
 import {
@@ -43,7 +42,7 @@ export default function PackageCheckout({ pkg }: PackageCheckoutProps) {
         description: `${pkg.name} has been activated successfully.`,
       });
 
-      router.push("/dashboard");
+      router.push("/dashboard?subscription=success");
       router.refresh();
     } catch (err: any) {
       toast({
@@ -62,24 +61,17 @@ export default function PackageCheckout({ pkg }: PackageCheckoutProps) {
 
       const payment = await initializePackagePaystack(pkg.id);
 
-      if (!payment.accessCode) {
-        throw new Error("Missing Paystack access code.");
+      if (!payment.authorizationUrl) {
+        throw new Error("Missing Paystack authorization URL.");
       }
 
-      const popup = new PaystackPop();
-      popup.resumeTransaction(payment.accessCode);
-
-      toast({
-        title: "Payment started",
-        description: `Invoice: ${payment.invoiceNumber}`,
-      });
+      window.location.href = payment.authorizationUrl;
     } catch (err: any) {
       toast({
         title: "Payment failed",
         description: err.message || "Unable to start payment.",
         variant: "destructive",
       });
-    } finally {
       setLoading(false);
     }
   };
@@ -145,7 +137,7 @@ export default function PackageCheckout({ pkg }: PackageCheckoutProps) {
               disabled={loading}
               className="bg-green-600 text-white px-6 py-3 rounded-lg hover:cursor-pointer"
             >
-              {loading ? "Processing..." : "Pay with Paystack"}
+              {loading ? "Redirecting..." : "Pay with Paystack"}
             </button>
 
             <button

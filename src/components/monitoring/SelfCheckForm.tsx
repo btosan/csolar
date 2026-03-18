@@ -1,4 +1,3 @@
-// src/components/monitoring/SelfCheckForm.tsx
 "use client";
 
 import { useTransition } from "react";
@@ -8,7 +7,10 @@ interface SelfCheckFormProps {
   onSubmit: (formData: FormData) => Promise<void>;
 }
 
-export default function SelfCheckForm({ systemId, onSubmit }: SelfCheckFormProps) {
+export default function SelfCheckForm({
+  systemId,
+  onSubmit,
+}: SelfCheckFormProps) {
   const [isPending, startTransition] = useTransition();
 
   const handleSubmit = (formData: FormData) => {
@@ -17,11 +19,11 @@ export default function SelfCheckForm({ systemId, onSubmit }: SelfCheckFormProps
         await onSubmit(formData);
       } catch (err: any) {
         if (err?.digest?.includes("NEXT_REDIRECT")) {
-          throw err; // allow redirect to work
+          throw err;
         }
 
         console.error("Form error:", err);
-        alert("Failed to save self-check. Please try again.");
+        alert(err?.message || "Failed to save self-check. Please try again.");
       }
     });
   };
@@ -32,7 +34,9 @@ export default function SelfCheckForm({ systemId, onSubmit }: SelfCheckFormProps
 
       {/* Production */}
       <div className="space-y-2">
-        <label className="block text-sm font-medium">Estimated Generation (kWh)</label>
+        <label className="block text-sm font-medium">
+          Estimated Generation (kWh)
+        </label>
         <input
           name="estimatedGenerationKwh"
           type="number"
@@ -43,7 +47,9 @@ export default function SelfCheckForm({ systemId, onSubmit }: SelfCheckFormProps
       </div>
 
       <div className="space-y-2">
-        <label className="block text-sm font-medium">Expected Generation (kWh)</label>
+        <label className="block text-sm font-medium">
+          Expected Generation (kWh)
+        </label>
         <input
           name="expectedGenerationKwh"
           type="number"
@@ -53,9 +59,24 @@ export default function SelfCheckForm({ systemId, onSubmit }: SelfCheckFormProps
         />
       </div>
 
+      <div className="space-y-2">
+        <label className="block text-sm font-medium">
+          Consumption (kWh)
+        </label>
+        <input
+          name="consumptionKwh"
+          type="number"
+          step="0.01"
+          className="w-full border rounded-md p-2"
+          disabled={isPending}
+        />
+      </div>
+
       {/* Inverter */}
       <div className="space-y-2">
-        <label className="block text-sm font-medium">Inverter Efficiency (%)</label>
+        <label className="block text-sm font-medium">
+          Inverter Efficiency (%)
+        </label>
         <input
           name="inverterEfficiency"
           type="number"
@@ -66,7 +87,9 @@ export default function SelfCheckForm({ systemId, onSubmit }: SelfCheckFormProps
       </div>
 
       <div className="space-y-2">
-        <label className="block text-sm font-medium">Inverter Temperature (°C)</label>
+        <label className="block text-sm font-medium">
+          Inverter Temperature (°C)
+        </label>
         <input
           name="inverterTempC"
           type="number"
@@ -76,9 +99,24 @@ export default function SelfCheckForm({ systemId, onSubmit }: SelfCheckFormProps
         />
       </div>
 
+      <div className="space-y-2">
+        <label className="block text-sm font-medium">
+          Inverter Output (kW)
+        </label>
+        <input
+          name="inverterOutputKw"
+          type="number"
+          step="0.01"
+          className="w-full border rounded-md p-2"
+          disabled={isPending}
+        />
+      </div>
+
       {/* Battery */}
       <div className="space-y-2">
-        <label className="block text-sm font-medium">Battery Charge (%)</label>
+        <label className="block text-sm font-medium">
+          Battery Charge (%)
+        </label>
         <input
           name="batteryChargePercent"
           type="number"
@@ -89,9 +127,37 @@ export default function SelfCheckForm({ systemId, onSubmit }: SelfCheckFormProps
       </div>
 
       <div className="space-y-2">
-        <label className="block text-sm font-medium">Battery Temperature (°C)</label>
+        <label className="block text-sm font-medium">
+          Battery Temperature (°C)
+        </label>
         <input
           name="batteryTempC"
+          type="number"
+          step="0.1"
+          className="w-full border rounded-md p-2"
+          disabled={isPending}
+        />
+      </div>
+
+      <div className="space-y-2">
+        <label className="block text-sm font-medium">
+          Battery Cycles
+        </label>
+        <input
+          name="batteryCycles"
+          type="number"
+          step="1"
+          className="w-full border rounded-md p-2"
+          disabled={isPending}
+        />
+      </div>
+
+      <div className="space-y-2">
+        <label className="block text-sm font-medium">
+          Battery Health (%)
+        </label>
+        <input
+          name="batteryHealthPercent"
           type="number"
           step="0.1"
           className="w-full border rounded-md p-2"
@@ -126,7 +192,7 @@ export default function SelfCheckForm({ systemId, onSubmit }: SelfCheckFormProps
             <div
               className="bg-blue-600 h-2.5 rounded-full animate-pulse"
               style={{ width: "45%", transition: "width 1.5s ease-in-out" }}
-            ></div>
+            />
           </div>
         )}
       </div>

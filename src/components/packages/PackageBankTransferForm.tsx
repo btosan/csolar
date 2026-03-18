@@ -130,7 +130,7 @@ export default function PackageBankTransferForm({
       <button
         type="submit"
         disabled={isPending}
-        className="bg-black text-white px-6 py-3 rounded"
+        className="bg-black text-white px-6 py-3 rounded hover:cursor-pointer"
       >
         {isPending ? "Submitting..." : "Submit Proof"}
       </button>

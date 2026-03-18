@@ -12,8 +12,10 @@ import {
   Package,
   TrendingUp
 } from 'lucide-react';
+import { getPendingPaymentProofCount } from "@/lib/actions/admin";
 
 export const dynamic = 'force-dynamic';
+
 
 export default async function AdminDashboard() {
   const session = await getServerSession(authOptions);
@@ -25,6 +27,8 @@ export default async function AdminDashboard() {
   if (session.user.role !== 'ADMIN') {
     redirect('/profile');
   }
+
+  const pendingProofsCount = await getPendingPaymentProofCount();
 
   return (
     <div className="container max-w-6xl mx-auto py-12 px-4 sm:px-6">
@@ -133,6 +137,35 @@ export default async function AdminDashboard() {
             <p className="text-muted-foreground">
               Monitor Solar Systems
             </p>
+          </div>
+        </Link>
+
+        <Link href="/admin/payment-proofs">
+          <div className="relative border rounded-xl p-6 hover:shadow-md transition-all hover:border-primary/50 hover:bg-accent/50 hover:text-black hover:font-medium cursor-pointer">
+
+            {/* 🔴 Notification badge */}
+            {pendingProofsCount > 0 && (
+              <span className="absolute top-3 right-3 bg-red-600 text-white text-xs px-2 py-1 rounded-full">
+                {pendingProofsCount}
+              </span>
+            )}
+
+            <div className="flex items-center gap-4 mb-4">
+              <div className="p-3 bg-primary/10 rounded-lg">
+                <Package className="h-6 w-6 text-primary" />
+              </div>
+              <h3 className="text-xl font-semibold">Payment Proofs</h3>
+            </div>
+
+            <p className="text-muted-foreground">
+              Review bank transfer submissions and approve subscriptions
+            </p>
+
+            {pendingProofsCount > 0 && (
+              <p className="text-sm text-red-600 mt-2 font-medium">
+                {pendingProofsCount} pending review
+              </p>
+            )}
           </div>
         </Link>
 

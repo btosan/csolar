@@ -1,13 +1,14 @@
-// src/lib/actions/monitoring.ts
 import { db } from "@/lib/db";
-import { MonitoringSource } from "@prisma/client";
+import { AITier, MonitoringSource } from "@prisma/client";
 import { recalculateHealthScore } from "@/lib/monitoring/calculateHealthScore";
 import { evaluateAlerts } from "@/lib/monitoring/evaluateAlerts";
 import { generateAiRecommendation } from "@/lib/monitoring/generateAiRecommendation";
+import { generateSystemInsight } from "@/lib/ai/generateSystemInsight";
 
 export type CreateSnapshotInput = {
   systemId: string;
   source: MonitoringSource;
+  aiTier?: AITier;
 
   estimatedGenerationKwh?: number;
   expectedGenerationKwh?: number;
@@ -25,9 +26,6 @@ export type CreateSnapshotInput = {
   notes?: string;
 };
 
-/**
- * Safe number parser – clamps values to realistic ranges and returns undefined for invalid input
- */
 function safeNumber(
   value: unknown,
   min: number = -Infinity,
@@ -37,9 +35,6 @@ function safeNumber(
   return Math.max(min, Math.min(max, value));
 }
 
-/**
- * Safe integer parser
- */
 function safeInteger(value: unknown): number | undefined {
   if (typeof value !== "number" || isNaN(value) || !Number.isInteger(value)) {
     return undefined;
@@ -52,10 +47,10 @@ export async function createMonitoringSnapshot(
 ): Promise<{ id: string; date: Date }> {
   const systemId = rawInput.systemId;
 
-  // Sanitize / normalize input values before saving
   const input: CreateSnapshotInput = {
     systemId,
     source: rawInput.source,
+    aiTier: rawInput.aiTier ?? "NONE",
 
     estimatedGenerationKwh: safeNumber(rawInput.estimatedGenerationKwh, 0),
     expectedGenerationKwh: safeNumber(rawInput.expectedGenerationKwh, 0),
@@ -74,15 +69,28 @@ export async function createMonitoringSnapshot(
   };
 
   try {
-    // ────────────────────────────────────────────────
-    // 1. Transaction: snapshot + alerts + health score
-    // ────────────────────────────────────────────────
     const result = await db.$transaction(
       async (tx) => {
         const snapshot = await tx.monitoringSnapshot.create({
           data: {
-            ...input,
+            systemId: input.systemId,
+            source: input.source,
             date: new Date(),
+
+            estimatedGenerationKwh: input.estimatedGenerationKwh,
+            expectedGenerationKwh: input.expectedGenerationKwh,
+            consumptionKwh: input.consumptionKwh,
+
+            inverterTempC: input.inverterTempC,
+            inverterEfficiency: input.inverterEfficiency,
+            inverterOutputKw: input.inverterOutputKw,
+
+            batteryChargePercent: input.batteryChargePercent,
+            batteryTempC: input.batteryTempC,
+            batteryCycles: input.batteryCycles,
+            batteryHealthPercent: input.batteryHealthPercent,
+
+            notes: input.notes,
           },
         });
 
@@ -93,16 +101,12 @@ export async function createMonitoringSnapshot(
         return { snapshot, health };
       },
       {
-        timeout: 15000,   // 15 seconds max for the whole transaction (default: 5000ms)
-        maxWait: 5000,    // 5 seconds max wait to get a transaction slot (default: 2000ms)
-        // isolationLevel: Prisma.TransactionIsolationLevel.ReadCommitted, // optional if needed
+        timeout: 15000,
+        maxWait: 5000,
       }
     );
 
-    // ────────────────────────────────────────────────
-    // 2. AI Recommendation (non-critical – failure is tolerated)
-    // ────────────────────────────────────────────────
-    if (result.health) {
+    if (result.health && input.aiTier !== "NONE") {
       try {
         const system = await db.solarSystem.findUnique({
           where: { id: systemId },
@@ -116,16 +120,34 @@ export async function createMonitoringSnapshot(
           },
         });
 
-        const ai = await generateAiRecommendation({
-          systemId,
-          systemName: system?.name || "Solar System",
-          score: result.health.score,
-          productionScore: result.health.productionScore,
-          inverterScore: result.health.inverterScore,
-          batteryScore: result.health.batteryScore,
-          activeAlerts,
-          tx: db,
-        });
+        let ai: {
+          summary: string;
+          actionPlan: string;
+          urgency: "LOW" | "MEDIUM" | "HIGH";
+        };
+
+        if (input.aiTier === "BASIC") {
+          ai = await generateSystemInsight({
+            systemName: system?.name || "Solar System",
+            score: result.health.score,
+            summary: `Production: ${result.health.productionScore ?? 0}/100, Inverter: ${result.health.inverterScore ?? 0}/100, Battery: ${result.health.batteryScore ?? 0}/100`,
+            productionScore: result.health.productionScore ?? 0,
+            inverterScore: result.health.inverterScore ?? 0,
+            batteryScore: result.health.batteryScore ?? 0,
+            activeAlerts,
+          });
+        } else {
+          ai = await generateAiRecommendation({
+            systemId,
+            systemName: system?.name || "Solar System",
+            score: result.health.score,
+            productionScore: result.health.productionScore ?? 0,
+            inverterScore: result.health.inverterScore ?? 0,
+            batteryScore: result.health.batteryScore ?? 0,
+            activeAlerts,
+            tx: db,
+          });
+        }
 
         await db.aiRecommendation.create({
           data: {
@@ -139,11 +161,9 @@ export async function createMonitoringSnapshot(
       } catch (aiError) {
         console.error("[createMonitoringSnapshot:AI] Failed", {
           systemId,
-          error:
-            aiError instanceof Error ? aiError.message : String(aiError),
+          error: aiError instanceof Error ? aiError.message : String(aiError),
           stack: aiError instanceof Error ? aiError.stack : undefined,
         });
-        // Do NOT re-throw – snapshot should still be considered successful
       }
     }
 
@@ -155,9 +175,9 @@ export async function createMonitoringSnapshot(
     console.error("[createMonitoringSnapshot] Failed", {
       systemId,
       source: rawInput.source,
-      // Fixed: use keyof to tell TS that k is a valid key of CreateSnapshotInput
       inputFields: Object.keys(rawInput).filter(
-        (k): k is keyof CreateSnapshotInput => rawInput[k as keyof CreateSnapshotInput] != null
+        (k): k is keyof CreateSnapshotInput =>
+          rawInput[k as keyof CreateSnapshotInput] != null
       ),
       error: error instanceof Error ? error.message : String(error),
       stack: error instanceof Error ? error.stack : undefined,

@@ -1,42 +1,74 @@
-"use server"
+"use server";
 
-import { db } from "@/lib/db"
-import { getServerSession } from "next-auth"
-import { authOptions } from "@/lib/auth"
-import { redirect } from "next/navigation"
-import { SystemType, BatteryType } from "@prisma/client"
+import { db } from "@/lib/db";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
+import { redirect } from "next/navigation";
+import { SystemType, BatteryType } from "@prisma/client";
 
 type CreateSystemInput = {
-  name: string
-  location: string
-  installationDate: string
-  systemType: SystemType
+  name: string;
+  location: string;
+  installationDate: string;
+  systemType: SystemType;
 
-  panelCapacity?: number
-  panelQuantity?: number
+  panelCapacity?: number;
+  panelQuantity?: number;
 
-  batteryType?: BatteryType
-  batteryCapacity?: number
+  batteryType?: BatteryType;
+  batteryCapacity?: number;
 
-  inverterBrand?: string
-  inverterModel?: string
-  inverterCapacity?: number
-}
+  inverterBrand?: string;
+  inverterModel?: string;
+  inverterCapacity?: number;
+};
 
 export async function createSolarSystem(data: CreateSystemInput) {
-  const session = await getServerSession(authOptions)
+  const session = await getServerSession(authOptions);
 
   if (!session?.user?.email) {
-    redirect("/login")
+    redirect("/login");
   }
 
   const user = await db.user.findUnique({
     where: { email: session.user.email },
     include: { customer: true },
-  })
+  });
 
   if (!user?.customer) {
-    throw new Error("Customer record not found")
+    throw new Error("Customer record not found");
+  }
+
+  const activeSubscription = await db.subscription.findFirst({
+    where: {
+      userId: user.id,
+      active: true,
+      endDate: {
+        gte: new Date(),
+      },
+    },
+    include: {
+      package: true,
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+
+  if (!activeSubscription) {
+    throw new Error("You need an active package to register a solar system.");
+  }
+
+  const systemCount = await db.solarSystem.count({
+    where: {
+      customerId: user.customer.id,
+    },
+  });
+
+  if (systemCount >= activeSubscription.package.maxSystems) {
+    throw new Error(
+      `Your current package allows only ${activeSubscription.package.maxSystems} system(s). Please upgrade your package.`
+    );
   }
 
   const system = await db.solarSystem.create({
@@ -66,17 +98,18 @@ export async function createSolarSystem(data: CreateSystemInput) {
           }
         : undefined,
 
-    inverter: data.inverterBrand && data.inverterModel
-        ? {
-            create: {
+      inverter:
+        data.inverterBrand && data.inverterModel
+          ? {
+              create: {
                 brand: data.inverterBrand,
                 model: data.inverterModel,
                 capacityKw: data.inverterCapacity ?? 1,
-            },
+              },
             }
-        : undefined,
+          : undefined,
     },
-  })
+  });
 
-  return system.id
+  return system.id;
 }

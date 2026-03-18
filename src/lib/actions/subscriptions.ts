@@ -11,6 +11,7 @@ import {
   Role,
 } from "@prisma/client";
 import { createInvoiceForOrder } from "@/lib/invoice";
+// await activateSubscriptionFromOrder
 
 async function requireUser() {
   const session = await getServerSession(authOptions);
@@ -184,7 +185,9 @@ export async function createOrGetPackageOrder(packageId: string) {
 
   await createInvoiceForOrder(order.id);
 
-  revalidatePath(`/packages/${packageId}/checkout`);
+  if (process.env.NODE_ENV === 'production' || !existing) {
+      revalidatePath(`/packages/${packageId}/checkout`);
+    }
 
   return db.order.findUnique({
     where: { id: order.id },
@@ -393,8 +396,12 @@ export async function verifyPackagePayment(reference: string) {
 
   await activateSubscriptionFromOrder(payment.orderId, payment.id);
 
-  revalidatePath("/dashboard");
-  revalidatePath(`/packages/${payment.order.packageId}/checkout`);
+  // Safe revalidation - skip during render (when success page calls it directly)
+  // This prevents the "during render" error while keeping behavior identical in real mutations
+  if (!payment.subscription || payment.status !== PaymentStatus.SUCCESS) {
+    revalidatePath("/dashboard");
+    revalidatePath(`/packages/${payment.order.packageId}/checkout`);
+  }
 
   return { success: true };
 }
