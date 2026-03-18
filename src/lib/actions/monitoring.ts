@@ -2,8 +2,6 @@ import { db } from "@/lib/db";
 import { AITier, MonitoringSource } from "@prisma/client";
 import { recalculateHealthScore } from "@/lib/monitoring/calculateHealthScore";
 import { evaluateAlerts } from "@/lib/monitoring/evaluateAlerts";
-import { generateAiRecommendation } from "@/lib/monitoring/generateAiRecommendation";
-import { generateSystemInsight } from "@/lib/ai/generateSystemInsight";
 
 export type CreateSnapshotInput = {
   systemId: string;
@@ -24,6 +22,12 @@ export type CreateSnapshotInput = {
   batteryHealthPercent?: number;
 
   notes?: string;
+};
+
+type AiResult = {
+  summary: string;
+  actionPlan: string;
+  urgency: "LOW" | "MEDIUM" | "HIGH";
 };
 
 function safeNumber(
@@ -103,7 +107,7 @@ export async function createMonitoringSnapshot(
       {
         timeout: 15000,
         maxWait: 5000,
-      }
+      },
     );
 
     if (result.health && input.aiTier !== "NONE") {
@@ -120,14 +124,14 @@ export async function createMonitoringSnapshot(
           },
         });
 
-        let ai: {
-          summary: string;
-          actionPlan: string;
-          urgency: "LOW" | "MEDIUM" | "HIGH";
-        };
+        let ai: AiResult;
 
         if (input.aiTier === "BASIC") {
-          ai = await generateSystemInsight({
+          const { generateSystemInsight } = await import(
+            "@/lib/ai/generateSystemInsight"
+          );
+
+          ai = (await generateSystemInsight({
             systemName: system?.name || "Solar System",
             score: result.health.score,
             summary: `Production: ${result.health.productionScore ?? 0}/100, Inverter: ${result.health.inverterScore ?? 0}/100, Battery: ${result.health.batteryScore ?? 0}/100`,
@@ -135,8 +139,12 @@ export async function createMonitoringSnapshot(
             inverterScore: result.health.inverterScore ?? 0,
             batteryScore: result.health.batteryScore ?? 0,
             activeAlerts,
-          });
+          })) as AiResult;
         } else {
+          const { generateAiRecommendation } = await import(
+            "@/lib/monitoring/generateAiRecommendation"
+          );
+
           ai = await generateAiRecommendation({
             systemId,
             systemName: system?.name || "Solar System",
@@ -177,7 +185,7 @@ export async function createMonitoringSnapshot(
       source: rawInput.source,
       inputFields: Object.keys(rawInput).filter(
         (k): k is keyof CreateSnapshotInput =>
-          rawInput[k as keyof CreateSnapshotInput] != null
+          rawInput[k as keyof CreateSnapshotInput] != null,
       ),
       error: error instanceof Error ? error.message : String(error),
       stack: error instanceof Error ? error.stack : undefined,
