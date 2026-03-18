@@ -12,9 +12,24 @@ interface GenerateAiRecommendationInput {
   tx: any;
 }
 
+type AiUrgency = "LOW" | "MEDIUM" | "HIGH";
+
+type GenerateAiRecommendationResult = {
+  summary: string;
+  actionPlan: string;
+  urgency: AiUrgency;
+};
+
+function normalizeUrgency(value: unknown): AiUrgency {
+  if (value === "LOW" || value === "MEDIUM" || value === "HIGH") {
+    return value;
+  }
+  return "MEDIUM";
+}
+
 export async function generateAiRecommendation(
   input: GenerateAiRecommendationInput,
-) {
+): Promise<GenerateAiRecommendationResult> {
   const {
     systemId,
     systemName,
@@ -46,7 +61,7 @@ export async function generateAiRecommendation(
     return {
       summary: `${ai.summary}\n\nUpgrade considerations: ${upgradeText}`,
       actionPlan: ai.actionPlan,
-      urgency: ai.urgency,
+      urgency: normalizeUrgency(ai.urgency),
     };
   } catch (err) {
     console.error("[generateAiRecommendation] Advanced AI failed:", err);
@@ -67,8 +82,8 @@ Upgrades: ${upgradeText}
         score < 50 || activeAlerts > 3
           ? "HIGH"
           : score < 70 || activeAlerts > 0
-          ? "MEDIUM"
-          : "LOW",
+            ? "MEDIUM"
+            : "LOW",
     };
   }
 }
