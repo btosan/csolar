@@ -134,7 +134,7 @@ const serviceData = [
 ]
 
 const Services = () => {
-  const [activeTab, setActiveTab] = useState("installation")
+  const [activeTab, setActiveTab] = useState("monitoring")
   const swiperRef = useRef(null)
 
   // Sync active tab with swipe
