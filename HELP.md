@@ -14,7 +14,7 @@ npx prisma migrate dev --name add-monitoring-enhancements
 
 rm -rf package-lock.json .next
 
-<!-- DEV -->
+<!-- DEV  ORDER OF PRISMA PRODUCTION MIGRATION AFTER UPDATING SCHEMA.PRISMA-->
 # STEP 1:
 npx prisma format
 
@@ -29,7 +29,8 @@ npx prisma migrate dev --name add-equipment
 # STEP 4:
 npx prisma db push
 
-<!-- ORDER OF PRISMA PRODUCTION MIGRATION AFTER UPDATING SCHEMA.PRISMA -->
+
+<!--PROD  ORDER OF PRISMA PRODUCTION MIGRATION AFTER UPDATING SCHEMA.PRISMA -->
 # STEP 1:
 npx prisma migrate dev --name add-equipment
 
