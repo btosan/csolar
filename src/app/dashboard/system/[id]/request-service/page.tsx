@@ -1,28 +1,28 @@
-import { getServerSession } from "next-auth"
-import { authOptions } from "@/lib/auth"
-import { redirect, notFound } from "next/navigation"
-import { db } from "@/lib/db"
-import Link from "next/link"
-import RequestTechnicianForm from "@/components/monitoring/RequestTechnicianForm" // adjust path
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
+import { redirect, notFound } from "next/navigation";
+import { db } from "@/lib/db";
+import Link from "next/link";
+import RequestTechnicianForm from "@/components/monitoring/RequestTechnicianForm";
 
 interface PageProps {
-  params: Promise<{ id: string }>
+  params: { id: string };
 }
 
-export default async function RequestServicePage(props: PageProps) {
-  const { id } = await props.params
+export default async function RequestServicePage({ params }: PageProps) {
+  const { id } = params;
 
-  const session = await getServerSession(authOptions)
+  const session = await getServerSession(authOptions);
   if (!session?.user?.email) {
-    redirect("/login")
+    redirect("/signin");
   }
 
   const user = await db.user.findUnique({
     where: { email: session.user.email },
     select: { id: true },
-  })
+  });
 
-  if (!user) redirect("/login")
+  if (!user) redirect("/signin");
 
   const system = await db.solarSystem.findFirst({
     where: {
@@ -34,10 +34,10 @@ export default async function RequestServicePage(props: PageProps) {
       name: true,
       location: true,
     },
-  })
+  });
 
   if (!system) {
-    notFound()
+    notFound();
   }
 
   return (
@@ -54,8 +54,11 @@ export default async function RequestServicePage(props: PageProps) {
       </h1>
 
       <div className="bg-white shadow rounded-2xl p-8">
-        <RequestTechnicianForm systemId={system.id} systemName={system.name} />
+        <RequestTechnicianForm
+          systemId={system.id}
+          systemName={system.name}
+        />
       </div>
     </div>
-  )
+  );
 }
