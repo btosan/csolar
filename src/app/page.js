@@ -66,8 +66,8 @@ export default function Home() {
       <div className="container pb-8 -mt-12 md:-mt-16 lg:-mt-20 bg-gray-50 w-full mx-auto flex items-center justify-center">
         <Link 
           href='/packages' 
-          className="text-base md:text-lg lg:text-xl underline underline-offset-8 decoration-dotted hover:text-gray-900 hover:text-lg md:hover:text-xl lg:hover:text-2xl hover:decoration-0 ">
-          See Packages
+          className="font-primary font-bold text-black text-sm md:text-base lg:text-lg xl:text-xl  uppercase underline underline-offset-8 decoration-dotted hover:text-gray-900 hover:text-lg md:hover:text-xl lg:hover:text-2xl hover:decoration-0 ">
+          See Our Packages
         </Link>
       </div>
       <FeaturedProducts />
