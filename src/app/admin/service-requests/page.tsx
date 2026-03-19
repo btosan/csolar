@@ -244,7 +244,7 @@ export default async function AdminServiceRequestsPage() {
                         name="technicianId"
                         required
                         defaultValue=""
-                        className="border rounded-lg px-3 py-2 min-w-[240px]"
+                        className="border rounded-lg px-3 py-2 min-w-60"
                       >
                         <option value="" disabled>
                           Select technician

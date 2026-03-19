@@ -32,13 +32,13 @@ function getStatusColor(status: ServiceStatus) {
 }
 
 interface PageProps {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 export default async function TechnicianRequestDetailsPage({
   params,
 }: PageProps) {
-  const { id } = params;
+  const { id } = await params;
 
   const session = await getServerSession(authOptions);
 

@@ -6,11 +6,11 @@ import Link from "next/link";
 import RequestTechnicianForm from "@/components/monitoring/RequestTechnicianForm";
 
 interface PageProps {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 export default async function RequestServicePage({ params }: PageProps) {
-  const { id } = params;
+  const { id } = await params;
 
   const session = await getServerSession(authOptions);
   if (!session?.user?.email) {
@@ -22,7 +22,9 @@ export default async function RequestServicePage({ params }: PageProps) {
     select: { id: true },
   });
 
-  if (!user) redirect("/signin");
+  if (!user) {
+    redirect("/signin");
+  }
 
   const system = await db.solarSystem.findFirst({
     where: {
