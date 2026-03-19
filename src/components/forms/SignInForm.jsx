@@ -51,15 +51,17 @@ export default function SignInForm() {
   });
 
 
-  useEffect(() => {
-    if (status === 'authenticated' && session) {
-      if (session.user?.role === 'ADMIN') {
-        router.replace('/admin');
-      } else {
-        router.replace(callbackUrl);
+    useEffect(() => {
+      if (status === 'authenticated' && session) {
+        if (session.user?.role === 'ADMIN') {
+          router.replace('/admin');
+        } else if (session.user?.role === 'TECHNICIAN') {
+          router.replace('/technician');
+        } else {
+          router.replace(callbackUrl);
+        }
       }
-    }
-  }, [status, session, router, callbackUrl]);
+    }, [status, session, router, callbackUrl]);
 
   const onSubmit = async (values) => {
     try {

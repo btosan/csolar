@@ -28,7 +28,7 @@ import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { LogOut, User, Mail, ShieldCheck, Upload } from 'lucide-react';
 
-// Zod schema
+// dashboard
 const profileSchema = z.object({
   name: z.string().min(1, 'Name is required').max(100, 'Name is too long'),
   image: z.string().url('Invalid image URL').optional().or(z.literal('')),
@@ -209,6 +209,14 @@ export default function Profile() {
                   className="flex items-center justify-center gap-2 py-3 px-5 text-center font-medium text-primary hover:text-primary/80 transition-colors rounded-md hover:bg-gray-100/90 border border-primary/20 w-full"
                 >
                   <span>Monitoring Dashboard</span>
+                  <span className="text-lg leading-none">→</span>
+                </Link>
+              ) : role === 'TECHNICIAN' ? (
+                <Link
+                  href="/technician"
+                  className="flex items-center justify-center gap-2 py-3 px-5 text-center font-medium text-primary hover:text-primary/80 transition-colors rounded-md hover:bg-gray-100/90 border border-primary/20 w-full"
+                >
+                  <span>Technician Dashboard</span>
                   <span className="text-lg leading-none">→</span>
                 </Link>
               ) : (

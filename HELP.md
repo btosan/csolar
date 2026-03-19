@@ -1,13 +1,6 @@
 npm install @prisma/adapter-pg pg
 
 
-npx prisma format
-
-npx prisma generate
-# or (better for development):
-npx prisma migrate dev --name init
-# or (quick prototyping / no migrations):
-npx prisma db push
 
 <!-- production -->
 npx prisma migrate dev --name add_project_date_default
@@ -21,6 +14,20 @@ npx prisma migrate dev --name add-monitoring-enhancements
 
 rm -rf package-lock.json .next
 
+<!-- DEV -->
+# STEP 1:
+npx prisma format
+
+# STEP 2:
+npx prisma generate
+# or (better for development):
+
+# STEP 3:
+npx prisma migrate dev --name add-equipment
+# or (quick prototyping / no migrations):
+
+# STEP 4:
+npx prisma db push
 
 <!-- ORDER OF PRISMA PRODUCTION MIGRATION AFTER UPDATING SCHEMA.PRISMA -->
 # STEP 1:

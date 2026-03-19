@@ -11,6 +11,8 @@ type CreateServiceRequestInput = {
   issueType: string;
   description?: string;
   priority?: number;
+  phoneNumber: string;
+  whatsappNumber?: string;
 };
 
 export async function createServiceRequest(data: CreateServiceRequestInput) {
@@ -20,9 +22,21 @@ export async function createServiceRequest(data: CreateServiceRequestInput) {
     redirect("/signin");
   }
 
-  if (!data.systemId || !data.issueType?.trim()) {
+  const issueType = data.issueType?.trim();
+  const phoneNumber = data.phoneNumber?.trim();
+  const whatsappNumber = data.whatsappNumber?.trim() || null;
+  const description = data.description?.trim() || null;
+
+  if (!data.systemId || !issueType) {
     throw new Error("System and issue type are required");
   }
+
+  if (!phoneNumber) {
+    throw new Error("Phone number is required");
+  }
+
+  const priority =
+    data.priority && [1, 2, 3].includes(data.priority) ? data.priority : 2;
 
   const user = await db.user.findUnique({
     where: { email: session.user.email },
@@ -46,11 +60,13 @@ export async function createServiceRequest(data: CreateServiceRequestInput) {
 
   const serviceRequest = await db.serviceRequest.create({
     data: {
-      issueType: data.issueType.trim(),
-      description: data.description?.trim() || null,
-      priority: data.priority ?? 2,
+      issueType,
+      description,
+      priority,
       status: ServiceStatus.OPEN,
       systemId: data.systemId,
+      phoneNumber,
+      whatsappNumber,
     },
   });
 
