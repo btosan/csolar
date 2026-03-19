@@ -10,7 +10,8 @@ import FeaturedProducts from "@/components/products/FeaturedProducts";
 import FeaturedProjects from "@/components/projects/FeaturedProjects";
 import ProductsSection from "@/components/products/ProductsSection";
 import SolutionsBanner from "@/components/SolutionsBanner";
-import HowItWorks from "../components/HowItWorks";
+import HowItWorks from "@/components/HowItWorks";
+import Link from "next/link";
 
 export const metadata = {
   title: "Contained Energy | Contained Solar – Smart Renewable Energy Solutions",
@@ -62,6 +63,13 @@ export default function Home() {
       <Services />
       <SolutionsBanner />
       <HowItWorks />
+      <div className="container pb-8 -mt-12 md:-mt-16 lg:-mt-20 bg-gray-50 w-full mx-auto flex items-center justify-center">
+        <Link 
+          href='/packages' 
+          className="text-base md:text-lg lg:text-xl underline underline-offset-8 decoration-dotted hover:text-gray-900 hover:text-lg md:hover:text-xl lg:hover:text-2xl hover:decoration-0 ">
+          See Packages
+        </Link>
+      </div>
       <FeaturedProducts />
       <div className="my-12.5 sm:my-20">
         <ProductCategory />

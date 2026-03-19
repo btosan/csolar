@@ -22,25 +22,27 @@ import "swiper/css"
 
 const serviceData = [
   {
-    name: "installation",
-    icon: <SolarPanel className="lg:h-9! lg:w-9! w-6 h-6" />,
-    title: "Solar & Inverter Installation",
+    name: "monitoring",
+    icon: <MonitorDot className="lg:h-9! lg:w-9! w-6 h-6" />,
+    title: "System Monitoring & Health Management",
     description:
-      "We design and install solar and inverter systems tailored to real energy needs, ensuring safety, efficiency, and long-term reliability from day one.",
+      "We track system performance and health to detect issues early, reduce downtime, and guide timely maintenance decisions.",
     serviceList: [
-      "Residential Solar Installations",
-      "Commercial Solar Systems",
-      "Mini-Grid, Off-Grid & Hybrid Systems",
-      "Smart & Future-proof Solar Streetlights",
-      "Inverter System Design & Setup",
-      "Solar Boreholes",
-      "Commissioning & Handover",
+      "Solar System Health Tracking",
+      "Battery & Inverter Condition Monitoring",
+      "Performance Benchmarking",
+      "Early Issue Detection",
+      "Service & Maintenance Alerts",
+      "Health-Based Recommendations",
     ],
     thumbs: [
-      { url: "/assets/img/services/thumb-1a.jpg" },
-      { url: "/assets/img/services/streetlight1.jpg" },
+      { url: "/assets/products/monitoring2.jpg" },
+      { url: "/assets/img/services/thumb-4.jpg" },
     ],
+    buttonLink: "/solutions",
+    buttonText: "Solutions",
   },
+
   {
     name: "sales",
     icon: <BaggageClaim className="lg:h-9! lg:w-9! w-6 h-6" />,
@@ -59,7 +61,33 @@ const serviceData = [
       { url: "/assets/inverters/inverter.jpg" },
       { url: "/assets/products/srne.webp" },
     ],
+    buttonLink: "/products",
+    buttonText: "Products",
   },
+
+  {
+    name: "installation",
+    icon: <SolarPanel className="lg:h-9! lg:w-9! w-6 h-6" />,
+    title: "Solar & Inverter Installation",
+    description:
+      "We design and install solar and inverter systems tailored to real energy needs, ensuring safety, efficiency, and long-term reliability from day one.",
+    serviceList: [
+      "Residential Solar Installations",
+      "Commercial Solar Systems",
+      "Mini-Grid, Off-Grid & Hybrid Systems",
+      "Smart & Future-proof Solar Streetlights",
+      "Inverter System Design & Setup",
+      "Solar Boreholes",
+      "Commissioning & Handover",
+    ],
+    thumbs: [
+      { url: "/assets/img/services/thumb-1a.jpg" },
+      { url: "/assets/img/services/streetlight1.jpg" },
+    ],
+    buttonLink: "/services/installation",
+    buttonText: "Installation",
+  },
+
   {
     name: "maintenance",
     icon: <PiWrenchFill className="lg:h-9! lg:w-9! w-6 h-6" />,
@@ -78,26 +106,10 @@ const serviceData = [
       { url: "/assets/img/services/thumb-3.jpg" },
       { url: "/assets/img/services/thumb-4.jpg" },
     ],
+    buttonLink: "/services/maintenance",
+    buttonText: "Maintenance",
   },
-  {
-    name: "monitoring",
-    icon: <MonitorDot className="lg:h-9! lg:w-9! w-6 h-6" />,
-    title: "System Monitoring & Health Management",
-    description:
-      "We track system performance and health to detect issues early, reduce downtime, and guide timely maintenance decisions.",
-    serviceList: [
-      "Solar System Health Tracking",
-      "Battery & Inverter Condition Monitoring",
-      "Performance Benchmarking",
-      "Early Issue Detection",
-      "Service & Maintenance Alerts",
-      "Health-Based Recommendations",
-    ],
-    thumbs: [
-      { url: "/assets/products/monitoring2.jpg" },
-      { url: "/assets/img/services/thumb-4.jpg" },
-    ],
-  },
+
   {
     name: "consulting",
     icon: <Lightbulb className="lg:h-9! lg:w-9! w-6 h-6" />,
@@ -116,6 +128,8 @@ const serviceData = [
       { url: "/assets/img/services/thumb-6.jpg" },
       { url: "/assets/img/services/thumb-1.jpg" },
     ],
+    buttonLink: "/contact",
+    buttonText: "Contact Us",
   },
 ]
 
@@ -209,7 +223,7 @@ const Services = () => {
                 className="
                   w-full
                   rounded-none
-                  h-25
+                  h-20
                   flex
                   items-center
                   relative
@@ -219,7 +233,7 @@ const Services = () => {
                 "
               >
                 <div
-                  className={`w-25 h-25 flex items-center justify-center absolute left-0 ${
+                  className={`w-20 h-20 flex items-center justify-center absolute left-0 ${
                     activeTab === item.name
                       ? "bg-primary text-white"
                       : "bg-accent text-primary"
@@ -235,7 +249,7 @@ const Services = () => {
           </TabsList>
 
           {/* CONTENT — FULL, WITH SWIPE ON MOBILE */}
-          <div className="flex-1 bg-white shadow h-122.5 p-7.5">
+          <div className="flex-1 bg-white shadow h-auto p-7.5">
             {/* Swiper for mobile/MD */}
             <div className="xl:hidden">
               <Swiper
@@ -250,8 +264,8 @@ const Services = () => {
 
                 {serviceData.map((item) => (
                   <SwiperSlide key={item.name}>
-                    <div className="flex flex-col md:flex-row gap-7.5">
-                      <div className="flex md:flex-col md:gap-5 gap-3">
+                    <div className="flex flex-col md:flex-row gap-5.5">
+                      <div className="flex md:flex-col md:gap-5 gap-2.5">
                         {item.thumbs.map((thumb, i) => (
                           <div
                             key={i}
@@ -282,7 +296,7 @@ const Services = () => {
                           ))}
                         </ul>
 
-                        <Button href="/contact" text="Contact Us" />
+                        <Button href={item.buttonLink} text={item.buttonText} />
                       </div>
                     </div>
                   </SwiperSlide>
@@ -326,7 +340,7 @@ const Services = () => {
                         ))}
                       </ul>
 
-                      <Button href="/contact" text="Contact Us" />
+                      <Button href={item.buttonLink} text={item.buttonText} />
                     </div>
                   </motion.div>
                 </TabsContent>

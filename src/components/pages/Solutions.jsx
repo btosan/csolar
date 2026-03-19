@@ -8,6 +8,7 @@ import { fadeIn } from "@/variants"
 import TrustSection from "@/components/TrustSection"
 import Faq from "@/components/Faq"
 import { useSession } from "next-auth/react"
+import PackagesClient from "@/components/packages/PackagesClient"
 
 const monitoringSolutions = [
   {
@@ -134,6 +135,7 @@ export default function MonitoringSolutionsPage() {
 
       {/* Trust & FAQ */}
       <div>
+        <PackagesClient />
         <TrustSection />
         <Faq />
       </div>

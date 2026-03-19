@@ -185,10 +185,6 @@ export async function createOrGetPackageOrder(packageId: string) {
 
   await createInvoiceForOrder(order.id);
 
-  if (process.env.NODE_ENV === 'production' || !existing) {
-      revalidatePath(`/packages/${packageId}/checkout`);
-    }
-
   return db.order.findUnique({
     where: { id: order.id },
     include: {

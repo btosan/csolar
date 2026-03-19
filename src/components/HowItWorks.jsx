@@ -4,6 +4,7 @@ import { motion } from "framer-motion"
 import { fadeIn } from "@/variants"
 import PreTitle from "@/components/PreTitle"
 import Button from "./Button"
+import Link from "next/link"
 
 const steps = [
   {
@@ -64,9 +65,10 @@ export default function HowItWorks() {
             </motion.div>
           ))}
         </div>
-        <div className="w-full mx-auto flex items-center justify-center pt-8">
+        <div className="w-full mx-auto flex items-center justify-center pt-8 md:pt-12 lg:pt-16">
             <Button href="/register" text="Get Started" />
         </div>
+
       </div>
     </section>
   )
