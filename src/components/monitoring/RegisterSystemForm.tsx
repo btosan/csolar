@@ -1,6 +1,6 @@
 "use client"
 
-import { useActionState, useEffect } from "react"  // ← added useEffect
+import { useActionState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { createSolarSystem } from "@/lib/actions/system"
 
@@ -35,16 +35,15 @@ export default function RegisterSystemForm() {
         return { error: err.message || "Failed to register system. Please try again." }
       }
     },
-    { success: false } // initial state
+    { success: false }
   )
 
-  // ← NEW: Move navigation to useEffect (runs after render)
   useEffect(() => {
     if (state.success && state.systemId) {
       router.push(`/dashboard/system/${state.systemId}`)
       router.refresh()
     }
-  }, [state.success, state.systemId, router]) // dependencies: only re-run when these change
+  }, [state.success, state.systemId, router]) 
 
   return (
     <form action={formAction} className="max-w-2xl space-y-6">
@@ -103,8 +102,9 @@ export default function RegisterSystemForm() {
 
       <select name="batteryType" className="w-full border rounded p-2">
         <option value="">No Battery</option>
+        <option value="TUBULAR">Tubular</option>
         <option value="LITHIUM">Lithium</option>
-        <option value="LEAD_ACID">Lead Acid</option>
+        <option value="LEAD_ACID"> Lead Acid (SMF)</option>
       </select>
 
       <input

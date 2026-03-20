@@ -9,6 +9,7 @@ interface GenerateAiRecommendationInput {
   inverterScore: number;
   batteryScore: number;
   activeAlerts: number;
+  notes?: string;
   tx: any;
 }
 
@@ -38,6 +39,7 @@ export async function generateAiRecommendation(
     inverterScore,
     batteryScore,
     activeAlerts,
+    notes,
     tx,
   } = input;
 
@@ -56,6 +58,7 @@ export async function generateAiRecommendation(
       inverterScore,
       batteryScore,
       activeAlerts,
+      notes,
     });
 
     return {
@@ -71,12 +74,14 @@ export async function generateAiRecommendation(
 System "${systemName}" health score: ${score}/100.
 Production: ${productionScore}, Inverter: ${inverterScore}, Battery: ${batteryScore}.
 Active alerts: ${activeAlerts}.
+${notes ? `Self-check notes: ${notes}` : ""}
 Upgrades: ${upgradeText}
       `.trim(),
       actionPlan: `
 1. Inspect and resolve active alerts promptly.
 2. Review upgrade recommendations: ${upgradeText}
-3. Continue regular monitoring and self-checks.
+3. ${notes ? `Take the user-reported unusual behavior into account during diagnosis: ${notes}` : "Continue regular monitoring and self-checks."}
+4. Continue regular monitoring and self-checks.
       `.trim(),
       urgency:
         score < 50 || activeAlerts > 3

@@ -153,6 +153,7 @@ export async function createMonitoringSnapshot(
             inverterScore: result.health.inverterScore ?? 0,
             batteryScore: result.health.batteryScore ?? 0,
             activeAlerts,
+            notes: input.notes,
             tx: db,
           });
         }

@@ -4,11 +4,9 @@ import { authOptions } from "@/lib/auth";
 import { db } from "@/lib/db";
 import Link from "next/link";
 import { Role, ServiceStatus } from "@prisma/client";
-import {
-  assignTechnicianToRequest,
-  updateServiceRequestStatus,
-} from "@/lib/actions/admin";
 import CompleteServiceVisitForm from "@/components/admin/CompleteServiceVisitForm";
+import AssignTechnicianForm from "@/components/admin/AssignTechnicianForm";
+import ServiceRequestQuickActions from "@/components/admin/ServiceRequestQuickActions";
 
 export const dynamic = "force-dynamic";
 
@@ -230,40 +228,10 @@ export default async function AdminServiceRequestsPage() {
                       Assign Technician
                     </h3>
 
-                    <form
-                      action={async (formData) => {
-                        "use server";
-                        await assignTechnicianToRequest({
-                          serviceRequestId: request.id,
-                          technicianId: formData.get("technicianId") as string,
-                        });
-                      }}
-                      className="flex flex-col sm:flex-row gap-3"
-                    >
-                      <select
-                        name="technicianId"
-                        required
-                        defaultValue=""
-                        className="border rounded-lg px-3 py-2 min-w-60"
-                      >
-                        <option value="" disabled>
-                          Select technician
-                        </option>
-                        {technicians.map((tech) => (
-                          <option key={tech.id} value={tech.id}>
-                            {tech.name || tech.email}
-                          </option>
-                        ))}
-                      </select>
-
-                      <button
-                        type="submit"
-                        className="bg-black text-white px-4 py-2 rounded-lg hover:opacity-90"
-                      >
-                        Assign Technician
-                      </button>
-                    </form>
-
+                    <AssignTechnicianForm
+                      serviceRequestId={request.id}
+                      technicians={technicians}
+                    />
                     {latestVisit?.technician && (
                       <p className="text-sm mt-3">
                         <span className="font-medium">Assigned to:</span>{" "}
@@ -278,46 +246,10 @@ export default async function AdminServiceRequestsPage() {
                       Quick Actions
                     </h3>
 
-                    <div className="flex flex-wrap gap-3">
-                      {request.status === "OPEN" && (
-                        <form
-                          action={async () => {
-                            "use server";
-                            await updateServiceRequestStatus({
-                              serviceRequestId: request.id,
-                              status: ServiceStatus.IN_PROGRESS,
-                            });
-                          }}
-                        >
-                          <button
-                            type="submit"
-                            className="bg-yellow-500 text-white px-4 py-2 rounded-lg hover:opacity-90"
-                          >
-                            Mark In Progress
-                          </button>
-                        </form>
-                      )}
-
-                      {request.status !== "COMPLETED" &&
-                        request.status !== "CANCELLED" && (
-                          <form
-                            action={async () => {
-                              "use server";
-                              await updateServiceRequestStatus({
-                                serviceRequestId: request.id,
-                                status: ServiceStatus.CANCELLED,
-                              });
-                            }}
-                          >
-                            <button
-                              type="submit"
-                              className="bg-gray-600 text-white px-4 py-2 rounded-lg hover:opacity-90"
-                            >
-                              Cancel Request
-                            </button>
-                          </form>
-                        )}
-                    </div>
+                  <ServiceRequestQuickActions
+                    serviceRequestId={request.id}
+                    currentStatus={request.status}
+                  />
                   </div>
 
                   {request.status !== "COMPLETED" &&

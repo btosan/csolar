@@ -7,7 +7,7 @@ datasource db {
 }
 
 //////////////////////////////////////
-// ENUMS 
+// ENUMS BatteryType
 //////////////////////////////////////
 
 enum Role {
@@ -29,6 +29,7 @@ enum SystemStatus {
 }
 
 enum BatteryType {
+  TUBULAR
   LEAD_ACID
   LITHIUM
 }
