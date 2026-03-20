@@ -8,6 +8,9 @@ interface Props {
   products: any[];
 }
 
+const INTERACTIVE_SELECTOR =
+  'a, button, input, textarea, select, summary, [role="button"], [data-no-drag="true"]';
+
 export default function ProductsCarousel({ products }: Props) {
   const outerRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
@@ -88,20 +91,22 @@ export default function ProductsCarousel({ products }: Props) {
         if (off >= 0) off -= baseWidth;
 
         setOffset(off);
-
         e.preventDefault();
       }
     };
 
     el.addEventListener("wheel", handleWheel, { passive: false });
-
     return () => el.removeEventListener("wheel", handleWheel);
   }, [addVelocity, getOffset, setOffset, baseWidth]);
 
   const onPointerDown = useCallback(
     (e: React.PointerEvent) => {
-      if (!e.isPrimary || (e.pointerType === "mouse" && e.button !== 0))
+      if (!e.isPrimary || (e.pointerType === "mouse" && e.button !== 0)) return;
+
+      const target = e.target as HTMLElement;
+      if (target.closest(INTERACTIVE_SELECTOR)) {
         return;
+      }
 
       const outer = outerRef.current;
       if (!outer) return;
@@ -110,11 +115,9 @@ export default function ProductsCarousel({ products }: Props) {
       setVelocity(0);
 
       activePointerId.current = e.pointerId;
-
       downX.current = e.clientX;
       lastX.current = e.clientX;
       downAt.current = performance.now();
-
       moved.current = false;
 
       try {
@@ -126,8 +129,7 @@ export default function ProductsCarousel({ products }: Props) {
 
   const onPointerMove = useCallback(
     (e: React.PointerEvent) => {
-      if (!isDraggingRef.current || activePointerId.current !== e.pointerId)
-        return;
+      if (!isDraggingRef.current || activePointerId.current !== e.pointerId) return;
 
       const dx = e.clientX - lastX.current;
       lastX.current = e.clientX;
@@ -173,13 +175,13 @@ export default function ProductsCarousel({ products }: Props) {
       isDraggingRef.current = false;
       activePointerId.current = null;
     },
-    [TAP_MAX_MS]
+    []
   );
 
   const onPointerCancel = useCallback(() => {
     isDraggingRef.current = false;
     activePointerId.current = null;
-  }, []);
+  }, [isDraggingRef]);
 
   const displayed = [...products, ...products, ...products];
 
@@ -198,7 +200,7 @@ export default function ProductsCarousel({ products }: Props) {
         WebkitOverflowScrolling: "auto",
         scrollbarWidth: "none",
         msOverflowStyle: "none",
-        cursor: isDraggingRef.current ? "grabbing" : "grab",
+        cursor: "grab",
       }}
     >
       <div

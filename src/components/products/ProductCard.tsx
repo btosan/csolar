@@ -3,8 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import AddToCartButton from "@/components/products/AddToCartButton";
-import ContactOptionsModal from "@/components/products/ContactOptionsModal";
+import ProductCardContactOverlay from "@/components/products/ProductCardContactOverlay";
 
 const BASE_URL =
   process.env.NEXT_PUBLIC_SITE_URL ||
@@ -25,40 +24,41 @@ type ProductCardProps = {
 };
 
 export default function ProductCard({ data }: ProductCardProps) {
-  const { id, name, slug, price, mainImageUrl, rating } = data;
+  const { name, slug, mainImageUrl, rating } = data;
 
   const imageSrc =
     mainImageUrl && mainImageUrl.trim() !== ""
       ? mainImageUrl
       : "/assets/csolar/solar-inverter.jpeg";
 
-  const [modalOpen, setModalOpen] = useState(false); // ← add this
+  const [overlayOpen, setOverlayOpen] = useState(false);
 
-  const productUrl = slug
-      ? `${BASE_URL}/products/${slug}`
-      : "";
+  const productUrl = slug ? `${BASE_URL}/products/${slug}` : "";
 
   return (
-    <div className="flex flex-col justify-center items-center border border-black/5 shadow-md rounded-xl pb-4">
-
-      <Link href={`/products/${slug}`} className="group">
-        <div className="bg-white rounded-t-xl w-full aspect-square mb-4 overflow-hidden">
+    <div className="relative flex h-full flex-col items-center overflow-hidden rounded-xl border border-black/5 pb-4 shadow-md bg-white">
+      <Link
+        href={`/products/${slug}`}
+        className="group w-full"
+        data-no-drag="true"
+      >
+        <div className="mb-4 aspect-square w-full overflow-hidden rounded-t-xl bg-white">
           <Image
             src={imageSrc}
             alt={name}
             width={400}
             height={400}
-            className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-500"
+            className="h-full w-full object-contain transition-transform duration-500 group-hover:scale-110"
           />
         </div>
 
-        <h3 className="px-4 text-center font-bold text-base md:text-lg text-black mb-1 line-clamp-2">
+        <h3 className="mb-1 px-4 text-center text-base font-bold text-black line-clamp-2 md:text-lg">
           {name}
         </h3>
       </Link>
 
-      <div className="px-4 flex items-center gap-2 mb-2">
-        <div className="text-yellow-500 text-sm">
+      <div className="mb-2 flex items-center gap-2 px-4">
+        <div className="text-sm text-yellow-500">
           {"★".repeat(Math.round(rating || 0))}
           {"☆".repeat(5 - Math.round(rating || 0))}
         </div>
@@ -68,32 +68,20 @@ export default function ProductCard({ data }: ProductCardProps) {
         </span>
       </div>
 
-      {/* <div className="font-bold text-lg md:text-xl text-black mb-4">
-        ₦{price.toLocaleString()}
-      </div> */}
-
-      <div className="w-full px-4 mx-auto flex md:flex-col items-center md:items-stretch md:justify-center justify-center md:gap-2">
-        {/* <AddToCartButton
-          productId={id}
-          name={name}
-          mainImageUrl={mainImageUrl || data.gallery?.[0]?.url} 
-        /> */}
-        {/* <button
-          onClick={() => setModalOpen(true)}
-          className="bg-black text-white font-medium text-center px-6 py-3 hover:opacity-80 transition hover:cursor-pointer"
-        >
-          Contact Sales
-        </button> */}
+      <div className="mt-auto w-full px-4">
         <button
-          onClick={() => setModalOpen(true)}
-          className="bg-accent text-black font-medium text-center px-6 py-3 hover:opacity-80 transition hover:cursor-pointer"
+          type="button"
+          data-no-drag="true"
+          onClick={() => setOverlayOpen(true)}
+          className="w-full rounded-lg bg-accent px-6 py-3 text-center font-medium text-black transition hover:opacity-80 hover:cursor-pointer"
         >
           Contact Sales
         </button>
       </div>
-      <ContactOptionsModal
-        isOpen={modalOpen}
-        onClose={() => setModalOpen(false)}
+
+      <ProductCardContactOverlay
+        isOpen={overlayOpen}
+        onClose={() => setOverlayOpen(false)}
         productName={name}
         productUrl={productUrl}
       />
