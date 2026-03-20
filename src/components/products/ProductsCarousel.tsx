@@ -8,8 +8,14 @@ interface Props {
   products: any[];
 }
 
-const INTERACTIVE_SELECTOR =
-  'a, button, input, textarea, select, summary, [role="button"], [data-no-drag="true"]';
+function wrapOffset(value: number, width: number) {
+  if (width <= 0) return value;
+
+  let next = value;
+  while (next <= -width) next += width;
+  while (next > 0) next -= width;
+  return next;
+}
 
 export default function ProductsCarousel({ products }: Props) {
   const outerRef = useRef<HTMLDivElement>(null);
@@ -17,12 +23,14 @@ export default function ProductsCarousel({ products }: Props) {
 
   const [userStopped, setUserStopped] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
+  const [isPointerDown, setIsPointerDown] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
 
   const itemWidth = 320;
   const gap = 24;
   const baseWidth = products.length * (itemWidth + gap) - gap;
 
-  const isPaused = userStopped || isHovered;
+  const isPaused = userStopped || isHovered || isPointerDown || isDragging;
 
   const {
     getOffset,
@@ -44,6 +52,7 @@ export default function ProductsCarousel({ products }: Props) {
   const lastX = useRef(0);
   const moved = useRef(false);
   const downAt = useRef(0);
+  const suppressClickRef = useRef(false);
 
   const DRAG_THRESHOLD = 6;
   const TAP_MAX_MS = 260;
@@ -60,12 +69,10 @@ export default function ProductsCarousel({ products }: Props) {
       if (trackRef.current) {
         trackRef.current.style.transform = `translate3d(${getOffset()}px, 0, 0)`;
       }
-
       raf = requestAnimationFrame(animate);
     };
 
     animate();
-
     return () => cancelAnimationFrame(raf);
   }, [getOffset]);
 
@@ -74,83 +81,81 @@ export default function ProductsCarousel({ products }: Props) {
     if (!el) return;
 
     const handleWheel = (e: WheelEvent) => {
-      let delta =
-        Math.abs(e.deltaX) >= Math.abs(e.deltaY)
-          ? e.deltaX
-          : e.shiftKey
-          ? e.deltaY
-          : 0;
+      const dominantHorizontal =
+        Math.abs(e.deltaX) >= Math.abs(e.deltaY) ? e.deltaX : e.shiftKey ? e.deltaY : 0;
 
-      if (delta !== 0) {
-        const factor = 1.2;
-        addVelocity(delta * factor);
+      if (dominantHorizontal === 0) return;
 
-        let off = getOffset() + delta;
+      setUserStopped(true);
+      setVelocity(0);
 
-        if (off <= -baseWidth) off += baseWidth;
-        if (off >= 0) off -= baseWidth;
+      const next = wrapOffset(getOffset() - dominantHorizontal, baseWidth);
+      setOffset(next);
+      addVelocity(-dominantHorizontal * 8);
 
-        setOffset(off);
-        e.preventDefault();
-      }
+      e.preventDefault();
     };
 
     el.addEventListener("wheel", handleWheel, { passive: false });
     return () => el.removeEventListener("wheel", handleWheel);
-  }, [addVelocity, getOffset, setOffset, baseWidth]);
+  }, [addVelocity, getOffset, setOffset, setVelocity, baseWidth]);
+
+  const endInteraction = useCallback(() => {
+    isDraggingRef.current = false;
+    activePointerId.current = null;
+    setIsPointerDown(false);
+    setIsDragging(false);
+  }, [isDraggingRef]);
 
   const onPointerDown = useCallback(
     (e: React.PointerEvent) => {
       if (!e.isPrimary || (e.pointerType === "mouse" && e.button !== 0)) return;
-
-      const target = e.target as HTMLElement;
-      if (target.closest(INTERACTIVE_SELECTOR)) {
-        return;
-      }
-
-      const outer = outerRef.current;
-      if (!outer) return;
-
-      isDraggingRef.current = true;
-      setVelocity(0);
 
       activePointerId.current = e.pointerId;
       downX.current = e.clientX;
       lastX.current = e.clientX;
       downAt.current = performance.now();
       moved.current = false;
+      suppressClickRef.current = false;
 
-      try {
-        outer.setPointerCapture(e.pointerId);
-      } catch {}
+      setIsPointerDown(true);
+      setUserStopped(true);
+      setVelocity(0);
     },
-    [isDraggingRef, setVelocity]
+    [setVelocity]
   );
 
   const onPointerMove = useCallback(
     (e: React.PointerEvent) => {
-      if (!isDraggingRef.current || activePointerId.current !== e.pointerId) return;
+      if (activePointerId.current !== e.pointerId) return;
 
-      const dx = e.clientX - lastX.current;
+      const totalDx = e.clientX - downX.current;
+      const stepDx = e.clientX - lastX.current;
       lastX.current = e.clientX;
 
-      if (!moved.current && Math.abs(e.clientX - downX.current) > DRAG_THRESHOLD) {
+      if (!moved.current && Math.abs(totalDx) > DRAG_THRESHOLD) {
         moved.current = true;
+        suppressClickRef.current = true;
+        isDraggingRef.current = true;
+        setIsDragging(true);
+
+        const outer = outerRef.current;
+        if (outer) {
+          try {
+            outer.setPointerCapture(e.pointerId);
+          } catch {}
+        }
       }
 
-      let off = getOffset() + dx;
+      if (!moved.current) return;
 
-      if (off <= -baseWidth) off += baseWidth;
-      if (off >= 0) off -= baseWidth;
+      const next = wrapOffset(getOffset() + stepDx, baseWidth);
+      setOffset(next);
 
-      setOffset(off);
-
-      if (moved.current) {
-        const velocityFactor = e.pointerType === "touch" ? 6 : 20;
-        addVelocity(dx * velocityFactor);
-      }
+      const velocityFactor = e.pointerType === "touch" ? 10 : 18;
+      addVelocity(stepDx * velocityFactor);
     },
-    [getOffset, setOffset, addVelocity, baseWidth]
+    [addVelocity, getOffset, setOffset, baseWidth, isDraggingRef]
   );
 
   const onPointerUp = useCallback(
@@ -158,7 +163,6 @@ export default function ProductsCarousel({ products }: Props) {
       if (activePointerId.current !== e.pointerId) return;
 
       const outer = outerRef.current;
-
       if (outer) {
         try {
           outer.releasePointerCapture(e.pointerId);
@@ -172,16 +176,25 @@ export default function ProductsCarousel({ products }: Props) {
         setUserStopped(true);
       }
 
-      isDraggingRef.current = false;
-      activePointerId.current = null;
+      endInteraction();
     },
-    []
+    [endInteraction]
   );
 
   const onPointerCancel = useCallback(() => {
-    isDraggingRef.current = false;
-    activePointerId.current = null;
-  }, [isDraggingRef]);
+    endInteraction();
+  }, [endInteraction]);
+
+  const onClickCapture = useCallback((e: React.MouseEvent) => {
+    if (!suppressClickRef.current) return;
+
+    e.preventDefault();
+    e.stopPropagation();
+
+    window.setTimeout(() => {
+      suppressClickRef.current = false;
+    }, 0);
+  }, []);
 
   const displayed = [...products, ...products, ...products];
 
@@ -195,17 +208,18 @@ export default function ProductsCarousel({ products }: Props) {
       onPointerMove={onPointerMove}
       onPointerUp={onPointerUp}
       onPointerCancel={onPointerCancel}
+      onClickCapture={onClickCapture}
       style={{
         touchAction: "pan-y",
         WebkitOverflowScrolling: "auto",
         scrollbarWidth: "none",
         msOverflowStyle: "none",
-        cursor: "grab",
+        cursor: isDragging ? "grabbing" : "grab",
       }}
     >
       <div
         ref={trackRef}
-        className="flex py-6 will-change-transform"
+        className="flex items-start py-6 will-change-transform"
         style={{ gap: `${gap}px` }}
       >
         {displayed.map((product, idx) => (
