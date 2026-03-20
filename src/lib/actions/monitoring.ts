@@ -192,6 +192,6 @@ export async function createMonitoringSnapshot(
       stack: error instanceof Error ? error.stack : undefined,
     });
 
-    throw new Error("Failed to save system self-check. Please try again.");
+    throw new Error("Failed to save system self-check. Please try again later.");
   }
 }
