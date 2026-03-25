@@ -85,6 +85,12 @@ const navLinks = [
   { name: "About", href: "/about" },
 ];
 
+
+const isExternalImageUrl = (src) => {
+  return typeof src === "string" && /^https?:\/\//i.test(src.trim());
+};
+
+
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeMenu, setActiveMenu] = useState(null);
@@ -223,13 +229,24 @@ const Header = () => {
                 >
                   <div className="h-7 w-7 rounded-full overflow-hidden border border-accent/30 shadow-sm">
                     {user.image ? (
-                      <CldImage
-                        src={user.image}
-                        alt={user.name || "User"}
-                        width={100}
-                        height={100}
-                        className="w-full h-full object-cover rounded-full"
-                      />
+                      isExternalImageUrl(user.image) ? (
+                        <Image
+                          src={user.image}
+                          alt={user.name || "User"}
+                          width={100}
+                          height={100}
+                          className="w-full h-full object-cover rounded-full"
+                          unoptimized
+                        />
+                      ) : (
+                        <CldImage
+                          src={user.image}
+                          alt={user.name || "User"}
+                          width={100}
+                          height={100}
+                          className="w-full h-full object-cover rounded-full"
+                        />
+                      )
                     ) : (
                       <div className="w-full h-full bg-white/20 flex items-center justify-center text-white text-sm font-medium">
                         {user.name?.[0]?.toUpperCase() || "?"}
