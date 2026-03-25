@@ -14,11 +14,11 @@ const socials = [
     },
     {
         icon: <RiTwitterXFill />,
-        path: "https://x.com"
+        path: "https://x.com/"
     },
     {
         icon: <RiInstagramFill />,
-        path: "https://instagram.com"
+        path: "https://instagram.com/"
     }
 ]
 const Socials = ({containerStyles,iconsStyles}) => {
