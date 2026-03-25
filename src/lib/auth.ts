@@ -1,9 +1,9 @@
 import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import GoogleProvider from "next-auth/providers/google";
-import { db } from "./db";
+import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import bcrypt from "bcryptjs";
+import { db } from "./db";
 
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(db),
@@ -12,6 +12,7 @@ export const authOptions: NextAuthOptions = {
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+      allowDangerousEmailAccountLinking: false,
     }),
 
     CredentialsProvider({
@@ -22,23 +23,27 @@ export const authOptions: NextAuthOptions = {
           type: "email",
           placeholder: "john@email.com",
         },
-        password: { label: "Password", type: "password" },
+        password: {
+          label: "Password",
+          type: "password",
+        },
       },
 
       async authorize(credentials) {
         try {
           if (!credentials?.email || !credentials?.password) {
-            throw new Error("Missing credentials");
+            return null;
           }
 
+          const email = credentials.email.toLowerCase().trim();
+
           const user = await db.user.findUnique({
-            where: {
-              email: credentials.email.toLowerCase(),
-            },
+            where: { email },
           });
 
+          // If user does not exist or is an OAuth-only user with no password
           if (!user || !user.password) {
-            throw new Error("Invalid credentials");
+            return null;
           }
 
           const passwordMatch = await bcrypt.compare(
@@ -47,14 +52,8 @@ export const authOptions: NextAuthOptions = {
           );
 
           if (!passwordMatch) {
-            throw new Error("Invalid credentials");
+            return null;
           }
-
-          // update activity timestamp
-          await db.user.update({
-            where: { id: user.id },
-            data: { updatedAt: new Date() },
-          });
 
           return {
             id: user.id,
@@ -64,7 +63,7 @@ export const authOptions: NextAuthOptions = {
             role: user.role,
           };
         } catch (error) {
-          console.error("Authorization error:", error);
+          console.error("Credentials authorize error:", error);
           return null;
         }
       },
@@ -73,6 +72,7 @@ export const authOptions: NextAuthOptions = {
 
   pages: {
     signIn: "/signin",
+    error: "/signin",
   },
 
   session: {
@@ -81,12 +81,40 @@ export const authOptions: NextAuthOptions = {
   },
 
   callbacks: {
-    async session({ session, token }) {
-      if (!session?.user || !token?.sub) return session;
+    async jwt({ token, user }) {
+      if (user) {
+        token.sub = user.id;
+        token.role = (user as any).role ?? "CUSTOMER";
+      }
 
-      // always fetch fresh DB user
+      // Ensure role exists even on later requests
+      if (!token.role && token.sub) {
+        const dbUser = await db.user.findUnique({
+          where: { id: token.sub },
+          select: { role: true },
+        });
+
+        if (dbUser) {
+          token.role = dbUser.role;
+        }
+      }
+
+      return token;
+    },
+
+    async session({ session, token }) {
+      if (!session.user || !token.sub) return session;
+
       const freshUser = await db.user.findUnique({
         where: { id: token.sub },
+        select: {
+          id: true,
+          email: true,
+          name: true,
+          image: true,
+          role: true,
+          createdAt: true,
+        },
       });
 
       if (freshUser) {
@@ -101,17 +129,19 @@ export const authOptions: NextAuthOptions = {
       return session;
     },
 
-    async jwt({ token, user }) {
-      if (user) {
-        token.id = user.id;
-        token.role = user.role;
+    async signIn({ user, account }) {
+      // Allow Google sign-in once OAuth succeeds
+      if (account?.provider === "google") {
+        return !!user.email;
       }
 
-      return token;
+      return true;
     },
   },
 
-  debug: process.env.NODE_ENV === "development",
+  secret: process.env.NEXTAUTH_SECRET,
+
+  debug: false,
 };
 
 const handler = NextAuth(authOptions);
