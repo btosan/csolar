@@ -11,6 +11,7 @@ import {
 
 import { useState } from "react"
 import Link from "next/link"
+import Image from "next/image";
 import { useSession, signOut } from "next-auth/react"
 
 import { RiMenu3Fill } from "react-icons/ri"
@@ -49,6 +50,10 @@ const links = [
   { name: "About", href: "/about" },
 ]
 
+
+const isExternalImageUrl = (src) => {
+  return typeof src === "string" && /^https?:\/\//i.test(src.trim());
+};
 
 const NavMobile = () => {
   const [isOpen, setIsOpen] = useState(false)
@@ -151,8 +156,18 @@ const NavMobile = () => {
                     onClick={() => setShowProfilePanel(!showProfilePanel)}
                     className="flex items-center gap-3 w-full text-left hover:opacity-90 transition-opacity focus:outline-none hover:cursor-pointer"
                   >
-                    <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-white/30 shadow-sm shrink-0">
-                      {user.image ? (
+                  <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-white/30 shadow-sm shrink-0">
+                    {user.image ? (
+                      isExternalImageUrl(user.image) ? (
+                        <Image
+                          src={user.image}
+                          alt={user.name || "User"}
+                          width={40}
+                          height={40}
+                          className="w-full h-full object-cover"
+                          unoptimized
+                        />
+                      ) : (
                         <CldImage
                           src={user.image}
                           alt={user.name || "User"}
@@ -160,12 +175,13 @@ const NavMobile = () => {
                           width={40}
                           height={40}
                         />
-                      ) : (
-                        <div className="w-full h-full bg-white/20 flex items-center justify-center text-white text-base font-medium">
-                          {user.name?.[0]?.toUpperCase() || "?"}
-                        </div>
-                      )}
-                    </div>
+                      )
+                    ) : (
+                      <div className="w-full h-full bg-white/20 flex items-center justify-center text-white text-base font-medium">
+                        {user.name?.[0]?.toUpperCase() || "?"}
+                      </div>
+                    )}
+                  </div>
                     <span className="text-sm uppercase tracking-[1.2px] text-white/90">
                       {user.name || "Profile"}
                     </span>
