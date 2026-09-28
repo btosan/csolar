@@ -1,3 +1,8 @@
+/**
+ * @param {"up" | "down" | "left" | "right"} direction
+ * @param {number} delay
+ * @returns {import("framer-motion").Variants}
+ */
 export const fadeIn = (direction, delay) => {
   return {
     hidden: {
@@ -11,8 +16,8 @@ export const fadeIn = (direction, delay) => {
       opacity: 1,
       transition: {
         type: "tween",
-        duration: 0.6,           // ← reduced from 1 → faster animation
-        delay: delay * 0.25,     // ← ¼ of original delay
+        duration: 0.6, // reduced from 1 → faster animation
+        delay: delay * 0.25, // ¼ of original delay
         ease: [0.25, 0.25, 0.25, 0.75],
       },
     },
