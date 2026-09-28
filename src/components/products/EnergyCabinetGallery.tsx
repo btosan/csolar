@@ -4,7 +4,18 @@ import { useState } from "react"
 import Image from "next/image"
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion"
 
-export default function EnergyCabinetGallery({ images = [] }) {
+type GalleryImage = {
+  src: string
+  alt: string
+}
+
+type EnergyCabinetGalleryProps = {
+  images?: GalleryImage[]
+}
+
+export default function EnergyCabinetGallery({
+  images = [],
+}: EnergyCabinetGalleryProps) {
   const [active, setActive] = useState(0)
   const reduceMotion = useReducedMotion()
 
@@ -56,7 +67,7 @@ export default function EnergyCabinetGallery({ images = [] }) {
           >
             <Image
               src={item.src}
-              alt="contained energy"
+              alt=""
               fill
               sizes="96px"
               className="object-cover"

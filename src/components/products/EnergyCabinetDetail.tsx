@@ -156,7 +156,15 @@ const specGroups = [
   },
 ]
 
-function SectionHeading({ pretitle, title, text }) {
+function SectionHeading({
+  pretitle,
+  title,
+  text,
+}: {
+  pretitle: string
+  title: string
+  text?: string
+}) {
   return (
     <div className="text-center max-w-135 mx-auto mb-12 lg:mb-16">
       <PreTitle text={pretitle} center />
