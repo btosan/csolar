@@ -11,6 +11,7 @@ import FeaturedProjects from "@/components/projects/FeaturedProjects";
 import ProductsSection from "@/components/products/ProductsSection";
 import SolutionsBanner from "@/components/SolutionsBanner";
 import HowItWorks from "@/components/HowItWorks";
+import EnergyCabinetFeature from "@/components/EnergyCabinetFeature";
 import Link from "next/link";
 
 export const metadata = {
@@ -60,6 +61,7 @@ export default function Home() {
   return (
     <div className="overflow-hidden">
       <Hero />
+      <EnergyCabinetFeature />
       <Services />
       <SolutionsBanner />
       <HowItWorks />

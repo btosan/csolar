@@ -7,6 +7,19 @@ import { ChevronRightIcon, ChevronLeftIcon } from "@heroicons/react/24/solid";
 import Button from "./Button";
 
 const slides = [
+    {
+    title: (
+      <>
+        <span className="text-accent">Industrial</span> & Commercial Energy Storage
+      </>
+    ),
+    description:
+      "From 175kWh energy storage to intelligent power management, we build independent energy stations that reduce grid dependence and improve power reliability.",
+    bg: "bg-[url('/assets/inverters/industrial.webp')]",
+    buttonText: "Contact Us",
+    buttonLink: "/contact",
+  },
+
   {
     title: (
       <>

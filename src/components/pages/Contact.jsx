@@ -115,9 +115,9 @@ export default function ContactPage() {
               <div>
                 <strong>Address:</strong>
                 <p className="mt-2">
-                  No 91/93 Aina Street,<br />
-                  Ojodu Berger,<br />
-                  Lagos, Nigeria
+                  34, Oguntona Crescent, <br />
+                  Charly Boy Bus Stop, <br />
+                  Gbagada, Lagos, Nigeria
                 </p>
               </div>
 

@@ -11,7 +11,7 @@ import Logo from "./Logo";
 const Footer = () => {
   const phoneNumber = "+2348033319391";
   const emailAddress = "containedsolar@gmail.com";
-  const officeAddress = "No 91/93 Aina Street, Ojodu Berger, Lagos, Nigeria";
+  const officeAddress = "34, Oguntona Crescent, Charly Boy Bus Stop, Gbagada, Lagos, Nigeria";
 
   return (
     <motion.footer
