@@ -27,7 +27,7 @@ const PRODUCT_URL = `${SITE_URL}/products/175kwh-energy-storage-cabinet`
 
 // Same WhatsApp number as the Contact page
 const WHATSAPP_HREF = `https://wa.me/2348033319391?text=${encodeURIComponent(
-  `Hello, I'd like a quote for the ${PRODUCT_NAME} by Blue Carbon. ${PRODUCT_URL}`
+  `Hello, I'd like a quote for the ${PRODUCT_NAME} by Blue Carbon / Exulted. ${PRODUCT_URL}`
 )}`
 
 const gallery = [
@@ -203,7 +203,7 @@ export default function EnergyCabinetDetail() {
           <EnergyCabinetGallery images={gallery} />
 
           <div>
-            <PreTitle text="Blue Carbon" />
+            <PreTitle text="Blue Carbon / Exulted" />
             <h1 className="text-3xl lg:text-4xl font-bold mb-4">
               {PRODUCT_NAME}
             </h1>

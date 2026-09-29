@@ -8,12 +8,12 @@ const PAGE_URL = `${BASE_URL}/products/175kwh-energy-storage-cabinet`;
 
 export const metadata: Metadata = {
   title:
-    "175kWh Commercial & Industrial Energy Storage Cabinet | Blue Carbon | Contained Solar",
+    "175kWh Commercial & Industrial Energy Storage Cabinet | Blue Carbon | Contained Solar | Exulted | Contained Energy",
   description:
     "Blue Carbon 175kWh all-in-one energy storage cabinet with built-in BMS, EMS and PCS. Off-grid, hybrid and peak shaving power for businesses and communities.",
   keywords: [
     "175kWh energy storage cabinet",
-    "Blue Carbon",
+    "Blue Carbon", "Exulted",
     "commercial energy storage",
     "industrial energy storage",
     "C&I energy storage",
@@ -33,7 +33,7 @@ export const metadata: Metadata = {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "Blue Carbon 175kWh energy storage cabinet by Contained Solar",
+        alt: "Blue Carbon / Exulted 175kWh energy storage cabinet by Contained Solar",
       },
     ],
     locale: "en_US",
