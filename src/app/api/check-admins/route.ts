@@ -7,9 +7,16 @@ export async function GET() {
       where: { role: 'ADMIN' },
     });
 
-    return NextResponse.json({ adminsExist: count > 0 });
+    return NextResponse.json({
+      adminsExist: count > 0,
+      // Registration stays open until the admin count is greater than 4
+      registrationOpen: count <= 4,
+    });
   } catch (error) {
     console.error('Failed to check admin count:', error);
-    return NextResponse.json({ adminsExist: false }, { status: 500 });
+    return NextResponse.json(
+      { adminsExist: false, registrationOpen: false },
+      { status: 500 }
+    );
   }
 }

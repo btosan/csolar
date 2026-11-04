@@ -2,7 +2,14 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { RiMapPin2Fill, RiPhoneFill, RiMailFill, RiArrowRightLine } from "react-icons/ri";
+import {
+  RiMapPin2Fill,
+  RiPhoneFill,
+  RiMailFill,
+  RiArrowRightLine,
+  RiFacebookFill,
+  RiInstagramLine,
+} from "react-icons/ri";
 import Socials from "./Socials";
 import { motion } from "framer-motion";
 import { fadeIn } from "@/variants";
@@ -12,6 +19,13 @@ const Footer = () => {
   const phoneNumber = "+2348033319391";
   const emailAddress = "containedsolar@gmail.com";
   const officeAddress = "34, Oguntona Crescent, Charly Boy Bus Stop, Gbagada, Lagos, Nigeria";
+  const facebookUrl = "https://web.facebook.com/profile.php?id=61587858568196";
+  const instagramUrl = "https://www.instagram.com/containedsolar/"; 
+
+  const socialLinks = [
+    { name: "Facebook", href: facebookUrl, icon: RiFacebookFill },
+    { name: "Instagram", href: instagramUrl, icon: RiInstagramLine },
+  ];
 
   return (
     <motion.footer
@@ -83,7 +97,23 @@ const Footer = () => {
         <p className="text-border">
           Copyright © {new Date().getFullYear()} Contained Solar, a subsidiary of Contained Energy Services Ltd. All rights reserved.
         </p>
-        <Socials containerStyles="flex gap-6 text-white" iconsStyles="hover:text-accent transition-all" />
+
+        {/* Social Links */}
+        <ul className="flex gap-6 text-white text-xl">
+          {socialLinks.map(({ name, href, icon: Icon }) => (
+            <li key={name}>
+              <a
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`Contained Solar on ${name}`}
+                className="hover:text-accent transition-all"
+              >
+                <Icon />
+              </a>
+            </li>
+          ))}
+        </ul>
       </div>
     </motion.footer>
   );

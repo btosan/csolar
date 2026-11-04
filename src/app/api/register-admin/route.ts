@@ -4,14 +4,14 @@ import { db } from '@/lib/db';
 
 export async function POST(req: Request) {
   try {
-    // Strict: only allow creation when ZERO admins exist
+    // Block creation when there are more than 4 admins (i.e. 5 or more)
     const adminCount = await db.user.count({
       where: { role: 'ADMIN' },
     });
 
-    if (adminCount > 0) {
+    if (adminCount > 4) {
       return NextResponse.json(
-        { message: 'Admin accounts already exist. This registration is disabled.' },
+        { message: 'Admin limit reached. New admin registration is disabled.' },
         { status: 403 }
       );
     }
@@ -57,7 +57,7 @@ export async function POST(req: Request) {
         email: normalizedEmail,
         password: hashedPassword,
         name: name?.trim() || null,
-        image: image || null,          // Cloudinary URL from frontend
+        image: image || null, // Cloudinary URL from frontend
         role: 'ADMIN',
       },
     });
